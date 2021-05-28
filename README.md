@@ -1,5 +1,10 @@
 # Data manipulation, analysis and visualisation in Python
 
+This repo contains the source code for the workshop (the notebooks with full
+content) as it is being developed. For the actual course repo, see for
+example [DS-python-data-analysis](https://github.com/jorisvandenbossche/DS-python-data-analysis)
+or [FLAMES-python-data-wrangling](https://github.com/jorisvandenbossche/FLAMES-python-data-wrangling).
+
 ## Introduction
 
 This course is intended for researchers that have at least basic programming skills in Python. It targets researchers that want to enhance their general data manipulation and analysis skills in Python. 
@@ -25,6 +30,3 @@ Found any typo or have a suggestion, see [how to contribute](./CONTRIBUTING.md).
 
 ## Meta 
 Authors: Joris Van den Bossche, Stijn Van Hoey
-
-<img src="img/logo_flanders+richtingmorgen.png" width="79%"> 
-<img src="img/doctoralschoolsprofiel_hq_rgb_web.png" width="20%"> 
