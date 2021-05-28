@@ -1,6 +1,0 @@
-(p9.ggplot(falcor, p9.aes(x='Bacterial_genotype', y='log10 Mc'))
-    + p9.geom_point()
-    + p9.facet_wrap('Phage', nrow=3)
-    + p9.geom_errorbar(p9.aes(ymin='log10 LBc', ymax='log10 UBc'), width=.2)
-    + p9.theme_bw()
-)

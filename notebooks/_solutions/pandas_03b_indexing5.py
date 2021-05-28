@@ -1,1 +1,0 @@
-countries[(countries['density'] > 100) & (countries['density'] < 300)]

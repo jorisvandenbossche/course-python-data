@@ -1,1 +1,0 @@
-df_daily = df_both.resample('D').sum()

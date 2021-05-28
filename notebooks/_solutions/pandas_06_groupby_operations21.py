@@ -1,1 +1,0 @@
-cast[cast.year == 2010].name.value_counts().head(10)

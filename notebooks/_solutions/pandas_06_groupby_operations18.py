@@ -1,1 +1,0 @@
-cast.character.value_counts().head(11)

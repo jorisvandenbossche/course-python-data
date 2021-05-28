@@ -1,1 +1,0 @@
-df['Age'].hist() #bins=30, log=True

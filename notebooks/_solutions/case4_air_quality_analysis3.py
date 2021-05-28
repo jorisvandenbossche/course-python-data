@@ -1,1 +1,0 @@
-data_tidy = data_tidy.dropna()

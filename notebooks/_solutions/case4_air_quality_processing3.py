@@ -1,1 +1,0 @@
-data = data.drop(flag_columns, axis=1)

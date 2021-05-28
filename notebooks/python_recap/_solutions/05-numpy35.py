@@ -1,1 +1,0 @@
-np.identity(3)

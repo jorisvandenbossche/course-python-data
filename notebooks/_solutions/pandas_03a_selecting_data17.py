@@ -1,1 +1,0 @@
-len(inception[inception['n'].isnull()])

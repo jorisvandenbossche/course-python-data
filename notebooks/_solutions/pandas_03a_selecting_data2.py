@@ -1,1 +1,0 @@
-males['Age'].mean()

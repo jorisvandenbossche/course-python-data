@@ -1,1 +1,0 @@
-males = df[df['Sex'] == 'male']

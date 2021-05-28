@@ -1,1 +1,0 @@
-cast[cast.name == 'Brad Pitt'].year.value_counts().sort_index().plot()
