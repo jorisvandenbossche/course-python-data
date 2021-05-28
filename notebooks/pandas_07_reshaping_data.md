@@ -446,7 +446,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
 
 grouped = cast.groupby(['year', 'type']).size()
 table = grouped.unstack('type').fillna(0)
-(table['actor'] / (table['actor'] + table['actress'])).plot(ylim=[0,1])
+(table['actor'] / (table['actor'] + table['actress'])).plot(ylim=[0, 1])
 ```
 
 <div class="alert alert-success">

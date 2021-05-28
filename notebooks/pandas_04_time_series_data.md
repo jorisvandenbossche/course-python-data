@@ -155,7 +155,7 @@ ts.dt.hour
 ```
 
 ```{code-cell} ipython3
-ts.dt.weekday
+ts.dt.dayofweek
 ```
 
 To quickly construct some regular time series data, the [``pd.date_range``](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.date_range.html) function comes in handy:
@@ -399,7 +399,7 @@ data.resample('M').mean().plot() # 10D
 <b>EXERCISE</b>:
 
  <ul>
-  <li>plot the monthly standard deviation of the columns</li>
+  <li>Plot the monthly standard deviation of the columns</li>
 </ul>
 </div>
 
@@ -414,11 +414,11 @@ data.resample('M').std().plot() # 'A'
 <b>EXERCISE</b>:
 
  <ul>
-  <li>plot the monthly mean and median values for the years 2011-2012 for 'L06_347'<br><br></li>
+  <li>Plot the monthly mean and median values for the years 2011-2012 for 'L06_347'<br><br></li>
 </ul>
-    
-**Note** remember the `agg` when using `groupby` to derive multiple statistics at the same time?
-    
+
+__Note__ Did you know <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.agg.html"><code>agg</code></a> to derive multiple statistics at the same time?
+
 </div>
 
 ```{code-cell} ipython3
