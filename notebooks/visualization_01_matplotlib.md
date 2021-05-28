@@ -11,13 +11,13 @@ kernelspec:
   name: python3
 ---
 
-<p><font size="6"><b>Matplotlib: Introduction </b></font></p>
+<p><font size="6"><b>Visualisation: Matplotlib</b></font></p>
 
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -170,24 +170,11 @@ For more information on legend positioning, check [this post](http://stackoverfl
 
 +++
 
-## I do not like the style...
+## Quick introduction to style
 
 +++
 
-**...understandable**
-
-+++
-
-Matplotlib had a bad reputation in terms of its default styling as figures created with earlier versions of Matplotlib were very Matlab-lookalike and mostly not really catchy. 
-
-Since Matplotlib 2.0, this has changed: https://matplotlib.org/users/dflt_style_changes.html!
-
-However...
-> *Des goûts et des couleurs, on ne discute pas...*
-
-(check [this link](https://fr.wiktionary.org/wiki/des_go%C3%BBts_et_des_couleurs,_on_ne_discute_pas) if you're not french-speaking)
-
-To account different tastes, Matplotlib provides a number of styles that can be used to quickly change a number of settings:
+Whereas Matplotlib makes it possible to change every detail in a plot and [create your own style](https://matplotlib.org/tutorials/introductory/customizing.html), there are a number of pre-defined styles provided by Matplotlib:
 
 ```{code-cell} ipython3
 plt.style.available
@@ -196,14 +183,14 @@ plt.style.available
 ```{code-cell} ipython3
 x = np.linspace(0, 10)
 
-with plt.style.context('seaborn'):  # 'seaborn', ggplot', 'bmh', 'grayscale', 'seaborn-whitegrid', 'seaborn-muted'
+with plt.style.context('ggplot'):  # 'seaborn', ggplot', 'bmh', 'grayscale', 'seaborn-whitegrid', 'seaborn-muted'
     fig, ax = plt.subplots()
     ax.plot(x, np.sin(x) + x + np.random.randn(50))
     ax.plot(x, np.sin(x) + 0.5 * x + np.random.randn(50))
     ax.plot(x, np.sin(x) + 2 * x + np.random.randn(50))
 ```
 
-We should not start discussing about colors and styles, just pick **your favorite style**!
+Just pick **your favorite style**... which will be active for the remainder of the notebook:
 
 ```{code-cell} ipython3
 plt.style.use('seaborn-whitegrid')
@@ -219,7 +206,7 @@ or go all the way and define your own custom style, see the [official documentat
 
  <ul>
   <li>If you just want <b>quickly a good-looking plot</b>, use one of the available styles (<code>plt.style.use('...')</code>)</li>
-  <li>Otherwise, the object-oriented way of working makes it possible to change everything!</li>
+  <li>Still, the object-oriented setup makes it possible to change every detail!</li>
 </ul>
 </div>
 
@@ -236,7 +223,7 @@ import pandas as pd
 ```
 
 ```{code-cell} ipython3
-flowdata = pd.read_csv('../data/vmm_flowdata.csv', 
+flowdata = pd.read_csv('data/vmm_flowdata.csv', 
                        index_col='Time', 
                        parse_dates=True)
 ```
@@ -244,6 +231,10 @@ flowdata = pd.read_csv('../data/vmm_flowdata.csv',
 ```{code-cell} ipython3
 flowdata.plot()
 ```
+
+The `plot()` method in Pandas uses Matplotlib under the hood and adds some convenience (e.g. legend) to it.
+
++++
 
 ### Pandas versus matplotlib
 
@@ -263,7 +254,7 @@ ax.plot(flowdata)
 ax.legend(["L06_347", "LS06_347", "LS06_348"])
 ```
 
-is still ok!
+is also fine, both options would work.
 
 +++
 
@@ -298,11 +289,11 @@ for ax, col, station in zip(axs, colors, flowdata.columns):
     ax.tick_params(labelsize=15)
 ```
 
-Is already a bit harder ;-)
+Is already a bit harder ;-). Using different subplots (aka facetting) to split up the data is useful in data exploration and is by default provided by Pandas. 
 
 +++
 
-### Best of both worlds...
+### Best of both worlds!
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots() #prepare a matplotlib figure
@@ -317,9 +308,11 @@ flowdata.plot(ax=ax) # use pandas for the plotting
 
 # Provide further adaptations with matplotlib:
 ax.set_xlabel("")
-ax.grid(which="major", linewidth='0.5', color='0.8')
+ax.grid(which="major", linewidth='0.5', color='0.9')
 fig.suptitle('Flow station time series', fontsize=15)
 ```
+
+It is a useful pattern: 1/ Prepare with Matplotlib, 2/ Plot using Pandas and 3/ further adjust specific elements with Matplotlib
 
 ```{code-cell} ipython3
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 6)) #provide with matplotlib 2 axis
@@ -340,70 +333,11 @@ ax2.legend()
  <ul>
   <li>You can do anything with matplotlib, but at a cost... <a href="http://stackoverflow.com/questions/tagged/matplotlib">stackoverflow</a></li>
       
-  <li>The preformatting of Pandas provides mostly enough flexibility for quick analysis and draft reporting. It is not for paper-proof figures or customization</li>
+  <li>The preformatting of Pandas provides mostly enough flexibility for quick analysis and draft reporting.</li>
 </ul>
 <br>
 
 If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figure: Make it a <b>reusable function</b>!
-
-</div>
-
-+++
-
-An example of such a reusable function to plot data:
-
-```{code-cell} ipython3
-%%file plotter.py  
-#this writes a file in your directory, check it(!)
-
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-
-from matplotlib import cm
-from matplotlib.ticker import MaxNLocator
-
-def vmm_station_plotter(flowdata, label="flow (m$^3$s$^{-1}$)"):
-    colors = [cm.viridis(x) for x in np.linspace(0.0, 1.0, len(flowdata.columns))] # list comprehension to set up the color sequence
-
-    fig, axs = plt.subplots(3, 1, figsize=(16, 8))
-
-    for ax, col, station in zip(axs, colors, flowdata.columns):
-        ax.plot(flowdata.index, flowdata[station], label=station, color=col) # this plots the data itself
-        
-        ax.legend(fontsize=15)
-        ax.set_ylabel(label, size=15)
-        ax.yaxis.set_major_locator(MaxNLocator(4)) # smaller set of y-ticks for clarity
-        
-        if not ax.is_last_row():  # hide the xticklabels from the none-lower row x-axis
-            ax.xaxis.set_ticklabels([])
-            ax.xaxis.set_major_locator(mdates.YearLocator())
-        else:                     # yearly xticklabels from the lower x-axis in the subplots
-            ax.xaxis.set_major_locator(mdates.YearLocator())
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-        ax.tick_params(axis='both', labelsize=15, pad=8) # enlarge the ticklabels and increase distance to axis (otherwise overlap)
-    return fig, axs
-```
-
-```{code-cell} ipython3
-from plotter import vmm_station_plotter
-# fig, axs = vmm_station_plotter(flowdata)
-```
-
-```{code-cell} ipython3
-fig, axs = vmm_station_plotter(flowdata, 
-                               label="NO$_3$ (mg/l)")
-fig.suptitle('Ammonium concentrations in the Maarkebeek', fontsize='17')
-fig.savefig('ammonium_concentration.pdf')
-```
-
-<div class="alert alert-danger">
-
- <b>NOTE</b>: 
-
-<ul>
-  <li>Let your hard work pay off, write your own custom functions!</li>
-</ul>
 
 </div>
 
@@ -432,12 +366,12 @@ For more in-depth material:
 
 <div class="alert alert-info" style="font-size:18px">
 
- <b>Remember</b>(!)
+**Galleries!**
 
-<ul>
-  <li><a href="http://matplotlib.org/gallery.html">matplotlib gallery</a> is an important resource to start from</li> 
-</ul>
-<br>
-
+Galleries are great to get inspiration, see the plot you want, and check the code how it is created:
+    
+* [matplotlib gallery](http://matplotlib.org/gallery.html") is an important resource to start from
+* [seaborn gallery](https://seaborn.pydata.org/examples/index.html)
+* The Python Graph Gallery (https://python-graph-gallery.com/)
 
 </div>
