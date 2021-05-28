@@ -41,7 +41,7 @@ countries = pd.DataFrame({'country': ['Belgium', 'France', 'Germany', 'Netherlan
 countries.head()
 ```
 
-# Elementwise-operations 
+# Elementwise-operations
 
 +++
 
@@ -68,8 +68,6 @@ With two Series objects:
 countries['population'] / countries['area']
 ```
 
-+++ {"editable": true}
-
 ## Adding new columns
 
 We can add a new column to a DataFrame with similar syntax as selecting a columns: create a new column by assigning the output to the DataFrame with a new column name in between the `[]`.
@@ -77,17 +75,10 @@ We can add a new column to a DataFrame with similar syntax as selecting a column
 For example, to add the population density calculated above, we can do:
 
 ```{code-cell} ipython3
-:editable: true
-
 countries['population_density'] = countries['population'] / countries['area'] * 1e6
 ```
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries
 ```
 
@@ -95,7 +86,7 @@ countries
 
 +++
 
-Pandas provides a large set of **summary** functions that operate on different kinds of pandas objects (DataFrames, Series, Index) and produce single value. When applied to a DataFrame, the result is returned as a pandas Series (one value for each column). 
+Pandas provides a large set of **summary** functions that operate on different kinds of pandas objects (DataFrames, Series, Index) and produce single value. When applied to a DataFrame, the result is returned as a pandas Series (one value for each column).
 
 +++
 

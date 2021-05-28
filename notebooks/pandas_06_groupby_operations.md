@@ -22,10 +22,6 @@ kernelspec:
 ---
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: '-'
----
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -67,7 +63,7 @@ What we did above, applying a function on different groups, is a "groupby operat
 
 ### Groupby: applying functions per group
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
 The "group by" concept: we want to **apply the same function on subsets of your dataframe, based on some key to split the dataframe in subsets**
 
@@ -97,20 +93,14 @@ df.groupby('key').sum()
 ```
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: subslide
----
 df.groupby('key').aggregate(np.sum)  # 'sum'
 ```
 
-And many more methods are available. 
+And many more methods are available.
 
 ```{code-cell} ipython3
 df.groupby('key')['data'].sum()
 ```
-
-+++ {"slideshow": {"slide_type": "subslide"}}
 
 # Application of the groupby concept on the titanic data
 
@@ -225,7 +215,7 @@ df.groupby('AgeClass')['Fare'].mean().plot(kind='bar', rot=0)
 
 If you are ready, more groupby exercises can be found below.
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
 # Some more theory
 
@@ -233,7 +223,7 @@ If you are ready, more groupby exercises can be found below.
 
 ## Specifying the grouper
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
 In the previous example and exercises, we always grouped by a single column by passing its name. But, a column name is not the only value you can pass as the grouper in `df.groupby(grouper)`. Other possibilities for `grouper` are:
 
@@ -271,8 +261,6 @@ Another way to obtain such counts, is to use the Series `value_counts` method:
 ```{code-cell} ipython3
 df['Embarked'].value_counts()
 ```
-
-+++ {"slideshow": {"slide_type": "subslide"}}
 
 # [OPTIONAL] Additional exercises using the movie data
 

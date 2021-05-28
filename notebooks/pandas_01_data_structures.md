@@ -101,17 +101,13 @@ All the needed functionality for the above examples will be explained throughout
 
 # The pandas data structures: `DataFrame` and `Series`
 
-+++ {"editable": true}
++++
 
 To load the pandas package and start working with it, we first import the package. The community agreed alias for pandas is `pd`,  which we will also use here:
 
 ```{code-cell} ipython3
-:editable: true
-
 import pandas as pd
 ```
-
-+++ {"editable": true}
 
 Let's start with getting some data. 
 
@@ -128,39 +124,23 @@ countries = pd.DataFrame(data)
 countries
 ```
 
-+++ {"editable": true}
-
 The object created here is a **DataFrame**:
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 type(countries)
 ```
-
-+++ {"editable": true}
 
 A `DataFrame` is a 2-dimensional, **tablular data structure** comprised of rows and columns. It is similar to a spreadsheet, a database (SQL) table or the data.frame in R.
 
 <img align="center" width=50% src="../img/pandas/01_table_dataframe1.svg">
 
-+++ {"editable": true}
++++
 
 A DataFrame can store data of different types (including characters, integers, floating point values, categorical data and more) in columns. In pandas, we can check the data types of the columns with the `dtypes` attribute:
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries.dtypes
 ```
-
-+++ {"editable": true}
 
 ## Each column in a `DataFrame` is a `Series`
 
@@ -169,25 +149,13 @@ When selecting a single column of a pandas `DataFrame`, the result is a pandas `
 To select the column, use the column label in between square brackets `[]`.
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries['population']
 ```
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 s = countries['population']
 type(s)
 ```
-
-+++ {"editable": true}
 
 ## Pandas objects have attributes and methods
 
@@ -197,53 +165,27 @@ Pandas provides a lot of functionalities for the DataFrame and Series. The `.dty
 countries.columns
 ```
 
-+++ {"editable": true}
-
 In addition, there are also functions that can be called on a DataFrame or Series, i.e. *methods*. As methods are functions, do not forget to use parentheses `()`.
 
 A few examples that can help exploring the data:
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries.head() # Top rows
 ```
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries.tail() # Bottom rows
 ```
-
-+++ {"editable": true}
 
 The ``describe`` method computes summary statistics for each column:
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries['population'].describe()
 ```
-
-+++ {"editable": true}
 
 **Sort**ing your data **by** a specific column is another important first-check:
 
 ```{code-cell} ipython3
----
-editable: true
-jupyter:
-  outputs_hidden: false
----
 countries.sort_values(by='population')
 ```
 
@@ -270,14 +212,14 @@ countries['population'].plot(kind='barh')
 +++
 
 <div style="border: 5px solid #3776ab; border-radius: 2px; padding: 2em;">
-    
+
 ## Python recap
     
 Python objects have **attributes** and **methods**:
     
 * Attribute: `obj.attribute` (no parentheses!) -> property of the object (pandas examples: `dtypes`, `columns`, `shape`, ..)
 * Method: `obj.method()` (function call with parentheses) -> action (pandas examples: `mean()`, `sort_values()`, ...)
-    
+
 </div>
 
 +++

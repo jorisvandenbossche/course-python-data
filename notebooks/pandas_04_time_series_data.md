@@ -22,10 +22,6 @@ kernelspec:
 ---
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: '-'
----
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -85,7 +81,7 @@ There is also a `Timedelta` type, which can e.g. be used to add intervals of tim
 ts + pd.Timedelta('5 days')
 ```
 
-## Parsing datetime strings 
+## Parsing datetime strings
 
 +++
 
@@ -164,8 +160,6 @@ To quickly construct some regular time series data, the [``pd.date_range``](http
 pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3H'))
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
-
 # Time series data: `Timestamp` in the index
 
 +++
@@ -217,7 +211,7 @@ data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 
 ## The DatetimeIndex
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++
 
 When we ensure the DataFrame has a `DatetimeIndex`, time-series related functionality becomes available:
 
@@ -246,10 +240,6 @@ The `plot` method will also adapt its labels (when you zoom in, you can see the 
 ```
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: subslide
----
 data.plot()
 ```
 
@@ -272,15 +262,11 @@ We can use label based indexing on a timeseries as expected:
 data[pd.Timestamp("2012-01-01 09:00"):pd.Timestamp("2012-01-01 19:00")]
 ```
 
-+++ {"slideshow": {"slide_type": "subslide"}}
-
 But, for convenience, indexing a time series also works with strings:
 
 ```{code-cell} ipython3
 data["2012-01-01 09:00":"2012-01-01 19:00"]
 ```
-
-+++ {"slideshow": {"slide_type": "subslide"}}
 
 A nice feature is **"partial string" indexing**, where we can do implicit slicing by providing a partial datetime string.
 
@@ -289,8 +275,6 @@ E.g. all data of 2013:
 ```{code-cell} ipython3
 data['2013':]
 ```
-
-+++ {"slideshow": {"slide_type": "-"}}
 
 Or all data of January up to March 2012:
 
@@ -358,8 +342,6 @@ data[data.index.month.isin([4, 5, 6])]
 data[(data.index.hour > 8) & (data.index.hour < 20)]
 ```
 
-+++ {"slideshow": {"slide_type": "subslide"}}
-
 ## The power of pandas: `resample`
 
 +++
@@ -371,8 +353,6 @@ The time series has a frequency of 1 hour. I want to change this to daily:
 ```{code-cell} ipython3
 data.resample('D').mean().head()
 ```
-
-+++ {"slideshow": {"slide_type": "subslide"}}
 
 Other mathematical methods can also be specified:
 
@@ -388,7 +368,6 @@ The string to specify the new time frequency: http://pandas.pydata.org/pandas-do
 These strings can also be combined with numbers, eg `'10D'`...
 
 </div>
-
 
 ```{code-cell} ipython3
 data.resample('M').mean().plot() # 10D
@@ -422,11 +401,8 @@ __Note__ Did you know <a href="https://pandas.pydata.org/pandas-docs/stable/refe
 </div>
 
 ```{code-cell} ipython3
----
-clear_cell: true
-slideshow:
-  slide_type: subslide
----
+:clear_cell: true
+
 subset = data['2011':'2012']['L06_347']
 subset.resample('M').agg(['mean', 'median']).plot()
 ```

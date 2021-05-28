@@ -343,10 +343,6 @@ df[df['Surname'].str.startswith('Williams')]
 df[df['Surname'].str.len() > 15]
 ```
 
-```{code-cell} ipython3
-
-```
-
 # [OPTIONAL] more exercises
 
 +++

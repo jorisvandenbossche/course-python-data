@@ -346,7 +346,3 @@ df.loc[df['Sex'] == 'female', 'Age'].mean()
 ```
 
 We will later see an easier way to calculate both averages at the same time with groupby.
-
-```{code-cell} ipython3
-
-```

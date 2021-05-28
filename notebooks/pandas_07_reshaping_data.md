@@ -22,10 +22,6 @@ kernelspec:
 ---
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: '-'
----
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -277,7 +273,7 @@ pd.melt(pivoted, id_vars=['Sex']) #, var_name='Pclass', value_name='Fare')
 
 # Reshaping with `stack` and `unstack`
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++
 
 The docs say:
 
@@ -292,10 +288,6 @@ Indeed...
 Before we speak about `hierarchical index`, first check it in practice on the following dummy example:
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: subslide
----
 df = pd.DataFrame({'A':['one', 'one', 'two', 'two'], 
                    'B':['a', 'b', 'a', 'b'], 
                    'C':range(4)})
@@ -310,10 +302,6 @@ df
 ```
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: subslide
----
 result = df['C'].unstack()
 result
 ```
@@ -335,7 +323,7 @@ df
 
 +++
 
-## Mimick pivot table 
+## Mimick pivot table
 
 +++
 

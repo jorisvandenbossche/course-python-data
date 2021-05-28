@@ -138,7 +138,7 @@ Further, more advanced filling techniques are available in the ``interpolate()``
 +++
 
 <div class="alert alert-info" style="font-size:120%">
-    
+
 **REMEMBER**: <br>
 
 * missing value indicator: `np.nan` (`NaN`)
