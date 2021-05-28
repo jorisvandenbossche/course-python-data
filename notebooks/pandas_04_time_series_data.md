@@ -13,10 +13,11 @@ kernelspec:
 
 <p><font size="6"><b>04 - Pandas: Working with time series data</b></font></p>
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
 
-> *© 2016-2019, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -25,7 +26,6 @@ kernelspec:
 slideshow:
   slide_type: '-'
 ---
-# %matplotlib notebook
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -120,7 +120,7 @@ pd.to_datetime("09/12/2016", dayfirst=True)
 pd.to_datetime("09/12/2016", format="%d/%m/%Y")
 ```
 
-A detailed overview of how to specify the `format` string, see the table in the python documentation: https://docs.python.org/3.5/library/datetime.html#strftime-and-strptime-behavior
+A detailed overview of how to specify the `format` string, see the table in the python documentation: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 
 +++
 
@@ -177,7 +177,7 @@ pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3H'))
 For the following demonstration of the time series functionality, we use a sample of discharge data of the Maarkebeek (Flanders) with 3 hour averaged values, derived from the [Waterinfo website](https://www.waterinfo.be/).
 
 ```{code-cell} ipython3
-data = pd.read_csv("../data/vmm_flowdata.csv")
+data = pd.read_csv("data/vmm_flowdata.csv")
 ```
 
 ```{code-cell} ipython3
@@ -203,7 +203,7 @@ data
 The steps above are provided as built-in functionality of `read_csv`:
 
 ```{code-cell} ipython3
-data = pd.read_csv("../data/vmm_flowdata.csv", index_col=0, parse_dates=True)
+data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 ```
 
 <div class="alert alert-info">
@@ -242,7 +242,7 @@ data.index.year
 The `plot` method will also adapt its labels (when you zoom in, you can see the different levels of detail of the datetime labels):
 
 ```{code-cell} ipython3
-# %matplotlib notebook
+%matplotlib widget
 ```
 
 ```{code-cell} ipython3
@@ -251,6 +251,11 @@ slideshow:
   slide_type: subslide
 ---
 data.plot()
+```
+
+```{code-cell} ipython3
+# switching back to static inline plots (the default)
+%matplotlib inline
 ```
 
 We have too much data to sensibly plot on one figure. Let's see how we can easily select part of the data or aggregate the data to other time resolutions in the next sections.
@@ -282,10 +287,8 @@ A nice feature is **"partial string" indexing**, where we can do implicit slicin
 E.g. all data of 2013:
 
 ```{code-cell} ipython3
-data['2013']
+data['2013':]
 ```
-
-Normally you would expect this to access a column named '2013', but as for a DatetimeIndex, pandas also tries to interprete it as a datetime slice.
 
 +++ {"slideshow": {"slide_type": "-"}}
 
@@ -380,7 +383,7 @@ data.resample('D').max().head()
 <div class="alert alert-info">
 <b>REMEMBER</b>: <br><br>
 
-The string to specify the new time frequency: http://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases <br><br>
+The string to specify the new time frequency: http://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases <br>
 
 These strings can also be combined with numbers, eg `'10D'`...
 
@@ -461,5 +464,5 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
 ```{code-cell} ipython3
 :clear_cell: true
 
-data['2013'].mean().plot(kind='barh')
+data['2013':'2013'].mean().plot(kind='barh')
 ```

@@ -13,10 +13,10 @@ kernelspec:
 
 <p><font size="6"><b>Pandas: Combining datasets Part I - concat</b></font></p>
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016-2019, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -96,7 +96,7 @@ The ``pd.concat`` function does all of the heavy lifting of combining data in di
 
 +++
 
-![](../img/schema-concat0.svg)
+![](../img/pandas/schema-concat0.svg)
 
 +++
 
@@ -139,7 +139,7 @@ pd.concat({'europe': countries, 'africa': countries_africa})
 
 +++
 
-![](../img/schema-concat1.svg)
+![](../img/pandas/schema-concat1.svg)
 
 +++
 
@@ -180,7 +180,7 @@ Using `pd.concat` above, we combined datasets that had the same columns or the s
 Let's look again at the titanic passenger data, but taking a small subset of it to make the example easier to grasp:
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 df = df.loc[:9, ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked']]
 ```
 

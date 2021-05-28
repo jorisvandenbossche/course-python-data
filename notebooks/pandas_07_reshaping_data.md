@@ -13,10 +13,11 @@ kernelspec:
 
 <p><font size="6"><b>07 - Pandas: Reshaping data</b></font></p>
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
 
-> *© 2016-2019, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -42,7 +43,7 @@ People who know Excel, probably know the **Pivot** functionality:
 
 +++
 
-![](../img/pivot_excel.png)
+![](../img/pandas/pivot_excel.png)
 
 +++
 
@@ -111,7 +112,7 @@ So far, so good...
 Let's now use the full titanic dataset:
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 ```{code-cell} ipython3
@@ -154,7 +155,7 @@ Well, they need to be combined, according to an `aggregation` functionality, whi
 # Pivot tables - aggregating while pivoting
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 ```{code-cell} ipython3
@@ -286,7 +287,7 @@ column labels) having a hierarchical index with a new inner-most level
 of row labels.
 
 Indeed... 
-<img src="../img/schema-stack.svg" width=50%>
+<img src="../img/pandas/schema-stack.svg" width=50%>
 
 Before we speak about `hierarchical index`, first check it in practice on the following dummy example:
 
@@ -341,7 +342,7 @@ df
 To better understand and reason about pivot tables, we can express this method as a combination of more basic steps. In short, the pivot is a convenient way of expressing the combination of a `groupby` and `stack/unstack`.
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 ```{code-cell} ipython3
@@ -377,12 +378,12 @@ df.groupby(['Pclass', 'Sex'])['Survived'].mean().unstack()
 These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKajNMa1pfSzN6Q3M) and [`cast.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKal9UYTJSR2ZhSW8) and put them in the `/data` folder.
 
 ```{code-cell} ipython3
-cast = pd.read_csv('../data/cast.csv')
+cast = pd.read_csv('data/cast.csv')
 cast.head()
 ```
 
 ```{code-cell} ipython3
-titles = pd.read_csv('../data/titles.csv')
+titles = pd.read_csv('data/titles.csv')
 titles.head()
 ```
 
@@ -444,7 +445,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
 :clear_cell: true
 
 grouped = cast.groupby(['year', 'type']).size()
-table = grouped.unstack('type')
+table = grouped.unstack('type').fillna(0)
 (table['actor'] / (table['actor'] + table['actress'])).plot(ylim=[0,1])
 ```
 

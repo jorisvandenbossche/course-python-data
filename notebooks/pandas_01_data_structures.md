@@ -14,19 +14,15 @@ kernelspec:
 <p><font size="6"><b>01 - Pandas: Data Structures </b></font></p>
 
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016-2019, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
 ```{code-cell} ipython3
 import pandas as pd
-```
-
-```{code-cell} ipython3
-import numpy as np
 import matplotlib.pyplot as plt
 ```
 
@@ -37,7 +33,7 @@ import matplotlib.pyplot as plt
 Let's directly start with importing some data: the `titanic` dataset about the passengers of the Titanic and their survival:
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 ```{code-cell} ipython3
@@ -50,9 +46,7 @@ Starting from reading such a tabular dataset, Pandas provides the functionalitie
 
 <div class="alert alert-warning">
 
- <ul>
-  <li>What is the age distribution of the passengers?</li>
-</ul> 
+- What is the age distribution of the passengers?
 
 </div>
 
@@ -107,23 +101,23 @@ All the needed functionality for the above examples will be explained throughout
 
 # The pandas data structures: `DataFrame` and `Series`
 
-Pandas provides two fundamental data objects, for 1D (``Series``) and 2D data (``DataFrame``).
++++ {"editable": true}
 
-+++
+To load the pandas package and start working with it, we first import the package. The community agreed alias for pandas is `pd`,  which we will also use here:
 
-## DataFrame: 2D tabular data
+```{code-cell} ipython3
+:editable: true
 
-+++
+import pandas as pd
+```
 
-A `DataFrame` is a **tablular data structure** (multi-dimensional object to hold labeled data) comprised of rows and columns, akin to a spreadsheet, database table, or R's data.frame object. You can think of it as multiple Series object which share the same index.
++++ {"editable": true}
 
-<img align="left" width=50% src="../img/schema-dataframe.svg">
+Let's start with getting some data. 
 
-+++
+In practice, most of the time you will import the data from some data source (text file, excel, database, ..), and Pandas provides functions for many different formats. 
 
-For the examples here, we are going to create a small DataFrame with some data about a few countries.
-
-When creating a DataFrame manually, a common way to do this is from dictionary of arrays or lists:
+But to start here, let's create a small dataset about a few countries manually from a dictionar of lists:
 
 ```{code-cell} ipython3
 data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
@@ -134,156 +128,122 @@ countries = pd.DataFrame(data)
 countries
 ```
 
-In practice, you will of course often import your data from an external source (text file, excel, database, ..), which we will see later.
++++ {"editable": true}
 
-Note that in the IPython notebook, the dataframe will display in a rich HTML view.
-
-+++
-
-### Attributes of the DataFrame
-
-The DataFrame has a built-in concept of named rows and columns, the **`index`** and **`columns`** attributes:
+The object created here is a **DataFrame**:
 
 ```{code-cell} ipython3
-countries.index
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
+type(countries)
 ```
 
-By default, the index is the numbers *0* through *N - 1*
++++ {"editable": true}
+
+A `DataFrame` is a 2-dimensional, **tablular data structure** comprised of rows and columns. It is similar to a spreadsheet, a database (SQL) table or the data.frame in R.
+
+<img align="center" width=50% src="../img/pandas/01_table_dataframe1.svg">
+
++++ {"editable": true}
+
+A DataFrame can store data of different types (including characters, integers, floating point values, categorical data and more) in columns. In pandas, we can check the data types of the columns with the `dtypes` attribute:
+
+```{code-cell} ipython3
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
+countries.dtypes
+```
+
++++ {"editable": true}
+
+## Each column in a `DataFrame` is a `Series`
+
+When selecting a single column of a pandas `DataFrame`, the result is a pandas `Series`, a 1-dimensional data structure. 
+
+To select the column, use the column label in between square brackets `[]`.
+
+```{code-cell} ipython3
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
+countries['population']
+```
+
+```{code-cell} ipython3
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
+s = countries['population']
+type(s)
+```
+
++++ {"editable": true}
+
+## Pandas objects have attributes and methods
+
+Pandas provides a lot of functionalities for the DataFrame and Series. The `.dtypes` shown above is an *attribute* of the DataFrame. Another example is the `.columns` attribute, returning the column names of the DataFrame:
 
 ```{code-cell} ipython3
 countries.columns
 ```
 
-To check the data types of the different columns:
++++ {"editable": true}
+
+In addition, there are also functions that can be called on a DataFrame or Series, i.e. *methods*. As methods are functions, do not forget to use parentheses `()`.
+
+A few examples that can help exploring the data:
 
 ```{code-cell} ipython3
-countries.dtypes
-```
-
-An overview of that information can be given with the `info()` method:
-
-```{code-cell} ipython3
-countries.info()
-```
-
-<div class="alert alert-info">
-
-__NumPy__ provides
-
-* multi-dimensional, homogeneously typed arrays  (single data type!)
-
-<br>
-
-__Pandas__ provides
-
-* 2D, heterogeneous data structure (multiple data types!)
-* labeled (named) row and column index
-
-</div>
-
-+++
-
-## One-dimensional data: `Series` (a column of a DataFrame)
-
-A Series is a basic holder for **one-dimensional labeled data**. It can be created much as a NumPy array is created:
-
-```{code-cell} ipython3
-s = pd.Series([0.1, 0.2, 0.3, 0.4])
-s
-```
-
-And often, you access a Series representing a column in the data, using typical `[]` indexing syntax and the column name:
-
-```{code-cell} ipython3
-countries['area']
-```
-
-### Attributes of a Series: `index` and `values`
-
-The series also has an **index**, which by default is the numbers *0* through *N - 1* (but no `.columns`):
-
-```{code-cell} ipython3
-s.index
-```
-
-You can access the underlying numpy array representation with the `.values` attribute:
-
-```{code-cell} ipython3
-s.values
-```
-
-We can access series values via the index, just like for NumPy arrays:
-
-```{code-cell} ipython3
-s[0]
-```
-
-Unlike the NumPy array, though, this index can be something other than integers:
-
-```{code-cell} ipython3
-s2 = pd.Series(np.arange(4), index=['a', 'b', 'c', 'd'])
-s2
-```
-
-```{code-cell} ipython3
-s2['c']
-```
-
-### Pandas Series versus dictionaries
-
-+++
-
-In this way, a ``Series`` object can be thought of as similar to an ordered dictionary mapping one typed value to another typed value.
-
-In fact, it's possible to construct a series directly from a Python dictionary:
-
-```{code-cell} ipython3
-pop_dict = {'Germany': 81.3, 
-            'Belgium': 11.3, 
-            'France': 64.3, 
-            'United Kingdom': 64.9, 
-            'Netherlands': 16.9}
-population = pd.Series(pop_dict)
-population
-```
-
-We can index the populations like a dict as expected ...
-
-```{code-cell} ipython3
-population['France']
-```
-
-... but with the power of numpy arrays. Many things you can do with numpy arrays, can also be applied on DataFrames / Series.
-
-Eg element-wise operations:
-
-```{code-cell} ipython3
-population * 1000
-```
-
-## Some useful methods on these data structures
-
-+++
-
-Exploration of the Series and DataFrame is essential (check out what you're dealing with). 
-
-```{code-cell} ipython3
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
 countries.head() # Top rows
 ```
 
 ```{code-cell} ipython3
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
 countries.tail() # Bottom rows
 ```
+
++++ {"editable": true}
 
 The ``describe`` method computes summary statistics for each column:
 
 ```{code-cell} ipython3
-countries.describe()
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
+countries['population'].describe()
 ```
+
++++ {"editable": true}
 
 **Sort**ing your data **by** a specific column is another important first-check:
 
 ```{code-cell} ipython3
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
 countries.sort_values(by='population')
 ```
 
@@ -305,6 +265,19 @@ countries['population'].plot(kind='barh')
 
 * You can play with the `kind` keyword of the `plot` function in the figure above: 'line', 'bar', 'hist', 'density', 'area', 'pie', 'scatter', 'hexbin', 'box'
 
+</div>
+
++++
+
+<div style="border: 5px solid #3776ab; border-radius: 2px; padding: 2em;">
+    
+## Python recap
+    
+Python objects have **attributes** and **methods**:
+    
+* Attribute: `obj.attribute` (no parentheses!) -> property of the object (pandas examples: `dtypes`, `columns`, `shape`, ..)
+* Method: `obj.method()` (function call with parentheses) -> action (pandas examples: `mean()`, `sort_values()`, ...)
+    
 </div>
 
 +++
@@ -374,14 +347,14 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 
 **EXERCISE**:
 
-* Read the CVS file (available at `../data/titanic.csv`) into a pandas DataFrame. Call the result `df`.
+* Read the CVS file (available at `data/titanic.csv`) into a pandas DataFrame. Call the result `df`.
 
 </div>
 
 ```{code-cell} ipython3
 :clear_cell: true
 
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 <div class="alert alert-success">

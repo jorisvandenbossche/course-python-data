@@ -14,10 +14,10 @@ kernelspec:
 <p><font size="6"><b>03 - Pandas: Indexing and selecting data - part II</b></font></p>
 
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016-2019, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -26,13 +26,8 @@ import pandas as pd
 ```
 
 ```{code-cell} ipython3
-# redefining the example objects
+# redefining the example dataframe
 
-# series
-population = pd.Series({'Germany': 81.3, 'Belgium': 11.3, 'France': 64.3, 
-                        'United Kingdom': 64.9, 'Netherlands': 16.9})
-
-# dataframe
 data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
         'population': [11.3, 64.3, 81.3, 16.9, 64.9],
         'area': [30510, 671308, 357050, 41526, 244820],
@@ -323,7 +318,7 @@ What to do when encountering the *value is trying to be set on a copy of a slice
 # Exercises using the Titanic dataset
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 ```{code-cell} ipython3

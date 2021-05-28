@@ -14,10 +14,10 @@ kernelspec:
 <p><font size="6"><b> 02 - Pandas: Basic operations on Series and DataFrames</b></font></p>
 
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016-2019, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *Data wrangling in Python*  
+> *November, 2020*
+>
+> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -28,13 +28,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-As you play around with DataFrames, you'll notice that many operations which work on NumPy arrays will also work on dataframes.
-
 ```{code-cell} ipython3
-# redefining the example objects
-
-population = pd.Series({'Germany': 81.3, 'Belgium': 11.3, 'France': 64.3, 
-                        'United Kingdom': 64.9, 'Netherlands': 16.9})
+# redefining the example DataFrame
 
 countries = pd.DataFrame({'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
         'population': [11.3, 64.3, 81.3, 16.9, 64.9],
@@ -46,69 +41,57 @@ countries = pd.DataFrame({'country': ['Belgium', 'France', 'Germany', 'Netherlan
 countries.head()
 ```
 
-# The 'new' concepts
+# Elementwise-operations 
 
 +++
 
-## Elementwise-operations 
+The typical arithmetic (+, -, \*, /) and comparison (==, >, <, ...) operations work *element-wise*.
 
-+++
-
-Just like with numpy arrays, many operations are element-wise:
+With as scalar:
 
 ```{code-cell} ipython3
-population / 100
+population = countries['population']
+population
 ```
+
+```{code-cell} ipython3
+population * 1000
+```
+
+```{code-cell} ipython3
+population > 50
+```
+
+With two Series objects:
 
 ```{code-cell} ipython3
 countries['population'] / countries['area']
 ```
 
-```{code-cell} ipython3
-np.log(countries['population'])
-```
++++ {"editable": true}
 
-which can be added as a new column, as follows:
+## Adding new columns
 
-```{code-cell} ipython3
-countries["log_population"] = np.log(countries['population'])
-```
+We can add a new column to a DataFrame with similar syntax as selecting a columns: create a new column by assigning the output to the DataFrame with a new column name in between the `[]`.
+
+For example, to add the population density calculated above, we can do:
 
 ```{code-cell} ipython3
-countries.columns
-```
+:editable: true
 
-```{code-cell} ipython3
-countries['population'] > 40
-```
-
-<div class="alert alert-info">
-
-<b>REMEMBER</b>:
-
-* When you have an operation which does NOT work element-wise or you have no idea how to do it directly in Pandas, use the **apply()** function
-* A typical use case is with a custom written or a **lambda** function
-
-</div>
-
-```{code-cell} ipython3
-countries["capital"].apply(lambda x: len(x)) # in case you forgot the functionality: countries["capital"].str.len()
+countries['population_density'] = countries['population'] / countries['area'] * 1e6
 ```
 
 ```{code-cell} ipython3
-def population_annotater(population):
-    """annotate as large or small"""
-    if population > 50:
-        return 'large'
-    else:
-        return 'small'
+---
+editable: true
+jupyter:
+  outputs_hidden: false
+---
+countries
 ```
 
-```{code-cell} ipython3
-countries["population"].apply(population_annotater) # a custom user function
-```
-
-## Aggregations (reductions)
+# Aggregations (reductions)
 
 +++
 
@@ -141,7 +124,7 @@ countries.median()
 Reading in the titanic data set...
 
 ```{code-cell} ipython3
-df = pd.read_csv("../data/titanic.csv")
+df = pd.read_csv("data/titanic.csv")
 ```
 
 Quick exploration first...
@@ -263,7 +246,7 @@ df['Fare'].quantile(0.75)
 <b>EXERCISE</b>:
 
  <ul>
-  <li>Calculate the normalized Fares (normalized relative to its mean)</li>
+  <li>Calculate the normalized Fares (normalized relative to its mean), and add this as a new column ('Fare_normalized') to the DataFrame.</li>
 </ul>
 </div>
 
@@ -273,12 +256,19 @@ df['Fare'].quantile(0.75)
 df['Fare'] / df['Fare'].mean()
 ```
 
-<div class="alert alert-success">
-<b>EXERCISE</b>:
+```{code-cell} ipython3
+:clear_cell: true
 
- <ul>
-  <li>Calculate the log of the Fares, and add this as a new column ('Fare_log') to the DataFrame.</li>
-</ul>
+df['Fare_normalized'] = df['Fare'] / df['Fare'].mean()
+df.head()
+```
+
+<div class="alert alert-success">
+    
+**EXERCISE**:
+
+* Calculate the log of the Fares. Tip: check the `np.log` function.
+
 </div>
 
 ```{code-cell} ipython3
@@ -287,12 +277,89 @@ df['Fare'] / df['Fare'].mean()
 np.log(df['Fare'])
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
+# Numpy -  multidimensional data arrays
 
-df['Fare_log'] = np.log(df['Fare'])
-df.head()
++++
+
+NumPy is the fundamental package for scientific computing with Python. It contains among other things:
+
+* a powerful N-dimensional array/vector/matrix object
+* sophisticated (broadcasting) functions
+* function implementation in C/Fortran assuring good performance if vectorized
+* tools for integrating C/C++ and Fortran code
+* useful linear algebra, Fourier transform, and random number capabilities
+
+Also known as *array oriented computing*. The recommended convention to import numpy is:
+
+```{code-cell} ipython3
+import numpy as np
 ```
+
+## Speed
+
++++
+
+Memory-efficient container that provides fast numerical operations:
+
+```{code-cell} ipython3
+L = range(1000)
+%timeit [i**2 for i in L]
+```
+
+```{code-cell} ipython3
+a = np.arange(1000)
+%timeit a**2
+```
+
+## It's used by Pandas under the hood
+
++++
+
+The columns of a DataFrame are internally stored using numpy arrays. We can also retrieve this data as numpy arrays, for example using the `to_numpy()` method:
+
+```{code-cell} ipython3
+arr = countries["population"].to_numpy()
+arr
+```
+
+What we said above about element-wise operations and reductions works the same for numpy arrays:
+
+```{code-cell} ipython3
+arr + 10
+```
+
+```{code-cell} ipython3
+arr.mean()
+```
+
+Numpy contains more numerical functions than pandas, for example to calculate the log:
+
+```{code-cell} ipython3
+np.log(arr)
+```
+
+Those functions can *also* be applied on pandas objects:
+
+```{code-cell} ipython3
+np.log(countries["population"])
+```
+
+<div class="alert alert-info">
+
+__NumPy__ provides
+
+* multi-dimensional, homogeneously typed arrays  (single data type!)
+
+<br>
+
+__Pandas__ provides
+
+* 2D, heterogeneous data structure (multiple data types!)
+* labeled (named) row and column index
+
+</div>
+
++++
 
 # Acknowledgement
 
