@@ -13,8 +13,6 @@ kernelspec:
 
 <p><font size="6"><b> Case study: air quality data of European monitoring stations (AirBase)</b></font></p><br>
 
-__AirBase (The European Air quality dataBase): hourly measurements of all air quality monitoring stations from Europe.__
-
 > *DS Data manipulation, analysis and visualisation in Python*  
 > *December, 2019*
 
@@ -24,11 +22,11 @@ __AirBase (The European Air quality dataBase): hourly measurements of all air qu
 
 +++
 
-AirBase is the European air quality database maintained by the European Environment Agency (EEA). It contains air quality monitoring data and information submitted by participating countries throughout Europe. The [air quality database](https://www.eea.europa.eu/data-and-maps/data/aqereporting-8/air-quality-zone-geometries) consists of a multi-annual time series of air quality measurement data and statistics for a number of air pollutants.
+**AirBase** is the European air quality database maintained by the European Environment Agency (EEA). It contains air quality monitoring data and information submitted by participating countries throughout Europe. The [air quality database](https://www.eea.europa.eu/data-and-maps/data/aqereporting-8/air-quality-zone-geometries) consists of a multi-annual time series of air quality measurement data and statistics for a number of air pollutants.
 
 +++
 
-Some of the data files that are available from AirBase were included in the data folder: the hourly **concentrations of nitrogen dioxide (NO2)** for 4 different measurement stations:
+Some of the data files that are available from AirBase were included in the data folder: the **hourly concentrations of nitrogen dioxide (NO2)** for 4 different measurement stations:
 
 - FR04037 (PARIS 13eme): urban background site at Square de Choisy
 - FR04012 (Paris, Place Victor Basch): urban traffic site at Rue d'Alesia
@@ -38,37 +36,28 @@ Some of the data files that are available from AirBase were included in the data
 See http://www.eea.europa.eu/themes/air/interactive/no2
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: '-'
----
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
-pd.options.display.max_rows = 8
-plt.style.use("seaborn-whitegrid")
 ```
-
-+++ {"slideshow": {"slide_type": "slide"}}
 
 # Processing a single file
 
 We will start with processing one of the downloaded files (`BETR8010000800100hour.1-1-1990.31-12-2012`). Looking at the data, you will see it does not look like a nice csv file:
 
 ```{code-cell} ipython3
-with open("../data/BETR8010000800100hour.1-1-1990.31-12-2012") as f:
+with open("data/BETR8010000800100hour.1-1-1990.31-12-2012") as f:
     print(f.readline())
 ```
 
 So we will need to do some manual processing.
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
 Just reading the tab-delimited data:
 
 ```{code-cell} ipython3
-data = pd.read_csv("../data/BETR8010000800100hour.1-1-1990.31-12-2012", sep='\t')#, header=None)
+data = pd.read_csv("data/BETR8010000800100hour.1-1-1990.31-12-2012", sep='\t')#, header=None)
 ```
 
 ```{code-cell} ipython3
@@ -77,16 +66,16 @@ data.head()
 
 The above data is clearly not ready to be used! Each row contains the 24 measurements for each hour of the day, and also contains a flag (0/1) indicating the quality of the data. Furthermore, there is no header row with column names.
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>: <br><br> Clean up this dataframe by using more options of `read_csv` (see its [docstring](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html))
+<b>EXERCISE</b>: <br><br> Clean up this dataframe by using more options of `pd.read_csv` (see its [docstring](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html))
 
  <ul>
   <li>specify the correct delimiter</li>
   <li>specify that the values of -999 and -9999 should be regarded as NaN</li>
-  <li>specify are own column names (for how the column names are made up, see See <a href="http://stackoverflow.com/questions/6356041/python-intertwining-two-lists">http://stackoverflow.com/questions/6356041/python-intertwining-two-lists</a>)
+  <li>specify our own column names (for how the column names are made up, see <a href="http://stackoverflow.com/questions/6356041/python-intertwining-two-lists">http://stackoverflow.com/questions/6356041/python-intertwining-two-lists</a>)
 </ul>
 </div>
 
@@ -99,7 +88,7 @@ column_names = ['date'] + [item for pair in zip(hours, ['flag' + str(i) for i in
 ```{code-cell} ipython3
 :clear_cell: true
 
-data = pd.read_csv("../data/BETR8010000800100hour.1-1-1990.31-12-2012",
+data = pd.read_csv("data/BETR8010000800100hour.1-1-1990.31-12-2012",
                    sep='\t', header=None, names=column_names, na_values=[-999, -9999])
 ```
 
@@ -109,9 +98,7 @@ data = pd.read_csv("../data/BETR8010000800100hour.1-1-1990.31-12-2012",
 data.head()
 ```
 
-+++ {"slideshow": {"slide_type": "subslide"}}
-
-For the sake of this tutorial, we will disregard the 'flag' columns (indicating the quality of the data). 
+For the sake of this tutorial, we will disregard the 'flag' columns (indicating the quality of the data).
 
 +++
 
@@ -119,7 +106,7 @@ For the sake of this tutorial, we will disregard the 'flag' columns (indicating 
 
 <b>EXERCISE</b>:
 <br><br>
-Drop all 'flag' columns ('flag1', 'flag2', ...) 
+Drop all 'flag' columns ('flag1', 'flag2', ...)
 
 ```{code-cell} ipython3
 flag_columns = [col for col in data.columns if 'flag' in col]
@@ -138,7 +125,7 @@ data.head()
 
 Now, we want to reshape it: our goal is to have the different hours as row indices, merged with the date into a datetime-index. Here we have a wide and long dataframe, and want to make this a long, narrow timeseries.
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
 <div class="alert alert-info">
 
@@ -149,7 +136,7 @@ Recap: reshaping your data with [`stack` / `melt` and `unstack` / `pivot`](./pan
 
 
 
-<img src="../img/schema-stack.svg" width=70%>
+<img src="../img/pandas/schema-stack.svg" width=70%>
 
 </div>
 
@@ -226,7 +213,6 @@ The end result should look like:<br><br>
 **NOTE**: This is an advanced exercise. Do not spend too much time on it and don't hesitate to look at the solutions. 
 
 </div>
-
 
 +++
 
@@ -371,14 +357,12 @@ def read_airbase_file(filename, station):
     data = data.drop([col for col in data.columns if 'flag' in col], axis=1)
 
     # reshape
-    data = data.set_index('date')
-    data_stacked = data.stack()
-    data_stacked = data_stacked.reset_index()
+    data_stacked = pd.melt(data, id_vars=['date'], var_name='hour')
     
     # parse to datetime and remove redundant columns 
-    data_stacked.index = pd.to_datetime(data_stacked['date'] + data_stacked['level_1'], format="%Y-%m-%d%H")
-    data_stacked = data_stacked.drop(['date', 'level_1'], axis=1)
-    data_stacked = data_stacked.rename(columns={0: station})
+    data_stacked.index = pd.to_datetime(data_stacked['date'] + data_stacked['hour'], format="%Y-%m-%d%H")
+    data_stacked = data_stacked.drop(['date', 'hour'], axis=1)
+    data_stacked = data_stacked.rename(columns={'value': station})
     
     return data_stacked
 ```
@@ -390,7 +374,7 @@ import os
 ```
 
 ```{code-cell} ipython3
-filename = "../data/BETR8010000800100hour.1-1-1990.31-12-2012"
+filename = "data/BETR8010000800100hour.1-1-1990.31-12-2012"
 station = os.path.split(filename)[-1][:7]
 ```
 
@@ -405,7 +389,7 @@ test = read_airbase_file(filename, station)
 test.head()
 ```
 
-We now want to use this function to read in all the different data files from AirBase, and combine them into one Dataframe. 
+We now want to use this function to read in all the different data files from AirBase, and combine them into one Dataframe.
 
 +++
 
@@ -427,7 +411,7 @@ import glob
 ```{code-cell} ipython3
 :clear_cell: true
 
-data_files = glob.glob("../data/*0008001*")
+data_files = glob.glob("data/*0008001*")
 data_files
 ```
 
@@ -471,5 +455,5 @@ combined_data.index.name = 'datetime'
 ```
 
 ```{code-cell} ipython3
-combined_data.to_csv("../data/airbase_data_processed.csv")
+combined_data.to_csv("airbase_data_processed.csv")
 ```
