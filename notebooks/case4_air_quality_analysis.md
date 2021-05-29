@@ -11,33 +11,22 @@ kernelspec:
   name: python3
 ---
 
-+++ {"slideshow": {"slide_type": "slide"}}
-
 <p><font size="6"><b> Case study: air quality data of European monitoring stations (AirBase)</b></font></p><br>
 
-__AirBase (The European Air quality dataBase): hourly measurements of all air quality monitoring stations from Europe.__
-
 > *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
+> *December, 2018*
 
 > *© 2016, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: '-'
----
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import plotnine as pn
-
-pd.options.display.max_rows = 8
 ```
 
-In the previous notebook, we processed some raw data files of the AirBase air quality data. As a reminder, the data contains hourly concentrations of nitrogen dioxide (NO2) for 4 different measurement stations:
+We processed some raw data files of the AirBase air quality data. The data contains hourly concentrations of nitrogen dioxide (NO2) for 4 different measurement stations:
 
 - FR04037 (PARIS 13eme): urban background site at Square de Choisy
 - FR04012 (Paris, Place Victor Basch): urban traffic site at Rue d'Alesia
@@ -46,16 +35,16 @@ In the previous notebook, we processed some raw data files of the AirBase air qu
 
 See http://www.eea.europa.eu/themes/air/interactive/no2
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++
 
 # Importing and quick exploration
 
-+++ {"slideshow": {"slide_type": "subslide"}}
++++
 
-We processed the individual data files in the previous notebook, and saved it to a csv file `../data/airbase_data_processed.csv`. Let's import the file here (if you didn't finish the previous notebook, a version of the dataset is also available in `../data/airbase_data.csv`):
+We processed the individual data files in the previous notebook ([case4_air_quality_processing.ipynb](case4_air_quality_processing.ipynb)), and saved it to a csv file `airbase_data_processed.csv`. Let's import the file here (if you didn't finish the previous notebook, a set of the pre-processed dataset if also available in `data/airbase_data.csv`):
 
 ```{code-cell} ipython3
-alldata = pd.read_csv('../data/airbase_data.csv', index_col=0, parse_dates=True)
+alldata = pd.read_csv('data/airbase_data.csv', index_col=0, parse_dates=True)
 ```
 
 We only use the data from 1999 onwards:
@@ -132,12 +121,12 @@ sns.pairplot(data.tail(5000).dropna())
 data.head()
 ```
 
-In principle this is not a tidy dataset. The variable that was measured is the NO2 concentration, and is divided in 4 columns. Of course those measurements were made at different stations, so one could interpet it as separate variables. But in any case, such format typically does not work well with `plotnine` which expects a pure tidy format.
+In principle this is not a tidy dataset. The variable that was measured is the NO2 concentration, and is divided in 4 columns. Of course those measurements were made at different stations, so one could interpret it as separate variables. But in any case, such format does not always work well with libraries like `seaborn` which expects a pure tidy format.
 
 
 Reason to not use a tidy dataset here: 
 
-* bigger memory use
+* smaller memory use
 * timeseries functionality like resample works better
 * pandas plotting already does what we want when having different columns for *some* types of plots (eg line plots of the timeseries)
 
@@ -173,7 +162,7 @@ data_tidy['no2'].isnull().sum()
 data_tidy = data_tidy.dropna()
 ```
 
-In the following exercises we will mostly do our analysis on `data`and often use pandas (or seaborn) plotting, but once we produced some kind of summary dataframe as the result of an analysis, then it becomes more interesting to convert that result to a tidy format to be able to use the more advanced plotting functionality of `plotnine`.
+In the following exercises we will mostly do our analysis on `data`and often use pandas plotting, but once we produced some kind of summary dataframe as the result of an analysis, then it becomes more interesting to convert that result to a tidy format to be able to use the more advanced plotting functionality of seaborn.
 
 +++
 
@@ -192,7 +181,7 @@ Take a look at the [Timeseries notebook](pandas_04_time_series_data.ipynb) when 
   <li>string indexing of DateTimeIndex</li>
 </ul><br>
 
-Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [plotnine](visualization_02_plotnine.ipynb) notebooks when you require more info about the plot requirements.
+Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [seaborn](visualization_02_seaborn.ipynb) notebooks when you require more info about the plot requirements.
 
 </div>
 
@@ -234,14 +223,13 @@ data.loc['2009':, 'FR04037'].resample('M').agg(['mean', 'median']).plot()
 
 NOTE: 
 
-When having the data not in a long format but when having different columns for which you want to make violin plots, you can use [seaborn](http://seaborn.pydata.org/examples/index.html).
-When using the tidy data, we can use `plotnine`.
+In this case, we can use seaborn both with the data not in a long format but when having different columns for which you want to make violin plots, as with the tidy data.
 </div>
 
 ```{code-cell} ipython3
 :clear_cell: true
 
-# with seaborn
+# with wide dataframe
 fig, ax = plt.subplots()
 sns.violinplot(data=data['2011-01': '2011-08'], palette="GnBu_d", ax=ax)
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
@@ -250,12 +238,19 @@ ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```{code-cell} ipython3
 :clear_cell: true
 
-# with plotnine
+# with tidy dataframe
 data_tidy_subset = data_tidy[(data_tidy['datetime'] >= "2011-01") & (data_tidy['datetime'] < "2011-09")]
 
-(pn.ggplot(data_tidy_subset, pn.aes(x='station', y='no2'))
-    + pn.geom_violin()
-    + pn.ylab("NO$_2$ concentration (µg/m³)"))
+fig, ax = plt.subplots()
+sns.violinplot(data=data_tidy_subset, x="station", y="no2", palette="GnBu_d", ax=ax)
+ax.set_ylabel("NO$_2$ concentration (µg/m³)")
+```
+
+```{code-cell} ipython3
+:clear_cell: true
+
+# with figure-level function
+sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette="GnBu_d")
 ```
 
 <div class="alert alert-success">
@@ -267,7 +262,7 @@ data_tidy_subset = data_tidy[(data_tidy['datetime'] >= "2011-01") & (data_tidy['
   <li>Using the matplotlib objects, change the y-label to 'NO$_2$ concentration (µg/m³)</li>
   <li>Add a 'darkorange' horizontal line on the ax for the y-value 40 µg/m³ (command for horizontal line from matplotlib: <code>axhline</code>).</li>
   <li><a href="visualization_01_matplotlib.ipynb">Place the text</a> 'Yearly limit is 40 µg/m³' just above the 'darkorange' line.</li>
-</ul><br>
+</ul>
 
 </div>
 
@@ -409,9 +404,9 @@ df2011.groupby(df2011.index.week)[['BETN029', 'BETR801']].quantile(0.95).plot()
 ```{code-cell} ipython3
 :clear_cell: true
 
-# Resample wise (not possible to use quantile directly on a resample, so you need a lambda function)
+# Resample wise
 # Note the different x-axis labels
-df2011[['BETN029', 'BETR801']].resample('W').agg(lambda x: x.quantile(0.75)).plot()
+df2011[['BETN029', 'BETR801']].resample('W').quantile(0.75).plot()
 ```
 
 <div class="alert alert-success">
@@ -474,12 +469,10 @@ data_weekend_BETR801.plot()
 ```{code-cell} ipython3
 :clear_cell: true
 
-# using a tidy dataset and plotnine
+# using a tidy dataset and seaborn
 data_weekend_BETR801_tidy = data_weekend['BETR801'].reset_index()
 
-(pn.ggplot(data_weekend_BETR801_tidy,
-           pn.aes(x='hour', y='BETR801', color='weekend'))
-    + pn.geom_line())
+sns.lineplot(data=data_weekend_BETR801_tidy, x="hour", y="BETR801", hue="weekend")
 ```
 
 ```{code-cell} ipython3
@@ -495,11 +488,9 @@ data_weekend_tidy.head()
 ```{code-cell} ipython3
 :clear_cell: true
 
-# when still having multiple factors, it becomes useful to convert to tidy dataset and use plotnine
-(pn.ggplot(data_weekend_tidy,
-           pn.aes(x='hour', y='no2', color='weekend'))
-    + pn.geom_line()
-    + pn.facet_wrap('station'))
+# when still having multiple factors, it becomes useful to convert to tidy dataset and use seaborn
+sns.relplot(data=data_weekend_tidy, x="hour", y="no2", kind="line",
+            hue="weekend", col="station", col_wrap=2)
 ```
 
 ```{code-cell} ipython3
@@ -559,8 +550,6 @@ exceedances = exceedances.groupby(exceedances.index.year).sum()
 ax = exceedances.loc[2005:].plot(kind='bar')
 ax.axhline(18, color='k', linestyle='--')
 ```
-
-+++ {"slideshow": {"slide_type": "slide"}}
 
 # More advanced exercises...
 
@@ -655,7 +644,7 @@ ax2.set_title('BETR801')
   <li>Add a new column, called 'weekday', to the variable <code>subset</code> which defines for each data point the day of the week</li>
   <li>From the <code>subset</code> DataFrame, select only Monday (= day 0) and Sunday (=day 6) and remove the others (so, keep this as variable <code>subset</code>)</li>
   <li>Change the values of the weekday column in <code>subset</code> according to the following mapping: <code>{0:"Monday", 6:"Sunday"}</code></li>
-  <li>With plotnine, make a scatter plot of the measurements at 'BETN029' vs 'FR04037', with the color variation based on the weekday. Add a linear regression to this plot.</li>
+  <li>With seaborn, make a scatter plot of the measurements at 'BETN029' vs 'FR04037', with the color variation based on the weekday. Add a linear regression to this plot.</li>
 </ul><br>
 
 **Note**: If you run into the **SettingWithCopyWarning** and do not know what to do, recheck [pandas_03b_indexing](pandas_03b_indexing.ipynb)
@@ -679,10 +668,15 @@ subset["weekday"] = subset["weekday"].replace(to_replace={0:"Monday", 6:"Sunday"
 ```{code-cell} ipython3
 :clear_cell: true
 
-(pn.ggplot(subset,
-           pn.aes(x="BETN029", y="FR04037", color="weekday"))
-    + pn.geom_point()
-    + pn.stat_smooth(method='lm'))
+sns.set_style("whitegrid")
+```
+
+```{code-cell} ipython3
+:clear_cell: true
+
+sns.lmplot(
+    data=subset, x="BETN029", y="FR04037", hue="weekday"
+)
 ```
 
 <div class="alert alert-success">
@@ -690,9 +684,8 @@ subset["weekday"] = subset["weekday"].replace(to_replace={0:"Monday", 6:"Sunday"
 <b>EXERCISE</b>:
 
  <ul>
-  <li>The maximum daily, 8 hour mean, should be below 100 µg/m³. What is the number of exceedances of this limit for each year/station?</li><br><br>
-  </ul>
- 
+  <li>The maximum daily, 8 hour mean, should be below 100 µg/m³. What is the number of exceedances of this limit for each year/station?</li><br>
+    </ul>
   
 **Tip:**<br>
 
@@ -716,14 +709,12 @@ exceedances = exceedances.groupby(exceedances.index.year).sum()
 ax = exceedances.plot(kind='bar')
 ```
 
-+++ {"slideshow": {"slide_type": "subslide"}}
-
 <div class="alert alert-success">
 
 <b>EXERCISE</b>:
 
  <ul>
-  <li>Visualize the typical week profile for station 'BETR801' as boxplots (where the values in one boxplot are the <i>daily means</i> for the different <i>weeks</i> for a certain weekday).</li><br><br>
+  <li>Visualize the typical week profile for station 'BETR801' as boxplots (where the values in one boxplot are the <i>daily means</i> for the different <i>weeks</i> for a certain weekday).</li><br>
   </ul>
  
   
@@ -745,35 +736,27 @@ data_daily = data.resample('D').mean()
 ```
 
 ```{code-cell} ipython3
----
-clear_cell: true
-slideshow:
-  slide_type: fragment
----
+:clear_cell: true
+
 # add a weekday column
 data_daily['weekday'] = data_daily.index.weekday
 data_daily.head()
 ```
 
-Plotting with plotnine:
+Plotting with seaborn:
 
 ```{code-cell} ipython3
 :clear_cell: true
 
-# plotnine
-(pn.ggplot(data_daily["2012"],
-           pn.aes(x='factor(weekday)', y='BETR801'))
-    + pn.geom_boxplot())
+# seaborn
+sns.boxplot(data=data_daily["2012":], x='weekday', y='BETR801', color="grey")
 ```
 
 Reshaping and plotting with pandas:
 
 ```{code-cell} ipython3
----
-clear_cell: true
-slideshow:
-  slide_type: subslide
----
+:clear_cell: true
+
 # when using pandas to plot, the different boxplots should be different columns
 # therefore, pivot table so that the weekdays are the different columns
 data_daily['week'] = data_daily.index.week
