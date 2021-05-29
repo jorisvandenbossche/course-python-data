@@ -27,7 +27,7 @@ kernelspec:
 
 +++
 
-In this case study, we will make use of the freely available bike count data of the city of Ghent (Belgium). At the Coupure Links, next to the Faculty of Bioscience Engineering, a counter keeps track of the number of passing cyclists in both directions.  
+In this case study, we will make use of the freely available bike count data of the city of Ghent (Belgium). At the Coupure Links, next to the Faculty of Bioscience Engineering, a counter keeps track of the number of passing cyclists in both directions.
 
 ```{code-cell} ipython3
 import pandas as pd
@@ -105,7 +105,7 @@ df.dtypes
 
 +++
 
-As explained above, the first and second column (respectively `datum` and `tijd`) indicate the date and hour of the day. To obtain a time series, we have to combine those two columns into one series of actual datetime values. 
+As explained above, the first and second column (respectively `datum` and `tijd`) indicate the date and hour of the day. To obtain a time series, we have to combine those two columns into one series of actual datetime values.
 
 +++
 
@@ -128,7 +128,7 @@ Preprocess the data:
 - `drop` can remove both rows and columns using the names of the index or column name. Make sure to define `columns=` argument to remove columns.
 - `rename` can be used for both rows/columns. It needs a dictionary with the current names as keys and the new names as values. 
 
-</details>    
+</details>
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -317,7 +317,7 @@ Create a new Pandas Series `df_both` which contains the sum of the counts of bot
 
 - Check the purpose of the `axis` argument of the `sum` method.
 
-</details>   
+</details>
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -336,8 +336,7 @@ Using the `df_both` from the previous exercise, create a new Series `df_quiet` w
 
 - Use the `[]` to select data. You can use conditions (so-called _boolean indexing_) returning True/False inside the brackets.
 
-</details>    
-   
+</details>
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -356,8 +355,7 @@ Using the original data `df`, select only the intervals for which less than 3 cy
 - To combine conditions use the `|` (or) or the `&` (and) operators.
 - Make sure to use `()` around each individual condition.    
 
-</details>    
-  
+</details>
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -379,8 +377,7 @@ What is the average number of bikers passing each 15 min?
 
 - As the time series is already 15min level, this is just the same as taking the mean.
 
-</details>    
-    
+</details>
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -583,7 +580,7 @@ Looking at the data in the above exercises, there seems to be clearly a:
 - weekly pattern
 - yearly pattern
 
-Such patterns can easily be calculated and visualized in pandas using the DatetimeIndex attributes `weekday` combined with `groupby` functionality. Below a taste of the possibilities, and we will learn about this in the proceeding notebooks:
+Such patterns can easily be calculated and visualized in pandas using the DatetimeIndex attributes `dayofweek` combined with `groupby` functionality. Below a taste of the possibilities, and we will learn about this in the proceeding notebooks:
 
 +++
 
@@ -594,7 +591,7 @@ df_daily = df.resample('D').sum()
 ```
 
 ```{code-cell} ipython3
-df_daily.groupby(df_daily.index.weekday).mean().plot(kind='bar')
+df_daily.groupby(df_daily.index.dayofweek).mean().plot(kind='bar')
 ```
 
 **Daily pattern:**

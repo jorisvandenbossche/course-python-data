@@ -153,7 +153,7 @@ data_tidy.head()
 ```{code-cell} ipython3
 :clear_cell: true
 
-data_tidy['no2'].isnull().sum()
+data_tidy['no2'].isna().sum()
 ```
 
 ```{code-cell} ipython3
@@ -436,7 +436,7 @@ Start with only visualizing the different in diurnal profile for the BETR801 sta
 **Hints:**
 
  <ul>
-  <li>Add a column 'weekend' defining if a value of the index is in the weekend (i.e. weekdays 5 and 6) or not</li>
+  <li>Add a column 'weekend' defining if a value of the index is in the weekend (i.e. days of the week 5 and 6) or not</li>
   <li>Add a column 'hour' with the hour of the day for each row.</li>
   <li>You can groupby on multiple items at the same time.</li>
 
@@ -446,7 +446,7 @@ Start with only visualizing the different in diurnal profile for the BETR801 sta
 ```{code-cell} ipython3
 :clear_cell: true
 
-data['weekend'] = data.index.weekday.isin([5, 6])
+data['weekend'] = data.index.dayofweek.isin([5, 6])
 data['weekend'] = data['weekend'].replace({True: 'weekend', False: 'weekday'})
 data['hour'] = data.index.hour
 ```
@@ -641,9 +641,9 @@ ax2.set_title('BETR801')
 
  <ul>
   <li>Make a selection of the original dataset of the data in January 2009, call the resulting variable <code>subset</code></li>
-  <li>Add a new column, called 'weekday', to the variable <code>subset</code> which defines for each data point the day of the week</li>
+  <li>Add a new column, called 'dayofweek', to the variable <code>subset</code> which defines for each data point the day of the week</li>
   <li>From the <code>subset</code> DataFrame, select only Monday (= day 0) and Sunday (=day 6) and remove the others (so, keep this as variable <code>subset</code>)</li>
-  <li>Change the values of the weekday column in <code>subset</code> according to the following mapping: <code>{0:"Monday", 6:"Sunday"}</code></li>
+  <li>Change the values of the dayofweek column in <code>subset</code> according to the following mapping: <code>{0:"Monday", 6:"Sunday"}</code></li>
   <li>With seaborn, make a scatter plot of the measurements at 'BETN029' vs 'FR04037', with the color variation based on the weekday. Add a linear regression to this plot.</li>
 </ul><br>
 
@@ -655,14 +655,14 @@ ax2.set_title('BETR801')
 :clear_cell: true
 
 subset = data['2009-01'].copy()
-subset["weekday"] = subset.index.weekday
-subset = subset[subset['weekday'].isin([0, 6])]
+subset["dayofweek"] = subset.index.dayofweek
+subset = subset[subset['dayofweek'].isin([0, 6])]
 ```
 
 ```{code-cell} ipython3
 :clear_cell: true
 
-subset["weekday"] = subset["weekday"].replace(to_replace={0:"Monday", 6:"Sunday"})
+subset["dayofweek"] = subset["dayofweek"].replace(to_replace={0:"Monday", 6:"Sunday"})
 ```
 
 ```{code-cell} ipython3
@@ -675,7 +675,7 @@ sns.set_style("whitegrid")
 :clear_cell: true
 
 sns.lmplot(
-    data=subset, x="BETN029", y="FR04037", hue="weekday"
+    data=subset, x="BETN029", y="FR04037", hue="dayofweek"
 )
 ```
 
@@ -714,10 +714,10 @@ ax = exceedances.plot(kind='bar')
 <b>EXERCISE</b>:
 
  <ul>
-  <li>Visualize the typical week profile for station 'BETR801' as boxplots (where the values in one boxplot are the <i>daily means</i> for the different <i>weeks</i> for a certain weekday).</li><br>
+  <li>Visualize the typical week profile for station 'BETR801' as boxplots (where the values in one boxplot are the <i>daily means</i> for the different <i>weeks</i> for a certain day of the week).</li><br>
   </ul>
  
-  
+
 **Tip:**<br>
 
 The boxplot method of a DataFrame expects the data for the different boxes in different columns. For this, you can either use `pivot_table` or a combination of `groupby` and `unstack`
@@ -727,7 +727,7 @@ The boxplot method of a DataFrame expects the data for the different boxes in di
 
 +++
 
-Calculating daily means and add weekday information:
+Calculating daily means and add day of the week information:
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -738,8 +738,8 @@ data_daily = data.resample('D').mean()
 ```{code-cell} ipython3
 :clear_cell: true
 
-# add a weekday column
-data_daily['weekday'] = data_daily.index.weekday
+# add a dayofweek column
+data_daily['dayofweek'] = data_daily.index.dayofweek
 data_daily.head()
 ```
 
@@ -749,7 +749,7 @@ Plotting with seaborn:
 :clear_cell: true
 
 # seaborn
-sns.boxplot(data=data_daily["2012":], x='weekday', y='BETR801', color="grey")
+sns.boxplot(data=data_daily["2012":], x='dayofweek', y='BETR801', color="grey")
 ```
 
 Reshaping and plotting with pandas:
@@ -759,8 +759,9 @@ Reshaping and plotting with pandas:
 
 # when using pandas to plot, the different boxplots should be different columns
 # therefore, pivot table so that the weekdays are the different columns
-data_daily['week'] = data_daily.index.week
-data_pivoted = data_daily['2012'].pivot_table(columns='weekday', index='week', values='BETR801')
+data_daily['week'] = data_daily.index.isocalendar().week
+data_pivoted = data_daily['2012':].pivot_table(columns='dayofweek', index='week',
+                                              values='BETR801')
 data_pivoted.head()
 data_pivoted.boxplot();
 ```
@@ -769,5 +770,5 @@ data_pivoted.boxplot();
 :clear_cell: true
 
 # An alternative method using `groupby` and `unstack`
-data_daily['2012'].groupby(['weekday', 'week'])['BETR801'].mean().unstack(level=0).boxplot();
+data_daily['2012':].groupby(['dayofweek', 'week'])['BETR801'].mean().unstack(level=0).boxplot();
 ```
