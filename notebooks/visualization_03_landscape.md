@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-<p><font size="6"><b>Visualzation - Python's Visualization Landscape</b></font></p>
+<p><font size="6"><b>Visualization - Python's Visualization Landscape</b></font></p>
 
 > *DS Data manipulation, analysis and visualization in Python*
 > *May/June, 2021*
@@ -35,13 +35,14 @@ conda install -c conda-forge bokeh plotly altair hvplot holoviews
 
 To have support of plotly inside the Jupyter Lab environment
 ```
+conda install -c conda-forge nodejs
 jupyter labextension install jupyterlab-plotly@4.14.3
 ```
 
 To run the large data set section, additional package installations are required:
 
 ```
-conda install -c bokeh datashader holoviews
+conda install -c conda-forge datashader holoviews
 ```
 
 To run the 'bokeh-pandas' backend:
@@ -130,40 +131,40 @@ Which approach to use, is sometimes just a matter of personal preference... Alth
 
 * When your data consists of only **1 categorical variable**, such as
 
-| ID | variable 1 | variable 2 | variabel ... |
-|------------|-------------| ---- | ----- |
-| 1 | 0.2 | 0.8 | ... |
-| 2 | 0.3 | 0.1 | ... |
-| 3 | 0.9 | 0.6 | ... |
-| 4 | 0.1 | 0.7 | ... |
-| ...  | ... | ... | ...|
+  | ID | variable 1 | variable 2 | variabel ... |
+  |------------|-------------| ---- | ----- |
+  | 1 | 0.2 | 0.8 | ... |
+  | 2 | 0.3 | 0.1 | ... |
+  | 3 | 0.9 | 0.6 | ... |
+  | 4 | 0.1 | 0.7 | ... |
+  | ...  | ... | ... | ...|
 
-the added value of using Seaborn approach is LOW. Pandas `.plot()` will probably suffice.
+  the added value of using Seaborn approach is LOW. Pandas `.plot()` will probably suffice.
 
 * When working with **timeseries data** from sensors or continuous logging, such as
 
-| datetime | station 1 | station 2 | station ... |
-|------------|-------------| ---- | ----- |
-| 2017-12-20T17:50:46Z | 0.2 | 0.8 | ... |
-| 2017-12-20T17:50:52Z | 0.3 | 0.1 | ... |
-| 2017-12-20T17:51:03Z | 0.9 | 0.6 | ... |
-| 2017-12-20T17:51:40Z | 0.1 | 0.7 | ... |
-| ...  | ... | ... | ...|
+  | datetime | station 1 | station 2 | station ... |
+  |------------|-------------| ---- | ----- |
+  | 2017-12-20T17:50:46Z | 0.2 | 0.8 | ... |
+  | 2017-12-20T17:50:52Z | 0.3 | 0.1 | ... |
+  | 2017-12-20T17:51:03Z | 0.9 | 0.6 | ... |
+  | 2017-12-20T17:51:40Z | 0.1 | 0.7 | ... |
+  | ...  | ... | ... | ...|
 
-the added value of using a grammar of graphics approach is LOW. Pandas `.plot()` will probably suffice.
+  the added value of using a grammar of graphics approach is LOW. Pandas `.plot()` will probably suffice.
 
 * When working with different experiments, different conditions, (factorial) **experimental designs**, such as
 
-| ID | origin | addition (ml)  | measured_value |
-|----|-----------| ----- | ------ |
-| 1  | Eindhoven | 0.3 | 7.2 |
-| 2  | Eindhoven | 0.6 | 6.7 |
-| 3  | Eindhoven | 0.9 | 5.2 |
-| 4  | Destelbergen | 0.3 | 7.2 |
-| 5  | Destelbergen | 0.6 | 6.8 |
-| ...  | ... | ... | ...|
+  | ID | origin | addition (ml)  | measured_value |
+  |----|-----------| ----- | ------ |
+  | 1  | Eindhoven | 0.3 | 7.2 |
+  | 2  | Eindhoven | 0.6 | 6.7 |
+  | 3  | Eindhoven | 0.9 | 5.2 |
+  | 4  | Destelbergen | 0.3 | 7.2 |
+  | 5  | Destelbergen | 0.6 | 6.8 |
+  | ...  | ... | ... | ...|
 
-the added value of using Seaborn approach is HIGH. Represent your data [`tidy`](http://www.jeannicholashould.com/tidy-data-in-python.html) to achieve maximal benefit!
+  the added value of using Seaborn approach is HIGH. Represent your data [`tidy`](http://www.jeannicholashould.com/tidy-data-in-python.html) to achieve maximal benefit!
 
 * When you want to visualize __distributions__ of data or __regressions__ between variables, the added value of using Seaborn approach is HIGH.
 
