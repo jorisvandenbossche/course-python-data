@@ -323,7 +323,7 @@ The function takes a `DataFrame` as input, splits the record into separate rows 
 
 **EXERCISE**
 
-- Use the function `solve_double_field_entry` to update the `survey_data` by decoupling the double entries. Save the result as a variable `survey_data_decoupled`. Use a `copy()` of the original `survey_data` as input.
+- Use the function `solve_double_field_entry` to update the `survey_data` by decoupling the double entries. Save the result as a variable `survey_data_decoupled`.
 
 <details><summary>Hints</summary>
 
@@ -893,13 +893,13 @@ survey_data_species = pd.merge(survey_data_plots, species_data, how="left",  # L
 ```
 
 ```{code-cell} ipython3
-len(survey_data_species)
+len(survey_data_species) # check length after join operation
 ```
 
 The join is ok, but we are left with some redundant columns and wrong naming:
 
 ```{code-cell} ipython3
- survey_data_species.head()
+survey_data_species.head()
 ```
 
 We do not need the columns `species_x` and `species_id` column anymore, as we will use the scientific names from now on:
@@ -1214,6 +1214,10 @@ df_species_annotated_subset.head()
 
 unique_species_annotated = pd.merge(unique_species, df_species_annotated_subset,
                                     left_index=True, right_index=True)
+```
+
+```{code-cell} ipython3
+unique_species_annotated.head()
 ```
 
 <div class="alert alert-success">

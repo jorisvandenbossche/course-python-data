@@ -11,12 +11,12 @@ kernelspec:
   name: python3
 ---
 
-<p><font size="6"><b> Case study: air quality data of European monitoring stations (AirBase)</b></font></p><br>
+<p><font size="6"><b> CASE - air quality data of European monitoring stations (AirBase)</b></font></p>
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *DS Data manipulation, analysis and visualization in Python*  
+> *May/June, 2021*
+>
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 

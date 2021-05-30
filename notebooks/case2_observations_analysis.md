@@ -249,6 +249,7 @@ survey_data['taxa'].value_counts()
 :clear_cell: true
 
 non_rodent_species = survey_data[survey_data['taxa'].isin(['Rabbit', 'Bird', 'Reptile'])]
+non_rodent_species.head()
 ```
 
 ```{code-cell} ipython3
@@ -272,6 +273,7 @@ Select the observations for which the `name` starts with the characters 'r' (mak
 :clear_cell: true
 
 r_species = survey_data[survey_data['name'].str.lower().str.startswith('r')]
+r_species.head()
 ```
 
 ```{code-cell} ipython3
@@ -298,6 +300,7 @@ Select the observations that are not Birds. Call the resulting variable <code>no
 :clear_cell: true
 
 non_bird_species = survey_data[survey_data['taxa'] != 'Bird']
+non_bird_species.head()
 ```
 
 ```{code-cell} ipython3
@@ -325,6 +328,8 @@ birds_85_89 = survey_data[(survey_data["eventDate"] >= "1985-01-01")
                           & (survey_data['taxa'] == 'Bird')]
 birds_85_89.head()
 ```
+
+Alternative solution:
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -481,10 +486,13 @@ n_plot_sex.head()
 :clear_cell: true
 
 pivoted = n_plot_sex.pivot(columns="sex", index="verbatimLocality", values="count")
+```
+
+```{code-cell} ipython3
 pivoted.head()
 ```
 
-As such, we can use the variable `pivoted` to plot the result:
+To check, we can use the variable `pivoted` to plot the result:
 
 ```{code-cell} ipython3
 pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
@@ -590,9 +598,7 @@ survey_data.resample('A', on='eventDate').size().plot()
 
 To evaluate the intensity or number of occurrences during different time spans, a heatmap is an interesting representation.
 
-```{code-cell} ipython3
-survey_data.head()
-```
++++
 
 <div class="alert alert-success">
 

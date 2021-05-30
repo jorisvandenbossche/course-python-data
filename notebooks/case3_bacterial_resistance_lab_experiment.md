@@ -231,6 +231,8 @@ pd.pivot_table(tidy_experiment, values='optical_density',
                aggfunc='mean')
 ```
 
+Advanced/optional solution:
+
 ```{code-cell} ipython3
 :clear_cell: true
 
@@ -315,6 +317,7 @@ We will first reproduce 'Figure 2' without the error bars:
 
 falcor["Bacterial_genotype"] = falcor["Bacterial_genotype"].replace({'WT(2)': 'WT',
                                                                      'MUT(2)': 'MUT'})
+falcor.head()
 ```
 
 ```{code-cell} ipython3
@@ -327,10 +330,6 @@ sns.catplot(data=falcor, kind="point",
             join=False, ci=None,
             aspect=3, height=3,
             color="black")
-```
-
-```{code-cell} ipython3
-falcor.head()
 ```
 
 Seaborn supports confidence intervals by different estimators when multiple values are combined (see [this example](https://seaborn.pydata.org/examples/pointplot_anova.html)). In this particular case, the error estimates are already provided and are not symmetrical. Hence, we need to find a method to use the lower `log10 LBc` and upper `log10 UBc` confidence intervals.

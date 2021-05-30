@@ -456,7 +456,7 @@ df_daily.max()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: false
+:clear_cell: true
 
 df_daily.nlargest(10)
 ```

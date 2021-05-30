@@ -11,12 +11,12 @@ kernelspec:
   name: python3
 ---
 
-<p><font size="6"><b> Case study: air quality data of European monitoring stations (AirBase)</b></font></p><br>
+<p><font size="6"><b> CASE - air quality data of European monitoring stations (AirBase)</b></font></p>
 
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2018*
-
-> *© 2016, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *DS Data manipulation, analysis and visualization in Python*  
+> *May/June, 2021*
+>
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -221,9 +221,8 @@ data.loc['2009':, 'FR04037'].resample('M').agg(['mean', 'median']).plot()
   <li>Change the y-label to 'NO$_2$ concentration (µg/m³)'</li>
 </ul><br>
 
-NOTE: 
+_NOTE:_ In this case, we can use seaborn both with the data not in a long format but when having different columns for which you want to make violin plots, as with the tidy data.
 
-In this case, we can use seaborn both with the data not in a long format but when having different columns for which you want to make violin plots, as with the tidy data.
 </div>
 
 ```{code-cell} ipython3
@@ -270,7 +269,7 @@ sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette=
 :clear_cell: true
 
 fig, ax = plt.subplots()
-data['2012'].mean().plot(kind='bar', ax=ax, rot=0, color='C0')
+data['2012':].mean().plot(kind='bar', ax=ax, rot=0, color='C0')
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ax.axhline(y=40., color='darkorange')
 ax.text(0.01, 0.48, 'Yearly limit is 40 µg/m³',
@@ -375,8 +374,10 @@ data.groupby('month').mean()
 data.groupby('month').mean().plot()
 ```
 
+Remove the temporary 'month' column generated in the solution of the previous exercise:
+
 ```{code-cell} ipython3
-data = data.drop("month", axis=1)
+data = data.drop("month", axis=1, errors="ignore")
 ```
 
 Note: Technically, we could reshape the result of the groupby operation to a tidy format (we no longer have a real time series), but since we already have the things we want to plot as lines in different columns, doing `.plot` already does what we want.
@@ -427,20 +428,20 @@ data.groupby(data.index.hour).mean().plot()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b> <br><br>
+__EXERCISE__
 
-What is the difference in the typical diurnal profile between week and weekend days? (and visualise it)<br><br>
+What is the difference in the typical diurnal profile between week and weekend days? (and visualise it)
 
-Start with only visualizing the different in diurnal profile for the BETR801 station. In a next step, make the same plot for each station.<br><br>
+Start with only visualizing the different in diurnal profile for the 'BETR801' station. In a next step, make the same plot for each station.
 
-**Hints:**
+<details><summary>Hints</summary>
 
- <ul>
-  <li>Add a column 'weekend' defining if a value of the index is in the weekend (i.e. days of the week 5 and 6) or not</li>
-  <li>Add a column 'hour' with the hour of the day for each row.</li>
-  <li>You can groupby on multiple items at the same time.</li>
+- Add a column `weekend` defining if a value of the index is in the weekend (i.e. days of the week 5 and 6) or not
+- Add a column `hour` with the hour of the day for each row.
+- You can `groupby` on multiple items at the same time.
+ 
+</details>
 
-</ul>
 </div>
 
 ```{code-cell} ipython3
@@ -493,18 +494,18 @@ sns.relplot(data=data_weekend_tidy, x="hour", y="no2", kind="line",
             hue="weekend", col="station", col_wrap=2)
 ```
 
+Remove the temporary columns 'hour' and 'weekend' used in the solution of previous exercise:
+
 ```{code-cell} ipython3
-data = data.drop(['hour', 'weekend'], axis=1)
+data = data.drop(['hour', 'weekend'], axis=1, errors="ignore")
 ```
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:<br><br>
+__EXERCISE__
 
- <ul>
-  <li>Calculate the correlation between the different stations (check in the documentation, google "pandas correlation" or use the magic function <code>%psearch</code>)</li>
+Calculate the correlation between the different stations (check in the documentation, google "pandas correlation" or use the magic function <code>%psearch</code>)
 
-</ul>
 </div>
 
 ```{code-cell} ipython3
@@ -515,19 +516,20 @@ data[['BETR801', 'BETN029', 'FR04037', 'FR04012']].corr()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:<br><br>
+__EXERCISE__
 
-Count the number of exceedances of hourly values above the European limit 200 µg/m3 for each year and station after 2005. Make a barplot of the counts. Add an horizontal line indicating the maximum number of exceedances (which is 18) allowed per year?<br><br>
+Count the number of exceedances of hourly values above the European limit 200 µg/m3 for each year and station after 2005. Make a barplot of the counts. Add an horizontal line indicating the maximum number of exceedances (which is 18) allowed per year?
 
 **Hints:**
 
- <ul>
-  <li>Create a new DataFrame, called <code>exceedances</code>, (with boolean values) indicating if the threshold is exceeded or not</li>
-  <li>Remember that the sum of True values can be used to count elements</li>
-  <li>Adding a horizontal line can be done with the matplotlib function <code>ax.axhline</code></li>
+<details><summary>Hints</summary>
+ 
+- Create a new DataFrame, called <code>exceedances</code>, (with boolean values) indicating if the threshold is exceeded or not
+- Remember that the sum of True values can be used to count elements
+- Adding a horizontal line can be done with the matplotlib function <code>ax.axhline</code>
+ 
+</details>
 
-
-</ul>
 </div>
 
 ```{code-cell} ipython3
@@ -559,7 +561,9 @@ data = alldata['1999':].copy()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>: Perform the following actions for the station `'FR04012'` only:
+__EXERCISE__
+    
+Perform the following actions for the station `'FR04012'` only:
 
  <ul>
   <li>Remove the rows containing <code>NaN</code> or zero values</li>
@@ -681,17 +685,17 @@ sns.lmplot(
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>The maximum daily, 8 hour mean, should be below 100 µg/m³. What is the number of exceedances of this limit for each year/station?</li><br>
-    </ul>
+The maximum daily, 8 hour mean, should be below 100 µg/m³. What is the number of exceedances of this limit for each year/station?
   
-**Tip:**<br>
+<details><summary>Hints</summary>
+ 
+- Have a look at the `rolling` method to perform moving window operations.
 
-Have a look at the `rolling` method to perform moving window operations.<br><br>
+</details>
 
-**Note:**<br>
+<br>_Note:_
 This is not an actual limit for NO$_2$, but a nice exercise to introduce the `rolling` method. Other pollutans, such as 0$_3$ have actually such kind of limit values based on 8-hour means.
 
 </div>
