@@ -38,7 +38,7 @@ plt.style.use('seaborn-whitegrid')
 **EXERCISE**
 
 - Read in the `survey_data_completed.csv` file and save the resulting `DataFrame` as variable `survey_data_processed` (if you did not complete the previous notebook, a version of the csv file is available in the `data` folder).
-- Interpret the 'eventDate' column directly as python `datetime` object and make sure the 'occurrenceID' column is used as the index of the resulting DataFrame (both can be done at once when reading the csv file using parameters of the `read_csv` function)
+- Interpret the 'eventDate' column directly as python `datetime` objects and make sure the 'occurrenceID' column is used as the index of the resulting DataFrame (both can be done at once when reading the csv file using parameters of the `read_csv` function)
 - Inspect the first five rows of the DataFrame and the data types of each of the data columns. Verify that the 'eventDate' indeed has a datetime data type.
 
 <details><summary>Hints</summary>
@@ -157,6 +157,8 @@ survey_data_unique = survey_data_processed.drop_duplicates()
 ```
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 len(survey_data_unique)
 ```
 
@@ -211,8 +213,6 @@ __NOTE!__
 The `DataFrame` we will use in the further analyses contains species information:
 
 ```{code-cell} ipython3
-:clear_cell: true
-
 survey_data = survey_data_unique.dropna(subset=['species']).copy()
 survey_data['name'] = survey_data['genus'] + ' ' + survey_data['species']
 ```
@@ -246,6 +246,8 @@ survey_data['taxa'].value_counts()
 </details>
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 non_rodent_species = survey_data[survey_data['taxa'].isin(['Rabbit', 'Bird', 'Reptile'])]
 ```
 
@@ -267,6 +269,8 @@ Select the observations for which the `name` starts with the characters 'r' (mak
 </details>
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 r_species = survey_data[survey_data['name'].str.lower().str.startswith('r')]
 ```
 
@@ -291,6 +295,8 @@ Select the observations that are not Birds. Call the resulting variable <code>no
 </details>
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 non_bird_species = survey_data[survey_data['taxa'] != 'Bird']
 ```
 
@@ -306,12 +312,14 @@ Select the __Bird__ (taxa is Bird) observations from 1985-01 till 1989-12 using 
 
 <details><summary>Hints</summary>
 
-- No hints, you can do this! (with the help of some `<=` and `&`)
+- No hints, you can do this! (with the help of some `<=` and `&`, and don't forget the put brackets around each comparison that you combine)
 
 
 </details>
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 birds_85_89 = survey_data[(survey_data["eventDate"] >= "1985-01-01")
                           & (survey_data["eventDate"] <= "1989-12-31 23:59")
                           & (survey_data['taxa'] == 'Bird')]
@@ -319,6 +327,8 @@ birds_85_89.head()
 ```
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 # alternative solution
 birds_85_89 = survey_data[(survey_data["eventDate"].dt.year >= 1985)
                           & (survey_data["eventDate"].dt.year <= 1989)
@@ -343,6 +353,8 @@ __Note__ You can do this all in a single line statement, but don't have to do it
 </details>
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 # Multiple lines
 obs_with_weight = survey_data.dropna(subset=["wgt"])
 median_weight = obs_with_weight.groupby(['name'])["wgt"].median()
@@ -350,6 +362,8 @@ median_weight.sort_values(ascending=False)
 ```
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 # Single line statement
 (survey_data
      .dropna(subset=["wgt"])
@@ -445,12 +459,13 @@ ax.set_ylabel("");
 
 **EXERCISE**
 
-- Starting from the `survey_data`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex`.
-- Use a `pivot_table` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
+- Starting from the `survey_data`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex` and ensure the counts are in a column named "count".
+- Use `pivot` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
 
 <details><summary>Hints</summary>
 
 - _...for each of the combinations..._ `groupby` can also be used with multiple columns at the same time.
+- If a `groupby` operation gives a Series as result, you can give that Series a name with the `.rename(..)` method.
 - `reset_index()` is useful function to convert multiple indices into columns again.
 
 </details>
@@ -465,16 +480,35 @@ n_plot_sex.head()
 ```{code-cell} ipython3
 :clear_cell: true
 
-pivoted = n_plot_sex.pivot_table(columns="sex", index="verbatimLocality", values="count")
+pivoted = n_plot_sex.pivot(columns="sex", index="verbatimLocality", values="count")
 pivoted.head()
 ```
 
 As such, we can use the variable `pivoted` to plot the result:
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Recreate the previous plot with the `catplot` function from the Seaborn library starting from `n_plot_sex`.
+
+<details><summary>Hints</summary>
+
+- Check the `kind` argument of the `catplot` function to figure out to specify you want a barplot with given x and y values.
+- To link a column to different colors, use the `hue` argument
+
+
+</details>
+
+```{code-cell} ipython3
+:clear_cell: true
+
+sns.catplot(data=n_plot_sex, x="verbatimLocality", y="count",
+            hue="sex", kind="bar", height=3, aspect=3)
 ```
 
 <div class="alert alert-success">
@@ -507,21 +541,21 @@ sns.catplot(data=survey_data, x="verbatimLocality",
 
 <details><summary>Hints</summary>
 
-- Make sure to pass the correct columns to respectively the `index`, `columns`, `values` and `aggfunc` parameters of the `pivot_table` function. You can use the `occurrenceID` to count the number of observations for each name/locality combination.
+- Make sure to pass the correct columns to respectively the `index`, `columns`, `values` and `aggfunc` parameters of the `pivot_table` function. You can use the `datasetName` to count the number of observations for each name/locality combination (when counting rows, the exact column doesn't matter).
 
 </details>
 
 ```{code-cell} ipython3
 :clear_cell: true
 
-species_per_plot = survey_data.reset_index().pivot_table(index="name",
-                                                         columns="verbatimLocality",
-                                                         values="occurrenceID",
-                                                         aggfunc='count')
+species_per_plot = survey_data.pivot_table(index="name",
+                                           columns="verbatimLocality",
+                                           values="datasetName",
+                                           aggfunc='count')
 
 # alternative ways to calculate this
-#species_per_plot = survey_data.groupby(['name', 'plot_id']).size().unstack(level=-1)
-#species_per_plot = pd.crosstab(survey_data['name'], survey_data['plot_id'])
+#species_per_plot = survey_data.groupby(['name', 'verbatimLocality']).size().unstack(level=-1)
+#pecies_per_plot = pd.crosstab(survey_data['name'], survey_data['verbatimLocality'])
 ```
 
 ```{code-cell} ipython3
@@ -554,7 +588,7 @@ Make a plot visualizing the evolution of the number of observations for each of 
 survey_data.resample('A', on='eventDate').size().plot()
 ```
 
-To evaluate the intensity or number of occurrences during different time spans, a heatmap is an interesting representation. We can actually use the plotnine library as well to make heatmaps, as it provides the [`geom_tile`](http://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_tile.html) geometry. Loading the library:
+To evaluate the intensity or number of occurrences during different time spans, a heatmap is an interesting representation.
 
 ```{code-cell} ipython3
 survey_data.head()
@@ -635,7 +669,7 @@ Plot, for the species 'Dipodomys merriami', 'Dipodomys ordii', 'Reithrodontomys 
 
 - `isin` is useful to select from within a list of elements.
 - `groupby` AND `resample` need to be combined. We do want to change the time-interval to represent data as a function of time (`resample`) and we want to do this _for each name/species_ (`groupby`). The order matters!
-- `unstack` is a Pandas function a bit similar to `pivot` we did not mentioned during this course. Check the [unstack documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.unstack.html) as it might be helpful for this exercise.
+- `unstack` is a Pandas function a bit similar to `pivot`. Check the [unstack documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.unstack.html) as it might be helpful for this exercise.
 
 </details>
 
@@ -665,6 +699,10 @@ axs = species_evolution.plot(subplots=True, figsize=(14, 8), sharey=True)
 
 Recreate the same plot as in the previous exercise using Seaborn `relplot` functon with the `month_evolution` variable.
 
++++
+
+Uncomment the next cell (calculates `month_evolution`, the intermediate result of the previous excercise):
+
 ```{code-cell} ipython3
 :clear_cell: true
 
@@ -673,7 +711,10 @@ subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dip
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
 month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size().rename("counts")
 month_evolution = month_evolution.reset_index()
+month_evolution.head()
 ```
+
+Plotting with seaborn:
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -697,12 +738,16 @@ Plot the annual amount of occurrences for each of the 'taxa' as a function of ti
 </details>
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 year_evolution = survey_data.groupby("taxa").resample('A', on='eventDate').size()
 year_evolution.name = "counts"
 year_evolution = year_evolution.reset_index()
 ```
 
 ```{code-cell} ipython3
+:clear_cell: true
+
 sns.relplot(data=year_evolution, x='eventDate', y="counts",
             col="taxa", col_wrap=2, kind="line", height=2, aspect=5,
             facet_kws={"sharey": False})
