@@ -13,11 +13,10 @@ kernelspec:
 
 <p><font size="6"><b> CASE - Bike count data</b></font></p>
 
-
-> *Data wrangling in Python*  
-> *November, 2020*
+> *DS Data manipulation, analysis and visualization in Python*
+> *May/June, 2021*
 >
-> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -27,7 +26,7 @@ kernelspec:
 
 +++
 
-In this case study, we will make use of the freely available bike count data of the city of Ghent (Belgium). At the Coupure Links, next to the Faculty of Bioscience Engineering, a counter keeps track of the number of passing cyclists in both directions.
+In this case study, we will make use of the openly available bike count data of the city of Ghent (Belgium). At the Coupure Links, next to the Faculty of Bioscience Engineering, a counter keeps track of the number of passing cyclists in both directions.
 
 ```{code-cell} ipython3
 import pandas as pd
@@ -43,7 +42,7 @@ plt.style.use('seaborn-whitegrid')
 
 +++
 
-The data were previously available on the open data portal of the city, and we downloaded them in the CSV format, and provided the original file as `data/fietstellingencoupure.csv`. 
+The data were previously available on the open data portal of the city, and we downloaded them in the `CSV` format, and provided the original file as `data/fietstellingencoupure.csv`.
 
 This dataset contains the historical data of the bike counters, and consists of the following columns:
 
@@ -67,8 +66,8 @@ This dataset contains the historical data of the bike counters, and consists of 
 - Both the `sep` and `delimiter` argument will work to define the delimiter.
 - Methods like `head`/`tail` have round brackets `()`, attributes like `dtypes` not.
 
-</details>    
-    
+</details>
+
 </div>
 
 ```{code-cell} ipython3
@@ -105,7 +104,7 @@ df.dtypes
 
 +++
 
-As explained above, the first and second column (respectively `datum` and `tijd`) indicate the date and hour of the day. To obtain a time series, we have to combine those two columns into one series of actual datetime values.
+As explained above, the first and second column (respectively `datum` and `tijd`) indicate the date and hour of the day. To obtain a time series, we have to combine those two columns into one series of actual timestamp values.
 
 +++
 
@@ -113,20 +112,20 @@ As explained above, the first and second column (respectively `datum` and `tijd`
 
 **EXERCISE**
 
-Preprocess the data:
+Pre-process the data:
 
 * Combine the 'datum' and 'tijd' columns into one Pandas Series of string datetime values, call this new variable `combined`.
-* Parse the string datetime values to datetime objects.
-* Set the resulting datetime column as the index of the `df` DataFrame.
+* Parse the string datetime values to `datetime` objects.
+* Set the resulting `datetime` column as the index of the `df` DataFrame.
 * Remove the original 'datum' and 'tijd' columns using the `drop` method, and call the new dataframe `df2`.
 * Rename the columns in the DataFrame 'ri Centrum', 'ri Mariakerke' to resp. 'direction_centre', 'direction_mariakerke' using the `rename` method.
 
 <details><summary>Hints</summary>
 
 - Concatenating strings can be done with the addition operation `+`.
-- When converting strings to a datetime with `pd.to_datetime`, specifying the format will make the conversion a lot faster.
+- When converting strings to a `datetime` with `pd.to_datetime`, specifying the format will make the conversion a lot faster.
 - `drop` can remove both rows and columns using the names of the index or column name. Make sure to define `columns=` argument to remove columns.
-- `rename` can be used for both rows/columns. It needs a dictionary with the current names as keys and the new names as values. 
+- `rename` can be used for both rows/columns. It needs a dictionary with the current names as keys and the new names as values.
 
 </details>
 
@@ -152,7 +151,7 @@ df2 = df.drop(columns=['datum', 'tijd'])
 ```{code-cell} ipython3
 :clear_cell: true
 
-df2 = df2.rename(columns={'ri Centrum': 'direction_centre', 
+df2 = df2.rename(columns={'ri Centrum': 'direction_centre',
                           'ri Mariakerke':'direction_mariakerke'})
 ```
 
@@ -160,7 +159,7 @@ df2 = df2.rename(columns={'ri Centrum': 'direction_centre',
 df2.head()
 ```
 
-Having the data available with an interpreted datetime, provides us the possibility of having time aware plotting:
+Having the data available with an interpreted `datetime`, provides us the possibility of having time aware plotting:
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -193,15 +192,15 @@ However, when we already know the format of the dates (and if this is consistent
 
 <div class="alert alert-info">
 
- <b>Remember</b>: Whenever possible, specify the date format to interpret the dates to datetime values!
+ <b>Remember</b>: Whenever possible, specify the date format to interpret the dates to `datetime` values!
 
 </div>
 
 +++
 
-### Write the data set cleaning as a function
+### Write the dataset cleaning as a function
 
-In order to make it easier to reuse the code for the preprocessing we have implemented, let's convert the code to a Python function:
+In order to make it easier to reuse the code for the pre-processing we have implemented, let's convert the code to a Python function:
 
 +++
 
@@ -213,7 +212,7 @@ Write a function `process_bike_count_data(df)` that performs the processing step
 
 <details><summary>Hints</summary>
 
-- Want to knwo more about proper documenting your Python functions? Check out the official guide of [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html). The `Parameters` and `Returns` sections should always be explained.
+- Want to know more about proper documenting your Python functions? Check out the official guide of [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html). The `Parameters` and `Returns` sections should always be explained.
 
 </details>
 
@@ -222,25 +221,25 @@ Write a function `process_bike_count_data(df)` that performs the processing step
 
 def process_bike_count_data(df):
     """Process the provided dataframe: parse datetimes and rename columns.
-    
+
     Parameters
     ----------
     df : pandas.DataFrame
-        DataFrame as read from the raw `fietstellingen`, 
-        containing the `datum`, `tijd`, `ri Centrum` 
+        DataFrame as read from the raw `fietstellingen`,
+        containing the `datum`, `tijd`, `ri Centrum`
         and `ri Mariakerke` columns.
-        
+
     Returns
     -------
     df2 : pandas.DataFrame
-        DataFrame with the datetime info as index and the 
-        `direction_centre` and `direction_mariakerke` columns 
+        DataFrame with the datetime info as index and the
+        `direction_centre` and `direction_mariakerke` columns
         with the counts.
     """
-    df.index = pd.to_datetime(df['datum'] + ' ' + df['tijd'], 
+    df.index = pd.to_datetime(df['datum'] + ' ' + df['tijd'],
                               format="%d/%m/%Y %H:%M")
     df2 = df.drop(columns=['datum', 'tijd'])
-    df2 = df2.rename(columns={'ri Centrum': 'direction_centre', 
+    df2 = df2.rename(columns={'ri Centrum': 'direction_centre',
                               'ri Mariakerke':'direction_mariakerke'})
     return df2
 ```
@@ -295,7 +294,7 @@ The count of the possible intervals is of interest:
 pd.Series(df.index).diff().value_counts()
 ```
 
-There are a few records that are not exactly 15min. But given it are only a few ones, we will ignore this for the current case study and just keep them for this explorative study.  
+There are a few records that are not exactly 15min. But given it are only a few ones, we will ignore this for the current case study and just keep them for this explorative study.
 
 Bonus question: do you know where the values of `-1 days +23:15:01` and `01:15:00` are coming from?
 
@@ -348,12 +347,12 @@ df_quiet = df_both[df_both < 5]
 
 **EXERCISE**
 
-Using the original data `df`, select only the intervals for which less than 3 cyclists passed in one or the other direction. Hence, less than 3 cyclists towards the centre or less than 3 cyclists towards Mariakerke.
+Using the original data `df`, select only the intervals for which less than 3 cyclists passed in one or the other direction. Hence, less than 3 cyclists towards the center or less than 3 cyclists towards Mariakerke.
 
 <details><summary>Hints</summary>
 
 - To combine conditions use the `|` (or) or the `&` (and) operators.
-- Make sure to use `()` around each individual condition.    
+- Make sure to use `()` around each individual condition.
 
 </details>
 
@@ -372,7 +371,7 @@ df[(df['direction_centre'] < 3) | (df['direction_mariakerke'] < 3)]
 **EXERCISE**
 
 What is the average number of bikers passing each 15 min?
-    
+
 <details><summary>Hints</summary>
 
 - As the time series is already 15min level, this is just the same as taking the mean.
@@ -393,7 +392,7 @@ What is the average number of bikers passing each hour?
 
 <details><summary>Hints</summary>
 
-- Use `resample` to first calculate the number of bikers passing each hour. 
+- Use `resample` to first calculate the number of bikers passing each hour.
 - `resample` requires an aggregation function that defines how to combine the values within each group (in this case all values within each hour).
 
 </details>
@@ -408,7 +407,7 @@ df.resample('H').sum().mean()
 
 **EXERCISE**
 
-What are the 10 highest peak values observed during any of the intervals for the direction towards the centre of Ghent?
+What are the 10 highest peak values observed during any of the intervals for the direction towards the center of Ghent?
 
 <details><summary>Hints</summary>
 
@@ -434,7 +433,7 @@ What is the maximum number of cyclist that passed on a single day calculated on 
 
 - Combine both directions by taking the sum.
 - Next, `resample` to daily values
-- Get the maximum value or ask for the n largest to see the dates as well.    
+- Get the maximum value or ask for the n largest to see the dates as well.
 
 </details>
 
@@ -462,7 +461,7 @@ df_daily.max()
 df_daily.nlargest(10)
 ```
 
-2013-06-05 was supposed to be the first time more than 10,000 bikers passed on one day (and not by coincidence: http://www.nieuwsblad.be/cnt/dmf20130605_022. Although the data shows it was not actually the first time ...
+The high number of bikers passing on 2013-06-05 was not by coincidence: http://www.nieuwsblad.be/cnt/dmf20130605_022 ;-)
 
 +++
 
@@ -498,7 +497,7 @@ Let's have a look at some short term patterns. For the data of the first 3 weeks
 
 <details><summary>Hints</summary>
 
-- Slicing is done using `[]`, you can use string representation of dates to select from a datetime index: e.g. `'2010-01-01':'2020-12-31'`
+- Slicing is done using `[]`, you can use string representation of dates to select from a `datetime` index: e.g. `'2010-01-01':'2020-12-31'`
 
 </details>
 
@@ -528,7 +527,7 @@ df_hourly['2014-01-01':'2014-01-20'].plot()
 
 **EXERCISE**
 
-- Select a subset of the data set from 2013-12-31 12:00:00 untill 2014-01-01 12:00:00 and assign the result to a new variable `newyear` 
+- Select a subset of the dataset from 2013-12-31 12:00:00 until 2014-01-01 12:00:00 and assign the result to a new variable `newyear`
 - Plot the selected data `newyear`.
 - Use a `rolling` function with a window of 10 values (check documentation of the function) to smooth the data of this period and make a plot of the smoothed version.
 
@@ -556,7 +555,7 @@ newyear.plot()
 newyear.rolling(10, center=True).mean().plot(linewidth=2)
 ```
 
-A more advanced usage of matplotlib to create a combined plot:
+A more advanced usage of Matplotlib to create a combined plot:
 
 ```{code-cell} ipython3
 :clear_cell: true
@@ -580,7 +579,7 @@ Looking at the data in the above exercises, there seems to be clearly a:
 - weekly pattern
 - yearly pattern
 
-Such patterns can easily be calculated and visualized in pandas using the DatetimeIndex attributes `dayofweek` combined with `groupby` functionality. Below a taste of the possibilities, and we will learn about this in the proceeding notebooks:
+Such patterns can easily be calculated and visualized in pandas using the `DatetimeIndex` attributes `dayofweek` combined with `groupby` functionality. Below a taste of the possibilities, and we will learn about this in the proceeding notebooks:
 
 +++
 
@@ -611,7 +610,7 @@ df_monthly = df.resample('M').sum()
 ```
 
 ```{code-cell} ipython3
-from calendar import month_abbr 
+from calendar import month_abbr
 ```
 
 ```{code-cell} ipython3
