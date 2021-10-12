@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -190,19 +189,19 @@ df.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 males = df[df['Sex'] == 'male']
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 males['Age'].mean()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df[df['Sex'] == 'female']['Age'].mean()
 ```
@@ -221,13 +220,13 @@ We will later see an easier way to calculate both averages at the same time with
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(df[df['Age'] > 70])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (df['Age'] > 70).sum()
 ```
@@ -242,7 +241,7 @@ len(df[df['Age'] > 70])
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df[(df['Age'] > 30) & (df['Age'] <= 40)]
 ```
@@ -260,52 +259,52 @@ Split the 'Name' column on the `,` extract the first part (the surname), and add
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 name = df['Name'][0]
 name
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 name.split(",")
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 name.split(",")[0]
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 def get_surname(name):
     return name.split(",")[0]
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Name'].apply(get_surname)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Surname'] = df['Name'].apply(get_surname)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # alternative using an "inline" lambda function
 df['Surname'] = df['Name'].apply(lambda x: x.split(',')[0])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # alternative solution with pandas' string methods
 df['Surname'] = df['Name'].str.split(",").str.get(0)
@@ -321,7 +320,7 @@ df['Surname'] = df['Name'].str.split(",").str.get(0)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df[df['Surname'].str.startswith('Williams')]
 ```
@@ -337,7 +336,7 @@ df[df['Surname'].str.startswith('Williams')]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df[df['Surname'].str.len() > 15]
 ```
@@ -369,7 +368,7 @@ titles.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(titles)
 ```
@@ -384,7 +383,7 @@ len(titles)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles.sort_values('year').head(2)
 ```
@@ -399,7 +398,7 @@ titles.sort_values('year').head(2)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(titles[titles['title'] == 'Hamlet'])
 ```
@@ -414,7 +413,7 @@ len(titles[titles['title'] == 'Hamlet'])
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles[titles['title'] == 'Treasure Island'].sort_values('year')
 ```
@@ -429,13 +428,13 @@ titles[titles['title'] == 'Treasure Island'].sort_values('year')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(titles[(titles['year'] >= 1950) & (titles['year'] <= 1959)])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(titles[titles['year'] // 10 == 195])
 ```
@@ -450,19 +449,19 @@ len(titles[titles['year'] // 10 == 195])
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 inception = cast[cast['title'] == 'Inception']
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(inception[inception['n'].isna()])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 inception['n'].isna().sum()
 ```
@@ -477,7 +476,7 @@ inception['n'].isna().sum()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(inception[inception['n'].notna()])
 ```
@@ -492,7 +491,7 @@ len(inception[inception['n'].notna()])
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titanic = cast[(cast['title'] == 'Titanic') & (cast['year'] == 1997)]
 titanic = titanic[titanic['n'].notna()]
@@ -509,7 +508,7 @@ titanic.sort_values('n')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 brad = cast[cast['name'] == 'Brad Pitt']
 brad = brad[brad['year'] // 10 == 199]

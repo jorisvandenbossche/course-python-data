@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -87,7 +86,7 @@ survey_data.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(survey_data)
 ```
@@ -122,7 +121,7 @@ Adding this static value as a new column `datasetName`:
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data["datasetName"] = datasetname
 ```
@@ -146,7 +145,7 @@ survey_data["datasetName"] = datasetname
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data["sex_char"].unique().tolist()
 ```
@@ -192,7 +191,7 @@ survey_data = survey_data.rename(columns={'sex_char': 'verbatimSex'})
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sex_dict = {"M": "male",
             "F": "female",
@@ -202,7 +201,7 @@ sex_dict = {"M": "male",
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data['sex'] = survey_data['verbatimSex'].replace(sex_dict)
 ```
@@ -233,7 +232,7 @@ To check what the frequency of occurrences is for male/female of the categories,
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data["sex"].value_counts(dropna=False).plot(kind="barh", color="#00007f")
 ```
@@ -333,7 +332,7 @@ The function takes a `DataFrame` as input, splits the record into separate rows 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data_decoupled = solve_double_field_entry(survey_data,
                                                  "and",
@@ -407,7 +406,7 @@ sum(pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coer
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 mask = pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coerce').isna()
 trouble_makers = survey_data_decoupled[mask]
@@ -452,7 +451,7 @@ The issue is the presence of day `31` during the months April and September of t
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 mask = pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coerce').isna()
 survey_data_decoupled.loc[mask, "day"] = 30
@@ -482,7 +481,7 @@ survey_data_decoupled["eventDate"] = \
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (survey_data_decoupled["year"]
      .value_counts(sort=False)
@@ -491,7 +490,7 @@ survey_data_decoupled["eventDate"] = \
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (survey_data_decoupled
      .groupby("year")
@@ -530,7 +529,7 @@ survey_data_decoupled.eventDate.dt #add a dot (.) and press TAB to explore the d
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (survey_data_decoupled
      .groupby(survey_data_decoupled["eventDate"].dt.year)
@@ -558,7 +557,7 @@ We actually do not need the `day`, `month`, `year` columns anymore, but feel fre
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 nrecords_by_dayofweek = survey_data_decoupled["eventDate"].dt.dayofweek.value_counts().sort_index()
 
@@ -615,7 +614,7 @@ The individual plots are only identified by a `plot` identification number. In o
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 plot_data = pd.read_excel("data/plot_location.xlsx", skiprows=3, index_col=0)
 ```
@@ -677,7 +676,7 @@ Apply the pyproj function `transform` to plot_data, using the columns `xutm` and
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 def transform_utm_to_wgs(row):
     """Converts the x and y coordinates
@@ -697,20 +696,20 @@ def transform_utm_to_wgs(row):
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # test the new function on a single row of the DataFrame
 transform_utm_to_wgs(plot_data.loc[0])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 plot_data.apply(transform_utm_to_wgs, axis=1)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 plot_data[["decimalLongitude" ,"decimalLatitude"]] = plot_data.apply(transform_utm_to_wgs, axis=1)
 ```
@@ -762,7 +761,7 @@ In practice, we have to add the columns `decimalLongitude`/`decimalLatitude` to 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 plot_data_selection = plot_data[["plot", "decimalLongitude", "decimalLatitude"]]
 ```
@@ -781,7 +780,7 @@ Combine the `DataFrame` `plot_data_selection` and the `DataFrame` `survey_data_d
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data_plots = pd.merge(survey_data_decoupled, plot_data_selection,
                              how="left", on="plot")
@@ -820,7 +819,7 @@ The column `species` only provides a short identifier in the survey overview. Th
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 species_data = pd.read_csv("data/species.csv", sep=";")
 ```
@@ -853,7 +852,7 @@ When reviewing the metadata, you see that in the data-file the acronym `NE` is u
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 species_data.loc[species_data["species_id"] == "NE", "species_id"] = "NA"
 ```
@@ -884,7 +883,7 @@ Combine the `DataFrame` `survey_data_plots` and the `DataFrame` `species_data` b
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data_species = pd.merge(survey_data_plots, species_data, how="left",  # LEFT OR INNER?
                                 left_on="species", right_on="species_id")
@@ -993,7 +992,7 @@ To apply this on our species data set, we will have to do this request for each 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 def name_match(genus_name, species_name, strict=True):
     """
@@ -1070,7 +1069,7 @@ Hence, in order to add this information to our survey DataFrame, we need to perf
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 #%%timeit
 unique_species = survey_data_species[["genus", "species"]].drop_duplicates().dropna()
@@ -1096,7 +1095,7 @@ len(unique_species)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 #%%timeit
 unique_species = \
@@ -1116,7 +1115,7 @@ len(unique_species)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 unique_species["name"] = unique_species["genus"] + " " + unique_species["species"]
 # an alternative approach worthwhile to know:
@@ -1168,7 +1167,7 @@ We can now transform this to a pandas `DataFrame`:
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_species_annotated = pd.DataFrame(species_annotated).transpose()
 ```
@@ -1190,7 +1189,7 @@ df_species_annotated.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_species_annotated_subset = df_species_annotated[['class', 'kingdom', 'order', 'phylum',
                                                     'scientificName', 'status', 'usageKey']]
@@ -1208,7 +1207,7 @@ df_species_annotated_subset.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 unique_species_annotated = pd.merge(unique_species, df_species_annotated_subset,
                                     left_index=True, right_index=True)
@@ -1227,7 +1226,7 @@ unique_species_annotated.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 survey_data_completed = pd.merge(survey_data_species, unique_species_annotated,
                                  how='left', on= ["genus", "species"])

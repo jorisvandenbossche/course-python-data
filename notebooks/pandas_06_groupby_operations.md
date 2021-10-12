@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -125,7 +124,7 @@ df.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.groupby('Sex')['Age'].mean()
 ```
@@ -140,7 +139,7 @@ df.groupby('Sex')['Age'].mean()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # df['Survived'].sum() / len(df['Survived'])
 df['Survived'].mean()
@@ -156,7 +155,7 @@ df['Survived'].mean()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df25 = df[df['Age'] < 25]
 df25['Survived'].sum() / len(df25['Survived'])
@@ -172,7 +171,7 @@ df25['Survived'].sum() / len(df25['Survived'])
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.groupby('Sex')['Survived'].mean()
 ```
@@ -187,7 +186,7 @@ df.groupby('Sex')['Survived'].mean()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.groupby('Pclass')['Survived'].mean().plot(kind='bar') #and what if you would compare the total number of survivors?
 ```
@@ -207,7 +206,7 @@ df['AgeClass'] = pd.cut(df['Age'], bins=np.arange(0,90,10))
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.groupby('AgeClass')['Fare'].mean().plot(kind='bar', rot=0)
 ```
@@ -302,13 +301,13 @@ titles.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles['decade'] = titles['year'] // 10 * 10
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles.groupby('decade').size().plot(kind='bar', color='green')
 ```
@@ -323,7 +322,7 @@ titles.groupby('decade').size().plot(kind='bar', color='green')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles['decade'] = titles['year'] // 10 * 10
 hamlet = titles[titles['title'] == 'Hamlet']
@@ -340,7 +339,7 @@ hamlet.groupby('decade').size().plot(kind='bar', color="orange")
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles['decade'] = titles['year'] // 10 * 10
 hamlet = titles[titles['title'].str.contains('Hamlet')]
@@ -357,7 +356,7 @@ hamlet.groupby('decade').size().plot(kind='bar', color="lightblue")
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast1990 = cast[cast['year'] >= 1990]
 cast1990 = cast1990[cast1990['n'] == 1]
@@ -365,7 +364,7 @@ cast1990.groupby('name').size().nlargest(10)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast1990['name'].value_counts().head(10)
 ```
@@ -380,14 +379,14 @@ cast1990['name'].value_counts().head(10)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 hamlets = titles[titles['title'].str.contains('Hamlet')]
 hamlets['title'].value_counts()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 hamlets = titles[titles['title'].str.startswith('Hamlet')]
 hamlets['title'].value_counts()
@@ -403,14 +402,14 @@ hamlets['title'].value_counts()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 title_longest = titles['title'].str.len().nlargest(10)
 title_longest
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 pd.options.display.max_colwidth = 210
 titles.loc[title_longest.index]
@@ -426,7 +425,7 @@ titles.loc[title_longest.index]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast1950 = cast[cast['year'] // 10 == 195]
 cast1950 = cast1950[cast1950['n'] == 1]
@@ -443,7 +442,7 @@ cast1950.groupby(['year', 'type']).size()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast.character.value_counts().head(11)
 ```
@@ -458,7 +457,7 @@ cast.character.value_counts().head(11)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast[cast.name == 'Brad Pitt'].year.value_counts().sort_index().plot()
 ```
@@ -473,7 +472,7 @@ cast[cast.name == 'Brad Pitt'].year.value_counts().sort_index().plot()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 titles[titles['title'].str.startswith('The Life')]['title'].value_counts().head(10)
 ```
@@ -488,7 +487,7 @@ titles[titles['title'].str.startswith('The Life')]['title'].value_counts().head(
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast[cast.year == 2010].name.value_counts().head(10)
 ```
@@ -503,7 +502,7 @@ cast[cast.year == 2010].name.value_counts().head(10)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 pink = cast[cast['title'] == 'The Pink Panther']
 pink.groupby(['year'])[['n']].max()
@@ -519,7 +518,7 @@ pink.groupby(['year'])[['n']].max()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 oz = cast[cast['name'] == 'Frank Oz']
 oz_roles = oz.groupby(['year', 'title']).size()
@@ -536,7 +535,7 @@ oz_roles[oz_roles > 1]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 oz = cast[cast['name'] == 'Frank Oz']
 oz_roles = oz.groupby(['character']).size()
@@ -553,7 +552,7 @@ oz_roles[oz_roles > 1].sort_values()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast['n_total'] = cast.groupby(['title', 'year'])['n'].transform('max') # transform will return an element for each row, so the max value is given to the whole group
 cast.head()
@@ -571,7 +570,7 @@ cast.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 leading = cast[cast['n'] == 1]
 sums_decade = leading.groupby([cast['year'] // 10 * 10, 'type']).size()
@@ -579,7 +578,7 @@ sums_decade
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 #sums_decade.groupby(level='year').transform(lambda x: x / x.sum())
 ratios_decade = sums_decade / sums_decade.groupby(level='year').transform('sum')
@@ -587,7 +586,7 @@ ratios_decade
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 ratios_decade[:, 'actor'].plot()
 ratios_decade[:, 'actress'].plot()
@@ -603,7 +602,7 @@ ratios_decade[:, 'actress'].plot()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 t = titles
 t.year.value_counts().head(3)
@@ -619,7 +618,7 @@ t.year.value_counts().head(3)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast1950 = cast[cast['year'] // 10 == 195]
 cast1950 = cast1950[cast1950['n'] == 1]
@@ -627,7 +626,7 @@ cast1950['type'].value_counts()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast2000 = cast[cast['year'] // 10 == 200]
 cast2000 = cast2000[cast2000['n'] == 1]

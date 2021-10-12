@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: tags,-run_control,-deletable,-editable,-jupyter,-slideshow
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -648,7 +647,7 @@ Consider the open data set:
 
 +++
 
-Working with such a data set on a local machine is not straightforward anymore, as this data set will consume a lot of memory to be handled by the default plotting libraries. Moreover, visualizing every single dot is not useful anymore at coarser zoom levels. 
+Working with such a data set on a local machine is not straightforward anymore, as this data set will consume a lot of memory to be handled by the default plotting libraries. Moreover, visualizing every single dot is not useful anymore at coarser zoom levels.
 
 +++
 

@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -143,20 +142,20 @@ Reason to not use a tidy dataset here:
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_tidy = data.reset_index().melt(id_vars=["datetime"], var_name='station', value_name='no2')
 data_tidy.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_tidy['no2'].isna().sum()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_tidy = data_tidy.dropna()
 ```
@@ -196,7 +195,7 @@ Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [seaborn]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 fig, ax = plt.subplots()
 data.loc['2009':, 'FR04037'].resample('M').mean().plot(ax=ax, label='mean')
@@ -206,7 +205,7 @@ ax.set_title("FR04037");
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data.loc['2009':, 'FR04037'].resample('M').agg(['mean', 'median']).plot()
 ```
@@ -225,7 +224,7 @@ _NOTE:_ In this case, we can use seaborn both with the data not in a long format
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # with wide dataframe
 fig, ax = plt.subplots()
@@ -234,7 +233,7 @@ ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # with tidy dataframe
 data_tidy_subset = data_tidy[(data_tidy['datetime'] >= "2011-01") & (data_tidy['datetime'] < "2011-09")]
@@ -245,7 +244,7 @@ ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # with figure-level function
 sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette="GnBu_d")
@@ -265,7 +264,7 @@ sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette=
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 fig, ax = plt.subplots()
 data['2012':].mean().plot(kind='bar', ax=ax, rot=0, color='C0')
@@ -290,7 +289,7 @@ ax.text(0.01, 0.48, 'Yearly limit is 40 µg/m³',
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 fig, ax = plt.subplots()
 
@@ -361,7 +360,7 @@ But, `groupby` is more flexible and can also do resamples that do not result in 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # add a column to the dataframe that indicates the month (integer value of 1 to 12):
 data['month'] = data.index.month
@@ -394,7 +393,7 @@ Note: Technically, we could reshape the result of the groupby operation to a tid
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Groupby wise
 df2011 = data['2011']
@@ -402,7 +401,7 @@ df2011.groupby(df2011.index.week)[['BETN029', 'BETR801']].quantile(0.95).plot()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Resample wise
 # Note the different x-axis labels
@@ -420,7 +419,7 @@ df2011[['BETN029', 'BETR801']].resample('W').quantile(0.75).plot()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data.groupby(data.index.hour).mean().plot()
 ```
@@ -444,7 +443,7 @@ Start with only visualizing the different in diurnal profile for the 'BETR801' s
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data['weekend'] = data.index.dayofweek.isin([5, 6])
 data['weekend'] = data['weekend'].replace({True: 'weekend', False: 'weekday'})
@@ -452,14 +451,14 @@ data['hour'] = data.index.hour
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_weekend = data.groupby(['weekend', 'hour']).mean()
 data_weekend.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # using unstack and pandas plotting
 data_weekend_BETR801 = data_weekend['BETR801'].unstack(level=0)
@@ -467,7 +466,7 @@ data_weekend_BETR801.plot()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # using a tidy dataset and seaborn
 data_weekend_BETR801_tidy = data_weekend['BETR801'].reset_index()
@@ -476,7 +475,7 @@ sns.lineplot(data=data_weekend_BETR801_tidy, x="hour", y="BETR801", hue="weekend
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # tidy dataset that still includes all stations
 
@@ -486,7 +485,7 @@ data_weekend_tidy.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # when still having multiple factors, it becomes useful to convert to tidy dataset and use seaborn
 sns.relplot(data=data_weekend_tidy, x="hour", y="no2", kind="line",
@@ -508,7 +507,7 @@ Calculate the correlation between the different stations (check in the documenta
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data[['BETR801', 'BETN029', 'FR04037', 'FR04012']].corr()
 ```
@@ -532,20 +531,20 @@ Count the number of exceedances of hourly values above the European limit 200 µ
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 exceedances = data > 200
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # group by year and count exceedances (sum of boolean)
 exceedances = exceedances.groupby(exceedances.index.year).sum()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Make a barplot of the yearly number of exceedances
 ax = exceedances.loc[2005:].plot(kind='bar')
@@ -575,21 +574,21 @@ Perform the following actions for the station `'FR04012'` only:
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 FR_station = data['FR04012'] # select the specific data series
 FR_station = FR_station[(FR_station.notnull()) & (FR_station != 0.0)]  # exclude the Nan and zero values
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 FR_sorted = FR_station.sort_values(ascending=True)
 FR_scaled = (FR_sorted - FR_sorted.min())/(FR_sorted.max() - FR_sorted.min())
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 fig, axfr = plt.subplots()
 FR_scaled.plot(use_index=False, ax = axfr)  #alternative version: FR_scaled.reset_index(drop=True).plot(use_index=False)  
@@ -611,7 +610,7 @@ axfr.axvline(x=FR_scaled.searchsorted(0.3), color='0.6', linestyle='--', linewid
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Mixing an matching matplotlib and Pandas
 fig, (ax1, ax2) = plt.subplots(1, 2, 
@@ -627,7 +626,7 @@ ax2.set_title('BETR801')
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # A more step by step approach (equally valid)
 fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True, sharex=True)
@@ -655,7 +654,7 @@ ax2.set_title('BETR801')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 subset = data['2009-01'].copy()
 subset["dayofweek"] = subset.index.dayofweek
@@ -663,19 +662,19 @@ subset = subset[subset['dayofweek'].isin([0, 6])]
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 subset["dayofweek"] = subset["dayofweek"].replace(to_replace={0:"Monday", 6:"Sunday"})
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.set_style("whitegrid")
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.lmplot(
     data=subset, x="BETN029", y="FR04037", hue="dayofweek"
@@ -700,13 +699,13 @@ This is not an actual limit for NO$_2$, but a nice exercise to introduce the `ro
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 exceedances = data.rolling(8).mean().resample('D').max() > 100
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 exceedances = exceedances.groupby(exceedances.index.year).sum()
 ax = exceedances.plot(kind='bar')
@@ -733,13 +732,13 @@ The boxplot method of a DataFrame expects the data for the different boxes in di
 Calculating daily means and add day of the week information:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_daily = data.resample('D').mean()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # add a dayofweek column
 data_daily['dayofweek'] = data_daily.index.dayofweek
@@ -749,7 +748,7 @@ data_daily.head()
 Plotting with seaborn:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # seaborn
 sns.boxplot(data=data_daily["2012":], x='dayofweek', y='BETR801', color="grey")
@@ -758,7 +757,7 @@ sns.boxplot(data=data_daily["2012":], x='dayofweek', y='BETR801', color="grey")
 Reshaping and plotting with pandas:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # when using pandas to plot, the different boxplots should be different columns
 # therefore, pivot table so that the weekdays are the different columns
@@ -770,7 +769,7 @@ data_pivoted.boxplot();
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # An alternative method using `groupby` and `unstack`
 data_daily['2012':].groupby(['dayofweek', 'week'])['BETR801'].mean().unstack(level=0).boxplot();

@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -162,7 +161,7 @@ Note: the population column is expressed in millions.
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 countries['density'] = countries['population']*1000000 / countries['area']
 ```
@@ -176,7 +175,7 @@ countries['density'] = countries['population']*1000000 / countries['area']
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 countries.loc[countries['density'] > 300, ['capital', 'population']]
 ```
@@ -191,7 +190,7 @@ countries.loc[countries['density'] > 300, ['capital', 'population']]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 countries['density_ratio'] = countries['density'] / countries['density'].mean()
 countries
@@ -207,7 +206,7 @@ countries
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 countries.loc['United Kingdom', 'capital'] = 'Cambridge'
 countries
@@ -222,7 +221,7 @@ countries
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 countries[(countries['density'] > 100) & (countries['density'] < 300)]
 ```
@@ -332,13 +331,13 @@ df.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.loc[df['Sex'] == 'male', 'Age'].mean()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.loc[df['Sex'] == 'female', 'Age'].mean()
 ```

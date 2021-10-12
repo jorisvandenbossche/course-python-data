@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -85,14 +84,14 @@ column_names = ['date'] + [item for pair in zip(hours, ['flag' + str(i) for i in
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data = pd.read_csv("data/BETR8010000800100hour.1-1-1990.31-12-2012",
                    sep='\t', header=None, names=column_names, na_values=[-999, -9999])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data.head()
 ```
@@ -113,7 +112,7 @@ flag_columns = [col for col in data.columns if 'flag' in col]
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data = data.drop(flag_columns, axis=1)
 ```
@@ -218,7 +217,7 @@ The end result should look like:<br><br>
 Reshaping using `melt`:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_stacked = pd.melt(data, id_vars=['date'], var_name='hour')
 data_stacked.head()
@@ -227,7 +226,7 @@ data_stacked.head()
 Reshaping using `stack`:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # we use stack to reshape the data to move the hours (the column labels) into a column.
 # But we don't want to move the 'date' column label, therefore we first set this as the index.
@@ -237,7 +236,7 @@ data_stacked.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # We reset the index to have the date and hours available as columns
 data_stacked = data_stacked.reset_index()
@@ -248,14 +247,14 @@ data_stacked.head()
 Combine date and hour:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Now we combine the dates and the hours into a datetime, and set this as the index
 data_stacked.index = pd.to_datetime(data_stacked['date'] + data_stacked['hour'], format="%Y-%m-%d%H")
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Drop the origal date and hour columns
 data_stacked = data_stacked.drop(['date', 'hour'], axis=1)
@@ -263,7 +262,7 @@ data_stacked.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # rename the remaining column to the name of the measurement station
 # (this is 0 or 'value' depending on which method was used)
@@ -325,7 +324,7 @@ def read_airbase_file(filename, station):
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 def read_airbase_file(filename, station):
     """
@@ -408,7 +407,7 @@ import glob
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data_files = glob.glob("data/*0008001*")
 data_files
@@ -426,7 +425,7 @@ data_files
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 dfs = []
 
@@ -437,7 +436,7 @@ for filename in data_files:
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 combined_data = pd.concat(dfs, axis=1)
 ```
