@@ -1,32 +1,32 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
+<!-- #region deletable=true editable=true -->
 <p><font size="6"><b>Visualisation: Matplotlib</b></font></p>
 
 
-> *Data wrangling in Python*  
-> *November, 2020*
->
-> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 # Matplotlib
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 [Matplotlib](http://matplotlib.org/) is a Python package used widely throughout the scientific Python community to produce high quality 2D publication graphics. It transparently supports a wide range of output formats including PNG (and other raster formats), PostScript/EPS, PDF and SVG and has interfaces for all of the major desktop GUI (graphical user interface) toolkits. It is a great package with lots of options.
 
 However, matplotlib is...
@@ -40,70 +40,83 @@ However, matplotlib is...
 And that's we mostly did, just use the `.plot` function of Pandas. So, why do we learn matplotlib? Well, for the *...then use matplotlib for the rest.*; at some point, somehow!
 
 Matplotlib comes with a convenience sub-package called ``pyplot`` which, for consistency with the wider matplotlib community, should always be imported as ``plt``:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": true} run_control={"frozen": false, "read_only": false}
 import numpy as np
 import matplotlib.pyplot as plt
 ```
 
+<!-- #region deletable=true editable=true -->
 ## - dry stuff - The matplotlib `Figure`, `axes` and `axis`
 
 At the heart of **every** plot is the figure object. The "Figure" object is the top level concept which can be drawn to one of the many output formats, or simply just to screen. Any object which can be drawn in this way is known as an "Artist" in matplotlib.
 
 Lets create our first artist using pyplot, and then show it:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig = plt.figure()
 plt.show()
 ```
 
+<!-- #region deletable=true editable=true -->
 On its own, drawing the figure artist is uninteresting and will result in an empty piece of paper (that's why we didn't see anything above).
 
 By far the most useful artist in matplotlib is the **Axes** artist. The Axes artist represents the "data space" of a typical plot, a rectangular axes (the most common, but not always the case, e.g. polar plots) will have 2 (confusingly named) **Axis** artists with tick labels and tick marks.
 
 There is no limit on the number of Axes artists which can exist on a Figure artist. Let's go ahead and create a figure with a single Axes artist, and show it using pyplot:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 ax = plt.axes()
 ```
 
+<!-- #region deletable=true editable=true -->
 Matplotlib's ``pyplot`` module makes the process of creating graphics easier by allowing us to skip some of the tedious Artist construction. For example, we did not need to manually create the Figure artist with ``plt.figure`` because it was implicit that we needed a figure when we created the Axes artist.
 
 Under the hood matplotlib still had to create a Figure artist, its just we didn't need to capture it into a variable. We can access the created object with the "state" functions found in pyplot called **``gcf``** and **``gca``**.
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 ## - essential stuff - `pyplot` versus Object based
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 Some example data:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": true} run_control={"frozen": false, "read_only": false}
 x = np.linspace(0, 5, 10)
 y = x ** 2
 ```
 
+<!-- #region deletable=true editable=true -->
 Observe the following difference:
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 **1. pyplot style: plt...** (you will see this a lot for code online!)
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 plt.plot(x, y, '-')
 ```
 
+<!-- #region deletable=true editable=true -->
 **2. creating objects**
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig, ax = plt.subplots()
 ax.plot(x, y, '-')
 ```
 
+<!-- #region deletable=true editable=true -->
 Although a little bit more code is involved, the advantage is that we now have **full control** of where the plot axes are placed, and we can easily add more than one axis to the figure:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig, ax1 = plt.subplots()
 ax1.plot(x, y, '-')
 ax1.set_ylabel('y')
@@ -113,6 +126,7 @@ ax2.set_xlabel('x')
 ax2.plot(x, y*2, 'r-')
 ```
 
+<!-- #region deletable=true editable=true -->
 <div class="alert alert-info" style="font-size:18px">
 
 <b>REMEMBER</b>:
@@ -122,16 +136,19 @@ ax2.plot(x, y*2, 'r-')
   <li>Get yourself used to writing <code>fig, ax = plt.subplots()</code></li>
 </ul>
 </div>
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig, ax = plt.subplots()
 ax.plot(x, y, '-')
 # ...
 ```
 
+<!-- #region deletable=true editable=true -->
 ## An small cheat-sheet reference for some common elements
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 x = np.linspace(-1, 0, 100)
 
 fig, ax  = plt.subplots(figsize=(10, 7))
@@ -166,21 +183,23 @@ ax.text(0.5, 0.5, 'Text centered at (0.5, 0.5)\nin Figure coordinates.',
 ax.legend(loc='upper right', frameon=True, ncol=2, fontsize=14)
 ```
 
+<!-- #region deletable=true editable=true -->
 For more information on legend positioning, check [this post](http://stackoverflow.com/questions/4700614/how-to-put-the-legend-out-of-the-plot) on stackoverflow!
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 ## Quick introduction to style
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 Whereas Matplotlib makes it possible to change every detail in a plot and [create your own style](https://matplotlib.org/tutorials/introductory/customizing.html), there are a number of pre-defined styles provided by Matplotlib:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 plt.style.available
 ```
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 x = np.linspace(0, 10)
 
 with plt.style.context('ggplot'):  # 'seaborn', ggplot', 'bmh', 'grayscale', 'seaborn-whitegrid', 'seaborn-muted'
@@ -190,16 +209,19 @@ with plt.style.context('ggplot'):  # 'seaborn', ggplot', 'bmh', 'grayscale', 'se
     ax.plot(x, np.sin(x) + 2 * x + np.random.randn(50))
 ```
 
+<!-- #region deletable=true editable=true -->
 Just pick **your favorite style**... which will be active for the remainder of the notebook:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": true} run_control={"frozen": false, "read_only": false}
 plt.style.use('seaborn-whitegrid')
 ```
 
+<!-- #region deletable=true editable=true -->
 or go all the way and define your own custom style, see the [official documentation](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html) or [this tutorial](https://colcarroll.github.io/yourplotlib/#/).
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 <div class="alert alert-info">
 
 <b>REMEMBER</b>:
@@ -209,66 +231,75 @@ or go all the way and define your own custom style, see the [official documentat
   <li>Still, the object-oriented setup makes it possible to change every detail!</li>
 </ul>
 </div>
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 ## Interaction with Pandas
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true run_control={"frozen": false, "read_only": false} -->
 What we have been doing while plotting with Pandas:
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": true} run_control={"frozen": false, "read_only": false}
 import pandas as pd
 ```
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": true} run_control={"frozen": false, "read_only": false}
 flowdata = pd.read_csv('data/vmm_flowdata.csv', 
                        index_col='Time', 
                        parse_dates=True)
 ```
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 flowdata.plot()
 ```
 
+<!-- #region deletable=true editable=true -->
 The `plot()` method in Pandas uses Matplotlib under the hood and adds some convenience (e.g. legend) to it.
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 ### Pandas versus matplotlib
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 #### Comparison 1: single plot
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 flowdata.plot(figsize=(16, 6)) # shift tab this!
 ```
 
+<!-- #region deletable=true editable=true -->
 Making this with matplotlib...
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig, ax = plt.subplots(figsize=(16, 6))
 ax.plot(flowdata)
 ax.legend(["L06_347", "LS06_347", "LS06_348"])
 ```
 
+<!-- #region deletable=true editable=true -->
 is also fine, both options would work.
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 #### Comparison 2: with subplots
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 axs = flowdata.plot(subplots=True, sharex=True,
                     figsize=(16, 8), colormap='viridis', # Dark2
                     fontsize=15, rot=0)
 ```
 
+<!-- #region deletable=true editable=true -->
 Mimicking this in matplotlib (just as a reference):
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 from matplotlib import cm
 import matplotlib.dates as mdates
 
@@ -289,19 +320,21 @@ for ax, col, station in zip(axs, colors, flowdata.columns):
     ax.tick_params(labelsize=15)
 ```
 
+<!-- #region deletable=true editable=true -->
 Is already a bit harder ;-). Using different subplots (aka facetting) to split up the data is useful in data exploration and is by default provided by Pandas. 
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 ### Best of both worlds!
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false}
 fig, ax = plt.subplots() #prepare a matplotlib figure
 
 flowdata.plot(ax=ax) # use pandas for the plotting
 ```
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig, ax = plt.subplots(figsize=(15, 5)) #prepare a matplotlib figure
 
 flowdata.plot(ax=ax) # use pandas for the plotting
@@ -312,9 +345,11 @@ ax.grid(which="major", linewidth='0.5', color='0.9')
 fig.suptitle('Flow station time series', fontsize=15)
 ```
 
+<!-- #region deletable=true editable=true -->
 It is a useful pattern: 1/ Prepare with Matplotlib, 2/ Plot using Pandas and 3/ further adjust specific elements with Matplotlib
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 6)) #provide with matplotlib 2 axis
 
 flowdata[["L06_347", "LS06_347"]].plot(ax=ax1) # plot the two timeseries of the same location on the first plot
@@ -326,6 +361,7 @@ ax2.set_ylabel("LS06_348")
 ax2.legend()
 ```
 
+<!-- #region deletable=true editable=true run_control={"frozen": false, "read_only": false} -->
 <div class="alert alert-info">
 
  <b>Remember</b>: 
@@ -340,9 +376,9 @@ ax2.legend()
 If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figure: Make it a <b>reusable function</b>!
 
 </div>
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 <div class="alert alert-info" style="font-size:18px">
 
  <b>Remember</b>: 
@@ -350,20 +386,20 @@ If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figur
 `fig.savefig()` to save your Figure object!
 
 </div>
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 # Need more matplotlib inspiration? 
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 For more in-depth material:
 * http://www.labri.fr/perso/nrougier/teaching/matplotlib/
 * notebooks in matplotlib section: http://nbviewer.jupyter.org/github/jakevdp/PythonDataScienceHandbook/blob/master/notebooks/Index.ipynb#4.-Visualization-with-Matplotlib
 * main reference: [matplotlib homepage](http://matplotlib.org/)
+<!-- #endregion -->
 
-+++
-
+<!-- #region deletable=true editable=true -->
 <div class="alert alert-info" style="font-size:18px">
 
 **Galleries!**
@@ -375,3 +411,4 @@ Galleries are great to get inspiration, see the plot you want, and check the cod
 * The Python Graph Gallery (https://python-graph-gallery.com/)
 
 </div>
+<!-- #endregion -->

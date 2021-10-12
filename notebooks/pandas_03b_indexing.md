@@ -1,31 +1,29 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
 <p><font size="6"><b>03 - Pandas: Indexing and selecting data - part II</b></font></p>
 
-
-> *Data wrangling in Python*  
-> *November, 2020*
->
-> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
-```{code-cell} ipython3
+```python
 import pandas as pd
 ```
 
-```{code-cell} ipython3
+```python
 # redefining the example dataframe
 
 data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
@@ -47,30 +45,27 @@ So as a summary, `[]` provides the following convenience shortcuts:
 
 </div>
 
-+++
 
 # Changing the DataFrame index
 
-+++
 
 We have mostly worked with DataFrames with the default *0, 1, 2, ... N* row labels (except for the time series data). But, we can also set one of the columns as the index.
 
 Setting the index to the country names:
 
-```{code-cell} ipython3
+```python
 countries = countries.set_index('country')
 countries
 ```
 
 Reversing this operation, is `reset_index`:
 
-```{code-cell} ipython3
+```python
 countries.reset_index('country')
 ```
 
 # Selecting data based on the index
 
-+++
 
 <div class="alert alert-warning" style="font-size:120%">
 <b>ATTENTION!</b>: <br><br>
@@ -82,11 +77,9 @@ One of pandas' basic features is the labeling of rows and columns, but this make
 
 </div>
 
-+++
 
 ## Systematic indexing with `loc` and `iloc`
 
-+++
 
 When using `[]` like above, you can only select from one axis at once (rows or columns, not both). For more advanced indexing, you have some extra attributes:
     
@@ -97,17 +90,16 @@ Both `loc` and `iloc` use the following pattern: `df.loc[ <selection of the rows
 
 This 'selection of the rows / columns' can be: a single label, a list of labels, a slice or a boolean mask.
 
-+++
 
 Selecting a single element:
 
-```{code-cell} ipython3
+```python
 countries.loc['Germany', 'area']
 ```
 
 But the row or column indexer can also be a list, slice, boolean array (see next section), ..
 
-```{code-cell} ipython3
+```python
 countries.loc['France':'Germany', ['area', 'population']]
 ```
 
@@ -118,12 +110,11 @@ countries.loc['France':'Germany', ['area', 'population']]
 
 </div>
 
-+++
 
 ---
 Selecting by position with `iloc` works similar as **indexing numpy arrays**:
 
-```{code-cell} ipython3
+```python
 countries.iloc[0:2,1:3]
 ```
 
@@ -131,12 +122,12 @@ countries.iloc[0:2,1:3]
 
 The different indexing methods can also be used to **assign data**:
 
-```{code-cell} ipython3
+```python
 countries2 = countries.copy()
 countries2.loc['Belgium':'Germany', 'population'] = 10
 ```
 
-```{code-cell} ipython3
+```python
 countries2
 ```
 
@@ -150,7 +141,6 @@ Advanced indexing with **loc** and **iloc**
 
 </div>
 
-+++
 
 <div class="alert alert-success">
 <b>EXERCISE</b>:
@@ -163,9 +153,7 @@ Advanced indexing with **loc** and **iloc**
 Note: the population column is expressed in millions.
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 countries['density'] = countries['population']*1000000 / countries['area']
 ```
 
@@ -177,9 +165,7 @@ countries['density'] = countries['population']*1000000 / countries['area']
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 countries.loc[countries['density'] > 300, ['capital', 'population']]
 ```
 
@@ -192,9 +178,7 @@ countries.loc[countries['density'] > 300, ['capital', 'population']]
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 countries['density_ratio'] = countries['density'] / countries['density'].mean()
 countries
 ```
@@ -208,9 +192,7 @@ countries
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 countries.loc['United Kingdom', 'capital'] = 'Cambridge'
 countries
 ```
@@ -223,15 +205,12 @@ countries
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 countries[(countries['density'] > 100) & (countries['density'] < 300)]
 ```
 
 # Alignment on the index
 
-+++
 
 <div class="alert alert-danger">
 
@@ -241,27 +220,27 @@ countries[(countries['density'] > 100) & (countries['density'] < 300)]
 
 </div>
 
-```{code-cell} ipython3
+```python
 population = countries['population']
 s1 = population[['Belgium', 'France']]
 s2 = population[['France', 'Germany']]
 ```
 
-```{code-cell} ipython3
+```python
 s1
 ```
 
-```{code-cell} ipython3
+```python
 s2
 ```
 
-```{code-cell} ipython3
+```python
 s1 + s2
 ```
 
 # Pitfall: chained indexing (and the 'SettingWithCopyWarning')
 
-```{code-cell} ipython3
+```python
 df = countries.copy()
 ```
 
@@ -269,38 +248,37 @@ When updating values in a DataFrame, you can run into the infamous "SettingWithC
 
 Assume we want to cap the population and replace all values above 50 with 50. We can do this using the basic `[]` indexing operation twice ("chained indexing"):
 
-```{code-cell} ipython3
+```python
 df[df['population'] > 50]['population'] = 50
 ```
 
 However, we get a warning, and we can also see that the original dataframe did not change:
 
-```{code-cell} ipython3
+```python
 df
 ```
 
 The warning message explains that we should use `.loc[row_indexer,col_indexer] = value` instead. That is what we just learned in this notebook, so we can do:
 
-```{code-cell} ipython3
+```python
 df.loc[df['population'] > 50, 'population'] = 50
 ```
 
 And now the dataframe actually changed:
 
-```{code-cell} ipython3
+```python
 df
 ```
 
 To explain *why* the original `df[df['population'] > 50]['population'] = 50` didn't work, we can do the "chained indexing" in two explicit steps:
 
-```{code-cell} ipython3
+```python
 temp = df[df['population'] > 50]
 temp['population'] = 50
 ```
 
 For Python, there is no real difference between the one-liner or this two-liner. And when writing it as two lines, you can see we make a temporary, filtered dataframe (called `temp` above). So here, with `temp['population'] = 50`, we are actually updating `temp` but not the original `df`.
 
-+++
 
 <div class="alert alert-info" style="font-size:120%">
 
@@ -313,15 +291,14 @@ What to do when encountering the *value is trying to be set on a copy of a slice
 
 </div>
 
-+++
 
 # Exercises using the Titanic dataset
 
-```{code-cell} ipython3
+```python
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```{code-cell} ipython3
+```python
 df.head()
 ```
 
@@ -333,15 +310,11 @@ df.head()
 
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.loc[df['Sex'] == 'male', 'Age'].mean()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.loc[df['Sex'] == 'female', 'Age'].mean()
 ```
 

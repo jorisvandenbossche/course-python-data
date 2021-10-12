@@ -1,27 +1,28 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
+<!-- #region -->
 <p><font size="6"><b>06 - Pandas: "Group by" operations</b></font></p>
 
 
-> *Data wrangling in Python*  
-> *November, 2020*
->
-> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +31,7 @@ plt.style.use('seaborn-whitegrid')
 
 # Some 'theory': the groupby operation (split-apply-combine)
 
-```{code-cell} ipython3
+```python
 df = pd.DataFrame({'key':['A','B','C','A','B','C','A','B','C'],
                    'data': [0, 5, 10, 5, 10, 15, 10, 15, 20]})
 df
@@ -38,11 +39,10 @@ df
 
 ### Recap: aggregating functions
 
-+++
 
 When analyzing data, you often calculate summary statistics (aggregations like the mean, max, ...). As we have seen before, we can easily calculate such a statistic for a Series or column using one of the many available methods. For example:
 
-```{code-cell} ipython3
+```python
 df['data'].sum()
 ```
 
@@ -50,7 +50,7 @@ However, in many cases your data has certain groups in it, and in that case, you
 
 For example, in the above dataframe `df`, there is a column 'key' which has three possible values: 'A', 'B' and 'C'. When we want to calculate the sum for each of those groups, we could do the following:
 
-```{code-cell} ipython3
+```python
 for key in ['A', 'B', 'C']:
     print(key, df[df['key'] == key]['data'].sum())
 ```
@@ -59,11 +59,9 @@ This becomes very verbose when having multiple groups. You could make the above 
 
 What we did above, applying a function on different groups, is a "groupby operation", and pandas provides some convenient functionality for this.
 
-+++
 
 ### Groupby: applying functions per group
 
-+++
 
 The "group by" concept: we want to **apply the same function on subsets of your dataframe, based on some key to split the dataframe in subsets**
 
@@ -77,7 +75,6 @@ This operation is also referred to as the "split-apply-combine" operation, invol
 
 Similar to SQL `GROUP BY`
 
-+++
 
 Instead of doing the manual filtering as above
 
@@ -88,31 +85,30 @@ Instead of doing the manual filtering as above
 
 pandas provides the `groupby` method to do exactly this:
 
-```{code-cell} ipython3
+```python
 df.groupby('key').sum()
 ```
 
-```{code-cell} ipython3
+```python
 df.groupby('key').aggregate(np.sum)  # 'sum'
 ```
 
 And many more methods are available.
 
-```{code-cell} ipython3
+```python
 df.groupby('key')['data'].sum()
 ```
 
 # Application of the groupby concept on the titanic data
 
-+++
 
 We go back to the titanic passengers survival data:
 
-```{code-cell} ipython3
+```python
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```{code-cell} ipython3
+```python
 df.head()
 ```
 
@@ -125,9 +121,7 @@ df.head()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.groupby('Sex')['Age'].mean()
 ```
 
@@ -140,9 +134,7 @@ df.groupby('Sex')['Age'].mean()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 # df['Survived'].sum() / len(df['Survived'])
 df['Survived'].mean()
 ```
@@ -156,9 +148,7 @@ df['Survived'].mean()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df25 = df[df['Age'] < 25]
 df25['Survived'].sum() / len(df25['Survived'])
 ```
@@ -172,9 +162,7 @@ df25['Survived'].sum() / len(df25['Survived'])
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.groupby('Sex')['Survived'].mean()
 ```
 
@@ -187,9 +175,7 @@ df.groupby('Sex')['Survived'].mean()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.groupby('Pclass')['Survived'].mean().plot(kind='bar') #and what if you would compare the total number of survivors?
 ```
 
@@ -201,29 +187,22 @@ df.groupby('Pclass')['Survived'].mean().plot(kind='bar') #and what if you would 
 
 </div>
 
-```{code-cell} ipython3
-:clear_cell: false
-
+```python clear_cell=false
 df['AgeClass'] = pd.cut(df['Age'], bins=np.arange(0,90,10))
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.groupby('AgeClass')['Fare'].mean().plot(kind='bar', rot=0)
 ```
 
 If you are ready, more groupby exercises can be found below.
 
-+++
 
 # Some more theory
 
-+++
 
 ## Specifying the grouper
 
-+++
 
 In the previous example and exercises, we always grouped by a single column by passing its name. But, a column name is not the only value you can pass as the grouper in `df.groupby(grouper)`. Other possibilities for `grouper` are:
 
@@ -232,43 +211,40 @@ In the previous example and exercises, we always grouped by a single column by p
 - function (to be applied on the index)
 - levels=[], names of levels in a MultiIndex
 
-```{code-cell} ipython3
+```python
 df.groupby(df['Age'] < 18)['Survived'].mean()
 ```
 
-```{code-cell} ipython3
+```python
 df.groupby(['Pclass', 'Sex'])['Survived'].mean()
 ```
 
 ## The size of groups - value counts
 
-+++
 
 Often you want to know how many elements there are in a certain group (or in other words: the number of occurences of the different values from a column).
 
 To get the size of the groups, we can use `size`:
 
-```{code-cell} ipython3
+```python
 df.groupby('Pclass').size()
 ```
 
-```{code-cell} ipython3
+```python
 df.groupby('Embarked').size()
 ```
 
 Another way to obtain such counts, is to use the Series `value_counts` method:
 
-```{code-cell} ipython3
+```python
 df['Embarked'].value_counts()
 ```
 
 # [OPTIONAL] Additional exercises using the movie data
 
-+++
 
 These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKajNMa1pfSzN6Q3M) and [`cast.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKal9UYTJSR2ZhSW8) and put them in the `/data` folder.
 
-+++
 
 `cast` dataset: different roles played by actors/actresses in films
 
@@ -278,7 +254,7 @@ These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://gith
 - type: actor/actress
 - n: the order of the role (n=1: leading role)
 
-```{code-cell} ipython3
+```python
 cast = pd.read_csv('data/cast.csv')
 cast.head()
 ```
@@ -288,7 +264,7 @@ cast.head()
 * title: title of the movie
 * year: year of release
 
-```{code-cell} ipython3
+```python
 titles = pd.read_csv('data/titles.csv')
 titles.head()
 ```
@@ -302,15 +278,11 @@ titles.head()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 titles['decade'] = titles['year'] // 10 * 10
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 titles.groupby('decade').size().plot(kind='bar', color='green')
 ```
 
@@ -323,9 +295,7 @@ titles.groupby('decade').size().plot(kind='bar', color='green')
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 titles['decade'] = titles['year'] // 10 * 10
 hamlet = titles[titles['title'] == 'Hamlet']
 hamlet.groupby('decade').size().plot(kind='bar', color="orange")
@@ -340,9 +310,7 @@ hamlet.groupby('decade').size().plot(kind='bar', color="orange")
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 titles['decade'] = titles['year'] // 10 * 10
 hamlet = titles[titles['title'].str.contains('Hamlet')]
 hamlet.groupby('decade').size().plot(kind='bar', color="lightblue")
@@ -357,17 +325,13 @@ hamlet.groupby('decade').size().plot(kind='bar', color="lightblue")
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast1990 = cast[cast['year'] >= 1990]
 cast1990 = cast1990[cast1990['n'] == 1]
 cast1990.groupby('name').size().nlargest(10)
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast1990['name'].value_counts().head(10)
 ```
 
@@ -380,16 +344,12 @@ cast1990['name'].value_counts().head(10)
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 hamlets = titles[titles['title'].str.contains('Hamlet')]
 hamlets['title'].value_counts()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 hamlets = titles[titles['title'].str.startswith('Hamlet')]
 hamlets['title'].value_counts()
 ```
@@ -403,16 +363,12 @@ hamlets['title'].value_counts()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 title_longest = titles['title'].str.len().nlargest(10)
 title_longest
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 pd.options.display.max_colwidth = 210
 titles.loc[title_longest.index]
 ```
@@ -426,9 +382,7 @@ titles.loc[title_longest.index]
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast1950 = cast[cast['year'] // 10 == 195]
 cast1950 = cast1950[cast1950['n'] == 1]
 cast1950.groupby(['year', 'type']).size()
@@ -443,9 +397,7 @@ cast1950.groupby(['year', 'type']).size()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast.character.value_counts().head(11)
 ```
 
@@ -458,9 +410,7 @@ cast.character.value_counts().head(11)
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast[cast.name == 'Brad Pitt'].year.value_counts().sort_index().plot()
 ```
 
@@ -473,9 +423,7 @@ cast[cast.name == 'Brad Pitt'].year.value_counts().sort_index().plot()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 titles[titles['title'].str.startswith('The Life')]['title'].value_counts().head(10)
 ```
 
@@ -488,9 +436,7 @@ titles[titles['title'].str.startswith('The Life')]['title'].value_counts().head(
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast[cast.year == 2010].name.value_counts().head(10)
 ```
 
@@ -503,9 +449,7 @@ cast[cast.year == 2010].name.value_counts().head(10)
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 pink = cast[cast['title'] == 'The Pink Panther']
 pink.groupby(['year'])[['n']].max()
 ```
@@ -519,9 +463,7 @@ pink.groupby(['year'])[['n']].max()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 oz = cast[cast['name'] == 'Frank Oz']
 oz_roles = oz.groupby(['year', 'title']).size()
 oz_roles[oz_roles > 1]
@@ -536,9 +478,7 @@ oz_roles[oz_roles > 1]
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 oz = cast[cast['name'] == 'Frank Oz']
 oz_roles = oz.groupby(['character']).size()
 oz_roles[oz_roles > 1].sort_values()
@@ -553,9 +493,7 @@ oz_roles[oz_roles > 1].sort_values()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast['n_total'] = cast.groupby(['title', 'year'])['n'].transform('max') # transform will return an element for each row, so the max value is given to the whole group
 cast.head()
 ```
@@ -571,25 +509,19 @@ cast.head()
 **Tip**: you can do a groupby twice in two steps, first calculating the numbers, and secondly, the ratios.
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 leading = cast[cast['n'] == 1]
 sums_decade = leading.groupby([cast['year'] // 10 * 10, 'type']).size()
 sums_decade
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 #sums_decade.groupby(level='year').transform(lambda x: x / x.sum())
 ratios_decade = sums_decade / sums_decade.groupby(level='year').transform('sum')
 ratios_decade
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 ratios_decade[:, 'actor'].plot()
 ratios_decade[:, 'actress'].plot()
 ```
@@ -603,9 +535,7 @@ ratios_decade[:, 'actress'].plot()
 </ul><br>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 t = titles
 t.year.value_counts().head(3)
 ```
@@ -619,17 +549,13 @@ t.year.value_counts().head(3)
 </ul><br>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast1950 = cast[cast['year'] // 10 == 195]
 cast1950 = cast1950[cast1950['n'] == 1]
 cast1950['type'].value_counts()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast2000 = cast[cast['year'] // 10 == 200]
 cast2000 = cast2000[cast2000['n'] == 1]
 cast2000['type'].value_counts()

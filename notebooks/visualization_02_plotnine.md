@@ -1,27 +1,25 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
 <p><font size="6"><b>Plotnine: Introduction </b></font></p>
 
-
-> *DS Data manipulation, analysis and visualisation in Python*  
-> *December, 2019*
-
-> *© 2016, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
-```{code-cell} ipython3
+```python run_control={"frozen": false, "read_only": false}
 import pandas as pd
 ```
 
@@ -29,40 +27,38 @@ import pandas as pd
 
 http://plotnine.readthedocs.io/en/stable/
 
-+++
-
+<!-- #region run_control={"frozen": false, "read_only": false} -->
 * Built on top of Matplotlib, but providing
     1. High level functions
     2. Implementation of the [Grammar of Graphics](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448), which became famous due to the `ggplot2` R package 
     3. The syntax is highly similar to the `ggplot2` R package
 * Works well with Pandas
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python run_control={"frozen": false, "read_only": false}
 import plotnine as p9
 ```
 
 ## Introduction
 
-+++
 
 We will use the Titanic example data set:
 
-```{code-cell} ipython3
+```python
 titanic = pd.read_csv('../data/titanic.csv')
 ```
 
-```{code-cell} ipython3
+```python
 titanic.head()
 ```
 
 Let's consider following question:
 >*For each class at the Titanic, how many people survived and how many died?*
 
-+++
 
 Hence, we should define the *size* of respectively the zeros (died) and ones (survived) groups of column `Survived`, also grouped by the `Pclass`. In Pandas terminology:
 
-```{code-cell} ipython3
+```python
 survived_stat = titanic.groupby(["Pclass", "Survived"]).size().rename('count').reset_index()
 survived_stat
 # Remark: the `rename` syntax is to provide the count column a column name 
@@ -70,7 +66,7 @@ survived_stat
 
 Providing this data in a bar chart with pure Pandas is still partly supported:
 
-```{code-cell} ipython3
+```python
 survived_stat.plot(x='Survived', y='count', kind='bar')
 ## A possible other way of plotting this could be using groupby again:   
 #survived_stat.groupby('Pclass').plot(x='Survived', y='count', kind='bar') # (try yourself by uncommenting)
@@ -78,11 +74,10 @@ survived_stat.plot(x='Survived', y='count', kind='bar')
 
 but with mixed results...
 
-+++
 
 Plotting libraries focussing on the **grammar of graphics** are really targeting these *grouped* plots. For example, the plotting of the resulting counts can be expressed in the grammar of graphics:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(survived_stat, 
            p9.aes(x='Survived', y='count', fill='factor(Survived)'))
     + p9.geom_bar(stat='identity', position='dodge')
@@ -91,7 +86,7 @@ Plotting libraries focussing on the **grammar of graphics** are really targeting
 
 Moreover, these `count` operations are embedded in the typical Grammar of Graphics packages and we can do these operations directly on the original `titanic` data set in a single coding step:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='Survived', fill='factor(Survived)'))
     + p9.geom_bar(stat='count', position='dodge')
@@ -110,53 +105,45 @@ Moreover, these `count` operations are embedded in the typical Grammar of Graphi
 
 </div>
 
-+++
 
 ## Building a plotnine graph
 
-+++
 
 Building plots with plotnine is typically an iterative process. As illustrated in the introduction, a graph is setup by layering different elements on top of each other using the `+` operator. putting everything together in brackets `()` provides Python-compatible syntax.
 
-+++
 
 #### data
 
-+++
 
 * Bind the plot to a specific data frame using the data argument:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(data=titanic))
 ```
 
 We haven 't defined anything else, so just an empty *figure* is available.
 
-+++
 
 #### aesthestics
 
-+++
 
  
 * Define aesthetics (**aes**), by **selecting variables** used in the plot and linking them to presentation such as plotting size, shape color, etc. You can interpret this as: **how** the variable will influence the plotted objects/geometries:
 
-+++
 
 The most important `aes` are: `x`, `y`, `alpha`, `color`, `colour`, `fill`, `linetype`, `shape`, `size` and `stroke`
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare')))
 ```
 
 #### geometry
 
-+++
 
 * Still nothing plotted yet, as we have to define what kind of [**geometry**](http://plotnine.readthedocs.io/en/stable/api.html#geoms) will be used for the plot. The easiest is probably using points:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point()
@@ -173,9 +160,7 @@ The most important `aes` are: `x`, `y`, `alpha`, `color`, `colour`, `fill`, `lin
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare', color='Sex'))
      + p9.geom_jitter()
@@ -184,15 +169,13 @@ The most important `aes` are: `x`, `y`, `alpha`, `color`, `colour`, `fill`, `lin
 
 These are the basic elements to have a graph, but other elements can be added to the graph:
 
-+++
 
 #### labels
 
-+++
 
 * Change the [**labels**](http://plotnine.readthedocs.io/en/stable/api.html#Labels):
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point()
@@ -202,11 +185,10 @@ These are the basic elements to have a graph, but other elements can be added to
 
 #### facets
 
-+++
 
 * Use the power of `groupby` and define [**facets**](http://plotnine.readthedocs.io/en/stable/api.html#facets) to group the plot by a grouping variable:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point()
@@ -217,13 +199,12 @@ These are the basic elements to have a graph, but other elements can be added to
 
 #### scales
 
-+++
 
 * Defining [**scale**](http://plotnine.readthedocs.io/en/stable/api.html#scales) for colors, axes,...
 
 For example, a log-version of the y-axis could support the interpretation of the lower numbers:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point() 
@@ -235,11 +216,10 @@ For example, a log-version of the y-axis could support the interpretation of the
 
 #### theme
 
-+++
 
 * Changing [**theme** ](http://plotnine.readthedocs.io/en/stable/api.html#themes):
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point() 
@@ -252,7 +232,7 @@ For example, a log-version of the y-axis could support the interpretation of the
 
 or changing specific [theming elements](http://plotnine.readthedocs.io/en/stable/api.html#Themeables), e.g. text size:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point() 
@@ -266,12 +246,10 @@ or changing specific [theming elements](http://plotnine.readthedocs.io/en/stable
 
 #### more...
 
-+++
 
 * adding [**statistical derivatives**](http://plotnine.readthedocs.io/en/stable/api.html#stats)
 * changing the [**plot coordinate**](http://plotnine.readthedocs.io/en/stable/api.html#coordinates) system
 
-+++
 
 <div class="alert alert-info">
 
@@ -285,15 +263,13 @@ or changing specific [theming elements](http://plotnine.readthedocs.io/en/stable
 
 </div>
 
-+++
 
 ## plotnine is built on top of Matplotlib
 
-+++
 
 As plotnine is built on top of Matplotlib, we can still retrieve the matplotlib `figure` object from plotnine for eventual customization:
 
-```{code-cell} ipython3
+```python
 myplot = (p9.ggplot(titanic, 
                     p9.aes(x='factor(Pclass)', y='Fare'))
      + p9.geom_point()
@@ -302,11 +278,11 @@ myplot = (p9.ggplot(titanic,
 
 The trick is to use the `draw()` function in plotnine:
 
-```{code-cell} ipython3
+```python
 my_plt_version = myplot.draw()
 ```
 
-```{code-cell} ipython3
+```python
 my_plt_version.axes[0].set_title("Titanic fare price per cabin class")
 ax2 = my_plt_version.add_axes([0.5, 0.5, 0.3, 0.3], label="ax2")
 my_plt_version
@@ -320,15 +296,13 @@ Similar to Pandas handling above, we can set up a matplotlib `Figure` with plotn
 
 </div>
 
-+++
 
 ## (OPTIONAL SECTION) Some more plotnine functionalities to remember...
 
-+++
 
 **Histogram**: Getting the univariaite distribution of the `Age`
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Age'))
      + p9.geom_histogram(bins=30))
 ```
@@ -344,9 +318,7 @@ Similar to Pandas handling above, we can set up a matplotlib `Figure` with plotn
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Age'))
      + p9.geom_histogram(bins=30)
      + p9.facet_wrap('Sex', nrow=2)
@@ -355,14 +327,14 @@ Similar to Pandas handling above, we can set up a matplotlib `Figure` with plotn
 
 **boxplot/violin plot**: Getting the univariaite distribution of `Age` per `Sex`
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Sex', y='Age'))
      + p9.geom_boxplot())
 ```
 
 Actually, a *violinplot* provides more inside to the distribution:
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Sex', y='Age'))
      + p9.geom_violin()
 )
@@ -380,9 +352,7 @@ Actually, a *violinplot* provides more inside to the distribution:
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Sex', y='Age'))
      + p9.geom_violin()
      + p9.geom_jitter(alpha=0.2)
@@ -391,7 +361,6 @@ Actually, a *violinplot* provides more inside to the distribution:
 
 **regressions**
 
-+++
 
 plotnine supports a number of statistical functions with the [`geom_smooth` function]:(http://plotnine.readthedocs.io/en/stable/generated/plotnine.stats.stat_smooth.html#plotnine.stats.stat_smooth)
 
@@ -411,7 +380,7 @@ The available methods are:
 
 each of these functions are provided by existing Python libraries and integrated in plotnine, so make sure to have these dependencies installed (read the error message!)
 
-```{code-cell} ipython3
+```python
 (p9.ggplot(titanic.dropna(subset=['Age', 'Sex', 'Fare']), 
            p9.aes(x='Fare', y='Age', color="Sex"))
      + p9.geom_point()
@@ -420,7 +389,7 @@ each of these functions are provided by existing Python libraries and integrated
 )
 ```
 
-```{code-cell} ipython3
+```python run_control={"frozen": false, "read_only": false}
 (p9.ggplot(titanic.dropna(subset=['Age', 'Sex', 'Fare']), 
            p9.aes(x='Fare', y='Age', color="Sex"))
      + p9.geom_point()
@@ -433,7 +402,6 @@ each of these functions are provided by existing Python libraries and integrated
 
 # Need more plotnine inspiration? 
 
-+++
 
 <div class="alert alert-info" style="font-size:18px">
 
@@ -445,21 +413,17 @@ Important resources to start from!
 
 </div>
 
-+++
 
 <a id='this_is_tidy'></a>
 
-+++
 
 # What is `tidy`?
 
-+++
 
 If you're wondering what *tidy* data representations are, you can read the scientific paper by Hadley Wickham, http://vita.had.co.nz/papers/tidy-data.pdf. 
 
 Here, we just introduce the main principle very briefly:
 
-+++
 
 Compare:
 
@@ -487,11 +451,9 @@ Compare:
 | Dendermonde | B  | 6.2 |
 | Eeklo | B  | 7.2 |
 
-+++
 
 This is sometimes also referred as *short* versus *long* format for a specific variable... Plotnine (and other grammar of graphics libraries) work better on `tidy` data, as it better supports `groupby`-like transactions!
 
-+++
 
 <div class="alert alert-info" style="font-size:16px">
 
@@ -507,3 +469,5 @@ This is sometimes also referred as *short* versus *long* format for a specific v
     <li>Each type of <code>observational unit</code> forms a <b>table</b>.</li>
 </ul>
 </div>
+
+

@@ -1,26 +1,25 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
 <p><font size="6"><b> CASE - Observation data - analysis</b></font></p>
 
-> *DS Data manipulation, analysis and visualization in Python*
-> *May/June, 2021*
->
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
-```{code-cell} ipython3
+```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,7 +30,6 @@ plt.style.use('seaborn-whitegrid')
 
 ## 1. Reading in the enriched observations data
 
-+++
 
 <div class="alert alert-success">
 
@@ -51,32 +49,24 @@ plt.style.use('seaborn-whitegrid')
 
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data_processed = pd.read_csv("data/survey_data_completed.csv",
                                     parse_dates=['eventDate'], index_col="occurrenceID")
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data_processed.head()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data_processed.info()
 ```
 
 ## 2. Tackle missing values (NaN) and duplicate values
 
-+++
 
 See [pandas_08_missing_values.ipynb](pandas_08_missing_values.ipynb) for an overview of functionality to work with missing values.
 
-+++
 
 <div class="alert alert-success">
 
@@ -91,9 +81,7 @@ How many records in the data set have no information about the `species`? Use th
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data_processed['species'].isna().sum()
 ```
 
@@ -109,9 +97,7 @@ How many duplicate records are present in the dataset? Use the method `duplicate
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data_processed.duplicated().sum()
 ```
 
@@ -129,9 +115,7 @@ survey_data_processed.duplicated().sum()
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 duplicate_observations = survey_data_processed[survey_data_processed.duplicated(keep=False)]
 duplicate_observations.sort_values(["eventDate", "verbatimLocality"]).head(9)
 ```
@@ -150,15 +134,11 @@ duplicate_observations.sort_values(["eventDate", "verbatimLocality"]).head(9)
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data_unique = survey_data_processed.drop_duplicates()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 len(survey_data_unique)
 ```
 
@@ -178,9 +158,7 @@ Use the `dropna()` method to find out:
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 len(survey_data_unique.dropna()), len(survey_data_unique.dropna(subset=['species']))
 ```
 
@@ -197,14 +175,12 @@ Filter the  `survey_data_unique` data and select only those records that do not 
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 mask = survey_data_unique['species'].isna() & survey_data_unique['sex'].notna()
 not_identified = survey_data_unique[mask]
 ```
 
-```{code-cell} ipython3
+```python
 not_identified.head()
 ```
 
@@ -212,7 +188,7 @@ __NOTE!__
 
 The `DataFrame` we will use in the further analyses contains species information:
 
-```{code-cell} ipython3
+```python
 survey_data = survey_data_unique.dropna(subset=['species']).copy()
 survey_data['name'] = survey_data['genus'] + ' ' + survey_data['species']
 ```
@@ -224,11 +200,10 @@ survey_data['name'] = survey_data['genus'] + ' ' + survey_data['species']
 For biodiversity studies, absence values (knowing that something is not present) are useful as well to normalize the observations, but this is out of scope for these exercises.
 </div>
 
-+++
 
 ## 3. Select subsets of the data
 
-```{code-cell} ipython3
+```python
 survey_data['taxa'].value_counts()
 #survey_data.groupby('taxa').size()
 ```
@@ -245,14 +220,12 @@ survey_data['taxa'].value_counts()
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 non_rodent_species = survey_data[survey_data['taxa'].isin(['Rabbit', 'Bird', 'Reptile'])]
 non_rodent_species.head()
 ```
 
-```{code-cell} ipython3
+```python
 len(non_rodent_species)
 ```
 
@@ -269,18 +242,16 @@ Select the observations for which the `name` starts with the characters 'r' (mak
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 r_species = survey_data[survey_data['name'].str.lower().str.startswith('r')]
 r_species.head()
 ```
 
-```{code-cell} ipython3
+```python
 len(r_species)
 ```
 
-```{code-cell} ipython3
+```python
 r_species["name"].value_counts()
 ```
 
@@ -296,17 +267,16 @@ Select the observations that are not Birds. Call the resulting variable <code>no
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 non_bird_species = survey_data[survey_data['taxa'] != 'Bird']
 non_bird_species.head()
 ```
 
-```{code-cell} ipython3
+```python
 len(non_bird_species)
 ```
 
+<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -319,10 +289,9 @@ Select the __Bird__ (taxa is Bird) observations from 1985-01 till 1989-12 using 
 
 
 </details>
+<!-- #endregion -->
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 birds_85_89 = survey_data[(survey_data["eventDate"] >= "1985-01-01")
                           & (survey_data["eventDate"] <= "1989-12-31 23:59")
                           & (survey_data['taxa'] == 'Bird')]
@@ -331,9 +300,7 @@ birds_85_89.head()
 
 Alternative solution:
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 # alternative solution
 birds_85_89 = survey_data[(survey_data["eventDate"].dt.year >= 1985)
                           & (survey_data["eventDate"].dt.year <= 1989)
@@ -357,18 +324,14 @@ __Note__ You can do this all in a single line statement, but don't have to do it
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 # Multiple lines
 obs_with_weight = survey_data.dropna(subset=["wgt"])
 median_weight = obs_with_weight.groupby(['name'])["wgt"].median()
 median_weight.sort_values(ascending=False)
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 # Single line statement
 (survey_data
      .dropna(subset=["wgt"])
@@ -380,7 +343,6 @@ median_weight.sort_values(ascending=False)
 
 ## 4. Species abundance
 
-+++
 
 <div class="alert alert-success">
 
@@ -394,15 +356,11 @@ Which 8 species (use the `name` column to identify the different species) have b
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data.groupby("name").size().nlargest(8)
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data['name'].value_counts()[:8]
 ```
 
@@ -420,9 +378,7 @@ survey_data['name'].value_counts()[:8]
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 n_species_per_plot = survey_data.groupby(["verbatimLocality"])["name"].nunique()
 
 fig, ax = plt.subplots(figsize=(6, 6))
@@ -449,9 +405,7 @@ ax.set_ylabel("plot number")
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 n_plots_per_species = survey_data.groupby(["name"])["verbatimLocality"].nunique().sort_values()
 
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -475,29 +429,26 @@ ax.set_ylabel("");
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 n_plot_sex = survey_data.groupby(["sex", "verbatimLocality"]).size().rename("count").reset_index()
 n_plot_sex.head()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 pivoted = n_plot_sex.pivot(columns="sex", index="verbatimLocality", values="count")
 ```
 
-```{code-cell} ipython3
+```python tags=[]
 pivoted.head()
 ```
 
 To check, we can use the variable `pivoted` to plot the result:
 
-```{code-cell} ipython3
+```python
 pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
 ```
 
+<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -511,14 +462,14 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 
 
 </details>
+<!-- #endregion -->
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 sns.catplot(data=n_plot_sex, x="verbatimLocality", y="count",
             hue="sex", kind="bar", height=3, aspect=3)
 ```
 
+<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -532,10 +483,9 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 
 
 </details>
+<!-- #endregion -->
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 sns.catplot(data=survey_data, x="verbatimLocality",
             hue="sex", kind="count", height=3, aspect=3)
 ```
@@ -553,9 +503,7 @@ sns.catplot(data=survey_data, x="verbatimLocality",
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 species_per_plot = survey_data.pivot_table(index="name",
                                            columns="verbatimLocality",
                                            values="datasetName",
@@ -566,16 +514,13 @@ species_per_plot = survey_data.pivot_table(index="name",
 #pecies_per_plot = pd.crosstab(survey_data['name'], survey_data['verbatimLocality'])
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 fig, ax = plt.subplots(figsize=(8,8))
 sns.heatmap(species_per_plot, ax=ax, cmap='Greens')
 ```
 
 ## 5. Observations over time
 
-+++
 
 <div class="alert alert-success">
 
@@ -590,15 +535,12 @@ Make a plot visualizing the evolution of the number of observations for each of 
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 survey_data.resample('A', on='eventDate').size().plot()
 ```
 
 To evaluate the intensity or number of occurrences during different time spans, a heatmap is an interesting representation.
 
-+++
 
 <div class="alert alert-success">
 
@@ -615,9 +557,7 @@ To evaluate the intensity or number of occurrences during different time spans, 
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 heatmap_prep = survey_data.pivot_table(index=survey_data['eventDate'].dt.year,
                                        columns=survey_data['eventDate'].dt.month,
                                        values='species', aggfunc='count')
@@ -627,15 +567,12 @@ ax = sns.heatmap(heatmap_prep, cmap='Reds')
 
 Remark that we started from a `tidy` data format (also called *long* format) and converted to *short* format with in the row index the years, in the column the months and the counts for each of these year/month combinations as values.
 
-+++
 
 ## (OPTIONAL SECTION) 6. Evolution of species during monitoring period
 
-+++
 
 *In this section, all plots can be made with the embedded Pandas plot function, unless specificly asked*
 
-+++
 
 <div class="alert alert-success">
 
@@ -650,15 +587,11 @@ Plot using Pandas `plot` function the number of records for `Dipodomys merriami`
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 merriami = survey_data[survey_data["name"] == "Dipodomys merriami"]
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 fig, ax = plt.subplots()
 merriami.groupby(merriami['eventDate'].dt.month).size().plot(kind="barh", ax=ax)
 ax.set_xlabel("number of occurrences");
@@ -679,22 +612,16 @@ Plot, for the species 'Dipodomys merriami', 'Dipodomys ordii', 'Reithrodontomys 
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 species_evolution = month_evolution.unstack(level=0)
 axs = species_evolution.plot(subplots=True, figsize=(14, 8), sharey=True)
 ```
@@ -705,13 +632,10 @@ axs = species_evolution.plot(subplots=True, figsize=(14, 8), sharey=True)
 
 Recreate the same plot as in the previous exercise using Seaborn `relplot` functon with the `month_evolution` variable.
 
-+++
 
 Uncomment the next cell (calculates `month_evolution`, the intermediate result of the previous excercise):
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 # Given as solution..
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
@@ -722,9 +646,7 @@ month_evolution.head()
 
 Plotting with seaborn:
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 sns.relplot(data=month_evolution, x='eventDate', y="counts",
             row="name", kind="line", hue="name", height=2, aspect=5)
 ```
@@ -743,17 +665,13 @@ Plot the annual amount of occurrences for each of the 'taxa' as a function of ti
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 year_evolution = survey_data.groupby("taxa").resample('A', on='eventDate').size()
 year_evolution.name = "counts"
 year_evolution = year_evolution.reset_index()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 sns.relplot(data=year_evolution, x='eventDate', y="counts",
             col="taxa", col_wrap=2, kind="line", height=2, aspect=5,
             facet_kws={"sharey": False})
@@ -771,9 +689,7 @@ The observations where taken by volunteers. You wonder on which day of the week 
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 fig, ax = plt.subplots()
 survey_data.groupby(survey_data["eventDate"].dt.dayofweek).size().plot(kind='barh', color='#66b266', ax=ax)
 import calendar

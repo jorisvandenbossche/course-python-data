@@ -1,34 +1,31 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
 <p><font size="6"><b> CASE - Bike count data</b></font></p>
 
-> *DS Data manipulation, analysis and visualization in Python*
-> *May/June, 2021*
->
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
-+++
 
 <img src="https://static.nieuwsblad.be/Assets/Images_Upload/2014/04/17/57b8f34e-5042-11e2-80ee-5d1d7b74455f_original.jpg.h380.jpg.568.jpg?maxheight=460&maxwidth=638&scale=both">
 
-+++
 
 In this case study, we will make use of the openly available bike count data of the city of Ghent (Belgium). At the Coupure Links, next to the Faculty of Bioscience Engineering, a counter keeps track of the number of passing cyclists in both directions.
 
-```{code-cell} ipython3
+```python
 import pandas as pd
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-whitegrid')
@@ -36,11 +33,9 @@ plt.style.use('seaborn-whitegrid')
 
 # Reading and processing the data
 
-+++
 
 ## Read csv data
 
-+++
 
 The data were previously available on the open data portal of the city, and we downloaded them in the `CSV` format, and provided the original file as `data/fietstellingencoupure.csv`.
 
@@ -50,7 +45,6 @@ This dataset contains the historical data of the bike counters, and consists of 
 - The second column `tijd` is the time of the day, in `hh:mm` format
 - The third and fourth column `ri Centrum` and `ri Mariakerke` are the counts at that point in time (counts between this timestamp and the previous)
 
-+++
 
 <div class="alert alert-success">
 
@@ -70,43 +64,31 @@ This dataset contains the historical data of the bike counters, and consists of 
 
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df = pd.read_csv("data/fietstellingencoupure.csv", sep=';')
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df.head()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df.tail()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 len(df)
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df.dtypes
 ```
 
 ## Data processing
 
-+++
 
 As explained above, the first and second column (respectively `datum` and `tijd`) indicate the date and hour of the day. To obtain a time series, we have to combine those two columns into one series of actual timestamp values.
 
-+++
 
 <div class="alert alert-success">
 
@@ -129,39 +111,31 @@ Pre-process the data:
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 combined = df['datum'] + ' ' + df['tijd']
 combined.head()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.index = pd.to_datetime(combined, format="%d/%m/%Y %H:%M")
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df2 = df.drop(columns=['datum', 'tijd'])
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df2 = df2.rename(columns={'ri Centrum': 'direction_centre',
                           'ri Mariakerke':'direction_mariakerke'})
 ```
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 df2.head()
 ```
 
 Having the data available with an interpreted `datetime`, provides us the possibility of having time aware plotting:
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 fig, ax = plt.subplots(figsize=(10, 6))
 df.plot(colormap='coolwarm', ax=ax)
 ```
@@ -172,21 +146,20 @@ df.plot(colormap='coolwarm', ax=ax)
 
 </div>
 
-+++
 
 When we just want to interpret the dates, without specifying how the dates are formatted, Pandas makes an attempt as good as possible:
 
-```{code-cell} ipython3
+```python
 combined = df['datum'] + ' ' + df['tijd']
 ```
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 %timeit -n 1 -r 1 pd.to_datetime(combined, dayfirst=True)
 ```
 
 However, when we already know the format of the dates (and if this is consistent throughout the full dataset), we can use this information to interpret the dates:
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 %timeit pd.to_datetime(combined, format="%d/%m/%Y %H:%M")
 ```
 
@@ -196,13 +169,11 @@ However, when we already know the format of the dates (and if this is consistent
 
 </div>
 
-+++
 
 ### Write the dataset cleaning as a function
 
 In order to make it easier to reuse the code for the pre-processing we have implemented, let's convert the code to a Python function:
 
-+++
 
 <div class="alert alert-success">
 
@@ -216,9 +187,7 @@ Write a function `process_bike_count_data(df)` that performs the processing step
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 def process_bike_count_data(df):
     """Process the provided dataframe: parse datetimes and rename columns.
 
@@ -244,7 +213,7 @@ def process_bike_count_data(df):
     return df2
 ```
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 df_raw = pd.read_csv("data/fietstellingencoupure.csv", sep=';')
 df_preprocessed = process_bike_count_data(df_raw)
 df_preprocessed.head()
@@ -252,45 +221,40 @@ df_preprocessed.head()
 
 ### Store our collected dataset as an interim data product
 
-+++
 
 As we finished our data-collection step, we want to save this result as an interim data output of our small investigation. As such, we do not have to re-download all the files each time something went wrong, but can restart from our interim step.
 
-```{code-cell} ipython3
+```python
 df_preprocessed.to_csv("bike_count_interim.csv")
 ```
 
 ## Data exploration and analysis
 
-+++
 
 We now have a cleaned-up dataset of the bike counts at Coupure Links in Ghent (Belgium). Next, we want to get an impression of the characteristics and properties of the data
 
-+++
 
 ### Load the interim data
 
-+++
 
 Reading the file in from the interim file (when you want to rerun the whole analysis on the updated online data, you would comment out this cell...)
 
-```{code-cell} ipython3
+```python
 df = pd.read_csv("bike_count_interim.csv", index_col=0, parse_dates=True)
 ```
 
 ### Count interval verification
 
-+++
 
 The number of bikers are counted for intervals of approximately 15 minutes. But let's check if this is indeed the case. Calculate the difference between each of the consecutive values of the index. We can use the `Series.diff()` method:
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 pd.Series(df.index).diff()
 ```
 
 The count of the possible intervals is of interest:
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 pd.Series(df.index).diff().value_counts()
 ```
 
@@ -298,13 +262,12 @@ There are a few records that are not exactly 15min. But given it are only a few 
 
 Bonus question: do you know where the values of `-1 days +23:15:01` and `01:15:00` are coming from?
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 df.describe()
 ```
 
 ### Quiet periods
 
-+++
 
 <div class="alert alert-success">
 
@@ -318,9 +281,7 @@ Create a new Pandas Series `df_both` which contains the sum of the counts of bot
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df_both = df.sum(axis=1)
 df_both
 ```
@@ -337,9 +298,7 @@ Using the `df_both` from the previous exercise, create a new Series `df_quiet` w
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df_quiet = df_both[df_both < 5]
 ```
 
@@ -356,15 +315,12 @@ Using the original data `df`, select only the intervals for which less than 3 cy
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df[(df['direction_centre'] < 3) | (df['direction_mariakerke'] < 3)]
 ```
 
 ### Count statistics
 
-+++
 
 <div class="alert alert-success">
 
@@ -378,9 +334,7 @@ What is the average number of bikers passing each 15 min?
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df.mean()
 ```
 
@@ -397,9 +351,7 @@ What is the average number of bikers passing each hour?
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df.resample('H').sum().mean()
 ```
 
@@ -415,9 +367,7 @@ What are the 10 highest peak values observed during any of the intervals for the
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df['direction_centre'].nlargest(10)
 # alternative:
 # df['direction_centre'].sort_values(ascending=False).head(10)
@@ -437,37 +387,27 @@ What is the maximum number of cyclist that passed on a single day calculated on 
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df_both = df.sum(axis=1)
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df_daily = df_both.resample('D').sum()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df_daily.max()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true tags=[]
 df_daily.nlargest(10)
 ```
 
 The high number of bikers passing on 2013-06-05 was not by coincidence: http://www.nieuwsblad.be/cnt/dmf20130605_022 ;-)
 
-+++
 
 ### Trends as function of time
 
-+++
 
 <div class="alert alert-success">
 
@@ -482,9 +422,7 @@ How does the long-term trend look like? Calculate monthly sums and plot the resu
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df_monthly = df.resample('M').sum()
 df_monthly.plot()
 ```
@@ -501,27 +439,20 @@ Let's have a look at some short term patterns. For the data of the first 3 weeks
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df_hourly = df.resample('H').sum()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df_hourly.head()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 df_hourly['2014-01-01':'2014-01-20'].plot()
 ```
 
 **New Year's Eve 2013-2014**
 
-+++
 
 <div class="alert alert-success">
 
@@ -537,29 +468,21 @@ df_hourly['2014-01-01':'2014-01-20'].plot()
 
 </details>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 newyear = df["2013-12-31 12:00:00": "2014-01-01 12:00:00"]
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 newyear.plot()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 newyear.rolling(10, center=True).mean().plot(linewidth=2)
 ```
 
 A more advanced usage of Matplotlib to create a combined plot:
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true jupyter={"outputs_hidden": false}
 # A more in-detail plotting version of the graph.
 fig, ax = plt.subplots()
 newyear.plot(ax=ax, color=['LightGreen', 'LightBlue'], legend=False, rot=0)
@@ -581,39 +504,37 @@ Looking at the data in the above exercises, there seems to be clearly a:
 
 Such patterns can easily be calculated and visualized in pandas using the `DatetimeIndex` attributes `dayofweek` combined with `groupby` functionality. Below a taste of the possibilities, and we will learn about this in the proceeding notebooks:
 
-+++
 
 **Weekly pattern**:
 
-```{code-cell} ipython3
+```python
 df_daily = df.resample('D').sum()
 ```
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 df_daily.groupby(df_daily.index.dayofweek).mean().plot(kind='bar')
 ```
 
 **Daily pattern:**
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 df_hourly.groupby(df_hourly.index.hour).mean().plot()
 ```
 
 So the daily pattern is clearly different for both directions. In the morning more people go north, in the evening more people go south. The morning peak is also more condensed.
 
-+++
 
 **Monthly pattern**
 
-```{code-cell} ipython3
+```python
 df_monthly = df.resample('M').sum()
 ```
 
-```{code-cell} ipython3
+```python
 from calendar import month_abbr
 ```
 
-```{code-cell} ipython3
+```python jupyter={"outputs_hidden": false}
 ax = df_monthly.groupby(df_monthly.index.month).mean().plot()
 ax.set_ylim(0)
 xlabels = ax.set_xticklabels(list(month_abbr)[0::2]) #too lazy to write the month values yourself...

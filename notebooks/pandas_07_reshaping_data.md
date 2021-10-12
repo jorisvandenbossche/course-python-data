@@ -1,27 +1,28 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.1
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.0
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
+<!-- #region -->
 <p><font size="6"><b>07 - Pandas: Reshaping data</b></font></p>
 
 
-> *Data wrangling in Python*  
-> *November, 2020*
->
-> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
+<!-- #endregion -->
 
-```{code-cell} ipython3
+```python
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,23 +30,19 @@ import matplotlib.pyplot as plt
 
 # Pivoting data
 
-+++
 
 ## Cfr. excel
 
-+++
 
 People who know Excel, probably know the **Pivot** functionality:
 
-+++
 
 ![](../img/pandas/pivot_excel.png)
 
-+++
 
 The data of the table:
 
-```{code-cell} ipython3
+```python
 excelample = pd.DataFrame({'Month': ["January", "January", "January", "January", 
                                   "February", "February", "February", "February", 
                                   "March", "March", "March", "March"],
@@ -55,69 +52,67 @@ excelample = pd.DataFrame({'Month': ["January", "January", "January", "January",
                    'Amount': [74., 235., 175., 100., 115., 240., 225., 125., 90., 260., 200., 120.]})
 ```
 
-```{code-cell} ipython3
+```python
 excelample
 ```
 
-```{code-cell} ipython3
+```python
 excelample_pivot = excelample.pivot(index="Category", columns="Month", values="Amount")
 excelample_pivot
 ```
 
 Interested in *Grand totals*?
 
-```{code-cell} ipython3
+```python
 # sum columns
 excelample_pivot.sum(axis=1)
 ```
 
-```{code-cell} ipython3
+```python
 # sum rows
 excelample_pivot.sum(axis=0)
 ```
 
 ## Pivot is just reordering your data:
 
-+++
 
 Small subsample of the titanic dataset:
 
-```{code-cell} ipython3
+```python
 df = pd.DataFrame({'Fare': [7.25, 71.2833, 51.8625, 30.0708, 7.8542, 13.0],
                    'Pclass': [3, 1, 1, 2, 3, 2],
                    'Sex': ['male', 'female', 'male', 'female', 'female', 'male'],
                    'Survived': [0, 1, 0, 1, 0, 1]})
 ```
 
-```{code-cell} ipython3
+```python
 df
 ```
 
-```{code-cell} ipython3
+```python
 df.pivot(index='Pclass', columns='Sex', values='Fare')
 ```
 
-```{code-cell} ipython3
+```python
 df.pivot(index='Pclass', columns='Sex', values='Survived')
 ```
 
 So far, so good...
 
-+++
 
 Let's now use the full titanic dataset:
 
-```{code-cell} ipython3
+```python
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```{code-cell} ipython3
+```python
 df.head()
 ```
 
 And try the same pivot (*no worries about the try-except, this is here just used to catch a loooong error*):
 
-```{code-cell} ipython3
+```python
 try:
     df.pivot(index='Sex', columns='Pclass', values='Fare')
 except Exception as e:
@@ -126,7 +121,7 @@ except Exception as e:
 
 This does not work, because we would end up with multiple values for one cell of the resulting frame, as the error says: `duplicated` values for the columns in the selection. As an example, consider the following rows of our three columns of interest:
 
-```{code-cell} ipython3
+```python
 df.loc[[1, 3], ["Sex", 'Pclass', 'Fare']]
 ```
 
@@ -134,7 +129,6 @@ Since `pivot` is just restructering data, where would both values of `Fare` for 
 
 Well, they need to be combined, according to an `aggregation` functionality, which is supported by the function`pivot_table`
 
-+++
 
 <div class="alert alert-danger">
 
@@ -146,15 +140,14 @@ Well, they need to be combined, according to an `aggregation` functionality, whi
 
 </div>
 
-+++
 
 # Pivot tables - aggregating while pivoting
 
-```{code-cell} ipython3
+```python
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```{code-cell} ipython3
+```python
 df.pivot_table(index='Sex', columns='Pclass', values='Fare')
 ```
 
@@ -166,12 +159,12 @@ df.pivot_table(index='Sex', columns='Pclass', values='Fare')
 
 </div>
 
-```{code-cell} ipython3
+```python
 df.pivot_table(index='Sex', columns='Pclass', 
                values='Fare', aggfunc='max')
 ```
 
-```{code-cell} ipython3
+```python
 df.pivot_table(index='Sex', columns='Pclass', 
                values='Fare', aggfunc='count')
 ```
@@ -185,12 +178,11 @@ df.pivot_table(index='Sex', columns='Pclass',
 </ul>
 </div>
 
-```{code-cell} ipython3
+```python
 pd.crosstab(index=df['Sex'], columns=df['Pclass'])
 ```
 
-+++ {"clear_cell": false}
-
+<!-- #region clear_cell=false -->
 <div class="alert alert-success">
 
 <b>EXERCISE</b>:
@@ -199,17 +191,14 @@ pd.crosstab(index=df['Sex'], columns=df['Pclass'])
   <li>Make a pivot table with the survival rates for Pclass vs Sex.</li>
 </ul>
 </div>
+<!-- #endregion -->
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.pivot_table(index='Pclass', columns='Sex', 
                values='Survived', aggfunc='mean')
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 fig, ax1 = plt.subplots()
 df.pivot_table(index='Pclass', columns='Sex', 
                values='Survived', aggfunc='mean').plot(kind='bar', 
@@ -218,8 +207,7 @@ df.pivot_table(index='Pclass', columns='Sex',
 ax1.set_ylabel('Survival ratio')
 ```
 
-+++ {"clear_cell": false}
-
+<!-- #region clear_cell=false -->
 <div class="alert alert-success">
 
 <b>EXERCISE</b>:
@@ -228,38 +216,34 @@ ax1.set_ylabel('Survival ratio')
   <li>Make a table of the median Fare payed by aged/underaged vs Sex.</li>
 </ul>
 </div>
+<!-- #endregion -->
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df['Underaged'] = df['Age'] <= 18
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.pivot_table(index='Underaged', columns='Sex', 
                values='Fare', aggfunc='median')
 ```
 
 # Melt - from pivot table to long or tidy format
 
-+++
 
 The `melt` function performs the inverse operation of a `pivot`. This can be used to make your frame longer, i.e. to make a *tidy* version of your data.
 
-```{code-cell} ipython3
+```python
 pivoted = df.pivot_table(index='Sex', columns='Pclass', values='Fare').reset_index()
 pivoted.columns.name = None
 ```
 
-```{code-cell} ipython3
+```python
 pivoted
 ```
 
 Assume we have a DataFrame like the above. The observations (the average Fare people payed) are spread over different columns. In a tidy dataset, each observation is stored in one row. To obtain this, we can use the `melt` function:
 
-```{code-cell} ipython3
+```python
 pd.melt(pivoted)
 ```
 
@@ -267,13 +251,12 @@ As you can see above, the `melt` function puts all column labels in one column, 
 
 In this case, this is not fully what we want. We would like to keep the 'Sex' column separately:
 
-```{code-cell} ipython3
+```python
 pd.melt(pivoted, id_vars=['Sex']) #, var_name='Pclass', value_name='Fare')
 ```
 
 # Reshaping with `stack` and `unstack`
 
-+++
 
 The docs say:
 
@@ -287,7 +270,7 @@ Indeed...
 
 Before we speak about `hierarchical index`, first check it in practice on the following dummy example:
 
-```{code-cell} ipython3
+```python
 df = pd.DataFrame({'A':['one', 'one', 'two', 'two'], 
                    'B':['a', 'b', 'a', 'b'], 
                    'C':range(4)})
@@ -296,17 +279,17 @@ df
 
 To use `stack`/`unstack`, we need the values we want to shift from rows to columns or the other way around as the index:
 
-```{code-cell} ipython3
+```python
 df = df.set_index(['A', 'B']) # Indeed, you can combine two indices
 df
 ```
 
-```{code-cell} ipython3
+```python
 result = df['C'].unstack()
 result
 ```
 
-```{code-cell} ipython3
+```python
 df = result.stack().reset_index(name='C')
 df
 ```
@@ -321,23 +304,21 @@ df
 </ul>
 </div>
 
-+++
 
 ## Mimick pivot table
 
-+++
 
 To better understand and reason about pivot tables, we can express this method as a combination of more basic steps. In short, the pivot is a convenient way of expressing the combination of a `groupby` and `stack/unstack`.
 
-```{code-cell} ipython3
+```python
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```{code-cell} ipython3
+```python
 df.head()
 ```
 
-```{code-cell} ipython3
+```python
 df.pivot_table(index='Pclass', columns='Sex', 
                values='Survived', aggfunc='mean')
 ```
@@ -353,24 +334,21 @@ df.pivot_table(index='Pclass', columns='Sex',
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 df.groupby(['Pclass', 'Sex'])['Survived'].mean().unstack()
 ```
 
 # [OPTIONAL] Exercises: use the reshaping methods with the movie data
 
-+++
 
 These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKajNMa1pfSzN6Q3M) and [`cast.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKal9UYTJSR2ZhSW8) and put them in the `/data` folder.
 
-```{code-cell} ipython3
+```python
 cast = pd.read_csv('data/cast.csv')
 cast.head()
 ```
 
-```{code-cell} ipython3
+```python
 titles = pd.read_csv('data/titles.csv')
 titles.head()
 ```
@@ -384,24 +362,18 @@ titles.head()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 grouped = cast.groupby(['year', 'type']).size()
 table = grouped.unstack('type')
 table.plot()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 cast.pivot_table(index='year', columns='type', values="character", aggfunc='count').plot() 
 # for values in using the , take a column with no Nan values in order to count effectively all values -> at this stage: aha-erlebnis about crosstab function(!)
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 pd.crosstab(index=cast['year'], columns=cast['type']).plot()
 ```
 
@@ -414,9 +386,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot()
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
 ```
 
@@ -429,9 +399,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 grouped = cast.groupby(['year', 'type']).size()
 table = grouped.unstack('type').fillna(0)
 (table['actor'] / (table['actor'] + table['actress'])).plot(ylim=[0, 1])
@@ -446,9 +414,7 @@ table = grouped.unstack('type').fillna(0)
 </ul>
 </div>
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 c = cast
 c = c[(c.character == 'Superman') | (c.character == 'Batman')]
 c = c.groupby(['year', 'character']).size()
@@ -457,9 +423,7 @@ c = c.fillna(0)
 c.head()
 ```
 
-```{code-cell} ipython3
-:clear_cell: true
-
+```python clear_cell=true
 d = c.Superman - c.Batman
 print('Superman years:')
 print(len(d[d > 0.0]))
