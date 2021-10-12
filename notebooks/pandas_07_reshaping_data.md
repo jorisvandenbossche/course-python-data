@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -200,14 +199,14 @@ pd.crosstab(index=df['Sex'], columns=df['Pclass'])
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.pivot_table(index='Pclass', columns='Sex', 
                values='Survived', aggfunc='mean')
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 fig, ax1 = plt.subplots()
 df.pivot_table(index='Pclass', columns='Sex', 
@@ -229,13 +228,13 @@ ax1.set_ylabel('Survival ratio')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Underaged'] = df['Age'] <= 18
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.pivot_table(index='Underaged', columns='Sex', 
                values='Fare', aggfunc='median')
@@ -353,7 +352,7 @@ df.pivot_table(index='Pclass', columns='Sex',
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.groupby(['Pclass', 'Sex'])['Survived'].mean().unstack()
 ```
@@ -384,7 +383,7 @@ titles.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 grouped = cast.groupby(['year', 'type']).size()
 table = grouped.unstack('type')
@@ -392,14 +391,14 @@ table.plot()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 cast.pivot_table(index='year', columns='type', values="character", aggfunc='count').plot() 
 # for values in using the , take a column with no Nan values in order to count effectively all values -> at this stage: aha-erlebnis about crosstab function(!)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 pd.crosstab(index=cast['year'], columns=cast['type']).plot()
 ```
@@ -414,7 +413,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
 ```
@@ -429,7 +428,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 grouped = cast.groupby(['year', 'type']).size()
 table = grouped.unstack('type').fillna(0)
@@ -446,7 +445,7 @@ table = grouped.unstack('type').fillna(0)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 c = cast
 c = c[(c.character == 'Superman') | (c.character == 'Batman')]
@@ -457,7 +456,7 @@ c.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 d = c.Superman - c.Batman
 print('Superman years:')

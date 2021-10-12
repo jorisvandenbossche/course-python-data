@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -292,7 +291,7 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df = pd.read_csv("data/titanic.csv")
 ```
@@ -306,7 +305,7 @@ df = pd.read_csv("data/titanic.csv")
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.head()
 ```
@@ -325,7 +324,7 @@ df.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(df)
 ```
@@ -338,7 +337,7 @@ len(df)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Age']
 ```
@@ -351,7 +350,7 @@ df['Age']
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Fare'].plot(kind='box')
 ```
@@ -365,7 +364,7 @@ df['Fare'].plot(kind='box')
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.sort_values(by='Age', ascending=False)
 ```

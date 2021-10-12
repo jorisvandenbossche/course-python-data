@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -290,7 +289,7 @@ data['2012-01':'2012-03']
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data['2012':]
 ```
@@ -305,7 +304,7 @@ data['2012':]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data[data.index.month == 1]
 ```
@@ -320,7 +319,7 @@ data[data.index.month == 1]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data[data.index.month.isin([4, 5, 6])]
 ```
@@ -335,7 +334,7 @@ data[data.index.month.isin([4, 5, 6])]
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data[(data.index.hour > 8) & (data.index.hour < 20)]
 ```
@@ -381,7 +380,7 @@ data.resample('M').mean().plot() # 10D
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data.resample('M').std().plot() # 'A'
 ```
@@ -399,7 +398,7 @@ __Note__ Did you know <a href="https://pandas.pydata.org/pandas-docs/stable/refe
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 subset = data['2011':'2012']['L06_347']
 subset.resample('M').agg(['mean', 'median']).plot()
@@ -415,13 +414,13 @@ subset.resample('M').agg(['mean', 'median']).plot()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 daily = data['LS06_348'].resample('D').mean() # daily averages calculated
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum values of these daily averages
 ```
@@ -436,7 +435,7 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 data['2013':'2013'].mean().plot(kind='barh')
 ```

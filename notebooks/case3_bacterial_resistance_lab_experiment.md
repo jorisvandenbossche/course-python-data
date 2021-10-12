@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: jupyter,clear_cell,-run_control,-deletable,-editable,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -125,7 +124,7 @@ Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the val
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 tidy_experiment = main_experiment.melt(id_vars=['AB_r', 'Bacterial_genotype', 'Phage_t',
                                                 'Survival_72h', 'PhageR_72h', 'experiment_ID'],
@@ -162,7 +161,7 @@ tidy_experiment.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.set_style("white")
 sns.displot(tidy_experiment, x="optical_density",
@@ -183,7 +182,7 @@ Use a Seaborn `violin plot` to check the distribution of the `optical_density` i
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.catplot(data=tidy_experiment, x="experiment_time_h",
             y="optical_density", kind="violin")
@@ -203,7 +202,7 @@ For each `Phage_t` in an individual subplot, use a `violin plot` to check the di
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.catplot(data=tidy_experiment, x="experiment_time_h", y="optical_density",
             col="Phage_t", col_wrap=2, kind="violin")
@@ -222,7 +221,7 @@ Create a summary table of the __average__ `optical_density` with the `Bacterial_
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 pd.pivot_table(tidy_experiment, values='optical_density',
                index='Bacterial_genotype',
@@ -233,7 +232,7 @@ pd.pivot_table(tidy_experiment, values='optical_density',
 Advanced/optional solution:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # advanced/optional solution
 tidy_experiment.groupby(['Bacterial_genotype', 'experiment_time_h'])['optical_density'].mean().unstack()
@@ -260,7 +259,7 @@ tidy_experiment.groupby(['Bacterial_genotype', 'experiment_time_h'])['optical_de
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 density_mean = (tidy_experiment
                 .groupby(['Bacterial_genotype','Phage_t', 'experiment_time_h'])['optical_density']
@@ -268,7 +267,7 @@ density_mean = (tidy_experiment
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.catplot(data=density_mean, kind="bar",
             x='Bacterial_genotype',
@@ -312,7 +311,7 @@ We will first reproduce 'Figure 2' without the error bars:
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 falcor["Bacterial_genotype"] = falcor["Bacterial_genotype"].replace({'WT(2)': 'WT',
                                                                      'MUT(2)': 'MUT'})
@@ -320,7 +319,7 @@ falcor.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.catplot(data=falcor, kind="point",
             x='Bacterial_genotype',
@@ -353,14 +352,14 @@ Reproduce 'Figure 2' with the error bars using the information from [this Stacko
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 falcor["Bacterial_genotype"] = falcor["Bacterial_genotype"].replace({'WT(2)': 'WT',
                                                                      'MUT(2)': 'MUT'})
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 def errorbar(x, y, low, high, **kws):
     """Utility function to link falcor data representation with the errorbar representation"""
@@ -368,7 +367,7 @@ def errorbar(x, y, low, high, **kws):
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.set_style("ticks")
 g = sns.FacetGrid(falcor, row="Phage", aspect=3, height=3)

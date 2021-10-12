@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -155,7 +154,7 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Age'].mean()
 ```
@@ -169,7 +168,7 @@ df['Age'].mean()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Age'].hist() #bins=30, log=True
 ```
@@ -186,13 +185,13 @@ Note: the 'Survived' column indicates whether someone survived (1) or not (0).
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Survived'].sum() / len(df['Survived'])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Survived'].mean()
 ```
@@ -206,13 +205,13 @@ df['Survived'].mean()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Fare'].max()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Fare'].median()
 ```
@@ -227,7 +226,7 @@ df['Fare'].median()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Fare'].quantile(0.75)
 ```
@@ -241,13 +240,13 @@ df['Fare'].quantile(0.75)
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Fare'] / df['Fare'].mean()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['Fare_normalized'] = df['Fare'] / df['Fare'].mean()
 df.head()
@@ -262,7 +261,7 @@ df.head()
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 np.log(df['Fare'])
 ```

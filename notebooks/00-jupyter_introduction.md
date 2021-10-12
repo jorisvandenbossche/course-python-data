@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -164,7 +163,7 @@ my_ + TAB
 
 +++
 
-* The  **SHIFT-TAB** combination is ultra essential to get information/help about the current operation 
+* The  **SHIFT-TAB** combination is ultra essential to get information/help about the current operation
 
 ```{code-cell} ipython3
 round(3.2)

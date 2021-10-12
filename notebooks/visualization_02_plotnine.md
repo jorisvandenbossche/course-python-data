@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: run_control,clear_cell,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -171,7 +170,7 @@ The most important `aes` are: `x`, `y`, `alpha`, `color`, `colour`, `fill`, `lin
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (p9.ggplot(titanic,
            p9.aes(x='factor(Pclass)', y='Fare', color='Sex'))
@@ -342,7 +341,7 @@ Similar to Pandas handling above, we can set up a matplotlib `Figure` with plotn
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Age'))
      + p9.geom_histogram(bins=30)
@@ -378,7 +377,7 @@ Actually, a *violinplot* provides more inside to the distribution:
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 (p9.ggplot(titanic.dropna(subset=['Age']), p9.aes(x='Sex', y='Age'))
      + p9.geom_violin()
@@ -428,7 +427,7 @@ each of these functions are provided by existing Python libraries and integrated
 )
 ```
 
-# Need more plotnine inspiration? 
+# Need more plotnine inspiration?
 
 +++
 

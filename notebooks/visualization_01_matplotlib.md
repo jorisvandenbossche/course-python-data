@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: jupyter,deletable,editable,run_control,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -288,7 +287,7 @@ for ax, col, station in zip(axs, colors, flowdata.columns):
     ax.tick_params(labelsize=15)
 ```
 
-Is already a bit harder ;-). Using different subplots (aka facetting) to split up the data is useful in data exploration and is by default provided by Pandas. 
+Is already a bit harder ;-). Using different subplots (aka facetting) to split up the data is useful in data exploration and is by default provided by Pandas.
 
 +++
 
@@ -352,7 +351,7 @@ If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figur
 
 +++
 
-# Need more matplotlib inspiration? 
+# Need more matplotlib inspiration?
 
 +++
 

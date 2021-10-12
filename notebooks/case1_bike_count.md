@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -70,31 +69,31 @@ This dataset contains the historical data of the bike counters, and consists of 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df = pd.read_csv("data/fietstellingencoupure.csv", sep=';')
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.tail()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 len(df)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.dtypes
 ```
@@ -129,26 +128,26 @@ Pre-process the data:
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 combined = df['datum'] + ' ' + df['tijd']
 combined.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.index = pd.to_datetime(combined, format="%d/%m/%Y %H:%M")
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df2 = df.drop(columns=['datum', 'tijd'])
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df2 = df2.rename(columns={'ri Centrum': 'direction_centre',
                           'ri Mariakerke':'direction_mariakerke'})
@@ -216,7 +215,7 @@ Write a function `process_bike_count_data(df)` that performs the processing step
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 def process_bike_count_data(df):
     """Process the provided dataframe: parse datetimes and rename columns.
@@ -318,7 +317,7 @@ Create a new Pandas Series `df_both` which contains the sum of the counts of bot
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_both = df.sum(axis=1)
 df_both
@@ -337,7 +336,7 @@ Using the `df_both` from the previous exercise, create a new Series `df_quiet` w
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_quiet = df_both[df_both < 5]
 ```
@@ -356,7 +355,7 @@ Using the original data `df`, select only the intervals for which less than 3 cy
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df[(df['direction_centre'] < 3) | (df['direction_mariakerke'] < 3)]
 ```
@@ -378,7 +377,7 @@ What is the average number of bikers passing each 15 min?
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.mean()
 ```
@@ -397,7 +396,7 @@ What is the average number of bikers passing each hour?
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df.resample('H').sum().mean()
 ```
@@ -415,7 +414,7 @@ What are the 10 highest peak values observed during any of the intervals for the
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df['direction_centre'].nlargest(10)
 # alternative:
@@ -437,25 +436,25 @@ What is the maximum number of cyclist that passed on a single day calculated on 
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_both = df.sum(axis=1)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_daily = df_both.resample('D').sum()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_daily.max()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_daily.nlargest(10)
 ```
@@ -482,7 +481,7 @@ How does the long-term trend look like? Calculate monthly sums and plot the resu
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_monthly = df.resample('M').sum()
 df_monthly.plot()
@@ -501,19 +500,19 @@ Let's have a look at some short term patterns. For the data of the first 3 weeks
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_hourly = df.resample('H').sum()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_hourly.head()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 df_hourly['2014-01-01':'2014-01-20'].plot()
 ```
@@ -537,19 +536,19 @@ df_hourly['2014-01-01':'2014-01-20'].plot()
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 newyear = df["2013-12-31 12:00:00": "2014-01-01 12:00:00"]
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 newyear.plot()
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 newyear.rolling(10, center=True).mean().plot(linewidth=2)
 ```
@@ -557,7 +556,7 @@ newyear.rolling(10, center=True).mean().plot(linewidth=2)
 A more advanced usage of Matplotlib to create a combined plot:
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # A more in-detail plotting version of the graph.
 fig, ax = plt.subplots()

@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: jupyter,run_control,-deletable,-editable,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -128,7 +127,7 @@ axs.scatter(data["L06_347"].values, data["LS06_347"].values,
 axs.set_aspect('equal')
 ```
 
-with: 
+with:
 
 ```{code-cell} ipython3
 fig, axs = plt.subplots()    

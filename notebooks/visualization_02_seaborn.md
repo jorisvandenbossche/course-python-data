@@ -1,6 +1,5 @@
 ---
 jupytext:
-  cell_metadata_filter: editable,deletable,run_control,jupyter,clear_cell,-slideshow,-tags
   formats: ipynb,md:myst
   text_representation:
     extension: .md
@@ -264,7 +263,7 @@ The `Axes` level Seaborn functions:
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 sns.displot(data=titanic, x="Age", row="Sex", aspect=3, height=2)
 ```
@@ -287,7 +286,7 @@ Make a violin plot showing the `Age` distribution for each `Sex` in each of the 
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Figure based
 sns.catplot(data=titanic, x="Pclass", y="Age", 
@@ -297,7 +296,7 @@ sns.despine(left=True)
 ```
 
 ```{code-cell} ipython3
-:clear_cell: true
+:tags: [nbtutor-solution]
 
 # Axes based
 sns.violinplot(data=titanic, x="Pclass", y="Age", 
@@ -357,7 +356,7 @@ g = sns.lmplot(
 )
 ```
 
-# Need more Seaborn inspiration? 
+# Need more Seaborn inspiration?
 
 +++
 
