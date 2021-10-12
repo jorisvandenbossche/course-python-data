@@ -121,18 +121,15 @@ Topic-wise, Seaborn provides three main modules, i.e. type of plots:
 - __distribution__: specialize in representing the distribution of datapoints
 - __categorical__: visualize a relationship involving categorical data (i.e. plot something _for each category_)
 
-In 'technical' terms, when working with Seaborn functions, it is important to understand which level they operate, as `axes-level` or `figure-level`: 
-
-- __axes-level__ functions plot data onto a single `matplotlib.pyplot.Axes` object and return the `Axes`
-- __figure-level__ functions return a Seaborn object, `FacetGrid`, which is a `matplotlib.pyplot.Figure`
-
-Remember the Matplotlib `Figure`, `axes` and `axis` anatomy explained in [visualization_01_matplotlib](visualization_01_matplotlib.ipynb)? 
-
-Each plot module has a single `Figure`-level function, which offers a unitary interface to its various `Axes`-level functions. The organization looks like this:
+The organization looks like this:
 
 +++
 
 ![](../img/seaborn_overview_modules.png)
+
++++
+
+We first check out the top commands of each of the types of plots: `relplot`, `displot`, `catplot`, each returning a Matplotlib `Figure`:
 
 +++
 
@@ -189,9 +186,20 @@ The `Figure` level Seaborn functions:
 
 </div>
 
-+++
++++ {"tags": []}
 
 ### Axes level functions
+
++++
+
+In 'technical' terms, when working with Seaborn functions, it is important to understand which level they operate, as `Axes-level` or `Figure-level`: 
+
+- __axes-level__ functions plot data onto a single `matplotlib.pyplot.Axes` object and return the `Axes`
+- __figure-level__ functions return a Seaborn object, `FacetGrid`, which is a `matplotlib.pyplot.Figure`
+
+Remember the Matplotlib `Figure`, `axes` and `axis` anatomy explained in [visualization_01_matplotlib](visualization_01_matplotlib.ipynb)? 
+
+Each plot module has a single `Figure`-level function (top command in the scheme), which offers a unitary interface to its various `Axes`-level functions (.
 
 +++
 
@@ -208,6 +216,8 @@ type(scatter_out)
 But we can't use the `col`/`row` options for facetting:
 
 ```{code-cell} ipython3
+:tags: []
+
 # sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived", col="Sex")  # uncomment to check the output
 ```
 
@@ -278,6 +288,29 @@ sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar",
 
 </details>
 
++++
+
+## (OPTIONAL) exercises
+
++++
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Make a violin plot showing the Age distribution for each Sex in each of the Pclass categories:
+
+- Use a different color for the Age.
+- Use the Pclass to make a plot for each of the classes along the x-axis
+- Check the behavior of the split argument and apply it to compare male/female.
+- Use the sns.despine function to remove the boundaries around the plot.
+    
+<details><summary>Hints</summary>
+
+- Have a look at https://seaborn.pydata.org/examples/grouped_violinplots.html for inspiration.
+
+</details>
+
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
@@ -325,7 +358,7 @@ sns.despine(left=True)
 
 +++
 
-Whereas the `relplot`, `catplot` and `displot` represent the main components of the Seaborn library, more interesting functions are available. You can check the [gallery](https://seaborn.pydata.org/examples/index.html) yourself, but let's introduce a few rof them:
+Whereas the `relplot`, `catplot` and `displot` represent the main components of the Seaborn library, more useful functions are available. You can check the [gallery](https://seaborn.pydata.org/examples/index.html) yourself, but let's introduce a few rof them:
 
 +++
 
