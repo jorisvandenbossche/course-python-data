@@ -43,6 +43,10 @@ import matplotlib.pyplot as plt
 
 +++
 
+The data for this use case contains the evolution of different bacteria populations when combined with different phage treatments (viruses). The evolution of the bacterial population is measured by using the __optical density__ (OD) at 3 moments during the experiment: at the start (0h), after 20h and at the end (72h).
+
++++
+
 The data is available on [Dryad](http://www.datadryad.org/resource/doi:10.5061/dryad.90qb7.3), a general purpose data repository providing all kinds of data sets linked to journal papers. The downloaded data is available in this repository in the `data` folder as an excel-file called `Dryad_Arias_Hall_v3.xlsx`.
 
 For the exercises, two sheets of the excel file will be used:
