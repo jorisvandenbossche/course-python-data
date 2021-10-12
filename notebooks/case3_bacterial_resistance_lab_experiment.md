@@ -81,7 +81,7 @@ Reading the `main experiment` data set from the corresponding sheet:
 ```{code-cell} ipython3
 main_experiment = pd.read_excel("data/Dryad_Arias_Hall_v3.xlsx",
                                 sheet_name="Main experiment")
-main_experiment
+main_experiment = main_experiment.drop(columns=["AB_r", "Survival_72h", "PhageR_72h"])  # focus on specific subset for this use case)
 ```
 
 Read the `Falcor` data and subset the columns of interest:
@@ -130,8 +130,7 @@ Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the val
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-tidy_experiment = main_experiment.melt(id_vars=['AB_r', 'Bacterial_genotype', 'Phage_t',
-                                                'Survival_72h', 'PhageR_72h', 'experiment_ID'],
+tidy_experiment = main_experiment.melt(id_vars=['Bacterial_genotype', 'Phage_t', 'experiment_ID'],
                                        value_vars=['OD_0h', 'OD_20h', 'OD_72h'],
                                        var_name='experiment_time_h',
                                        value_name='optical_density', )
