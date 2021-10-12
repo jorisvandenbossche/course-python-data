@@ -20,6 +20,9 @@ kernelspec:
 ---
 
 ```{code-cell} ipython3
+:tags: []
+
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 ```
@@ -37,6 +40,8 @@ import matplotlib.pyplot as plt
 * Interacts well with Pandas
 
 ```{code-cell} ipython3
+:tags: []
+
 import seaborn as sns
 ```
 
@@ -47,6 +52,8 @@ import seaborn as sns
 We will use the Titanic example data set:
 
 ```{code-cell} ipython3
+:tags: []
+
 titanic = pd.read_csv('data/titanic.csv')
 ```
 
@@ -55,24 +62,23 @@ titanic.head()
 ```
 
 Let's consider following question:
->*For each class at the Titanic, how many people survived and how many died?*
+>*For each class at the Titanic and each gender, what was the average age?*
 
 +++
 
-Hence, we should define the *size/count* of respectively the zeros (died) and ones (survived) groups of column `Survived`, also grouped by the `Pclass`. In Pandas terminology:
+Hence, we should define the *mean* of the male and female groups of column `Survived` in combination with the groups of the `Pclass` column. In Pandas terminology:
 
 ```{code-cell} ipython3
-survived_stat = titanic.groupby(["Pclass", "Survived"]).size().rename('count').reset_index()
+survived_stat = titanic.groupby(["Pclass", "Sex"])["Age"].mean().reset_index()
 survived_stat
-# Remark: the `rename` syntax is to provide the count column a column name 
 ```
 
 Providing this data in a bar chart with pure Pandas is still partly supported:
 
 ```{code-cell} ipython3
-survived_stat.plot(x='Survived', y='count', kind='bar')
+survived_stat.plot(x='Pclass', y='Age', kind='bar')
 ## A possible other way of plotting this could be using groupby again:   
-# survived_stat.groupby('Pclass').plot(x='Survived', y='count', kind='bar') # (try yourself by uncommenting)
+#survived_stat.groupby('Pclass').plot(x='Sex', y='Age', kind='bar') # (try yourself by uncommenting)
 ```
 
 but with mixed results.
@@ -83,16 +89,8 @@ __Seaborn__ provides another level of abstraction to visualize such *grouped* pl
 
 ```{code-cell} ipython3
 sns.catplot(data=survived_stat, 
-            x="Survived", y="count", 
+            x="Sex", y="Age", 
             col="Pclass", kind="bar")
-```
-
-Moreover, these `count` operations are embedded in Seaborn (similar to other 'Grammar of Graphics' packages such as ggplot in R and plotnine/altair in Python). We can do these operations directly on the original `titanic` data set in a single coding step:
-
-```{code-cell} ipython3
-sns.catplot(data=titanic, 
-            x="Survived", 
-            col="Pclass", kind="count")
 ```
 
 Check <a href="#this_is_tidy">here</a> for a short recap about `tidy` data.
@@ -241,6 +239,24 @@ The `Axes` level Seaborn functions:
 </div>
 
 +++
+
+### Summary statistics
+
++++
+
+Aggregations such as `count`, `mean` are embedded in Seaborn (similar to other 'Grammar of Graphics' packages such as ggplot in R and plotnine/altair in Python). We can do these operations directly on the original `titanic` data set in a single coding step:
+
+```{code-cell} ipython3
+sns.catplot(data=titanic, x="Survived", col="Pclass", 
+            kind="count")
+```
+
+To use another statistical function to apply on each of the groups, use the `estimator`:
+
+```{code-cell} ipython3
+sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar", 
+            estimator=np.mean)
+```
 
 ## (OPTIONAL) exercises
 
