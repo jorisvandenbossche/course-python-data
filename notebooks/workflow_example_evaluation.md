@@ -1,12 +1,14 @@
 ---
 jupytext:
+  cell_metadata_filter: jupyter,run_control,-deletable,-editable,-slideshow,-tags
+  formats: ipynb,md:myst
   text_representation:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.1
+    jupytext_version: 1.13.0
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -108,7 +110,6 @@ Very brief basic/minimal setup of a docstring:
     Some information about your function,...
     '''
 
-+++
 
 ## Making a plot function
 

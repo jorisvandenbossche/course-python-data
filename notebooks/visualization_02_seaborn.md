@@ -1,43 +1,33 @@
 ---
 jupytext:
+  cell_metadata_filter: editable,deletable,run_control,jupyter,clear_cell,-slideshow,-tags
+  formats: ipynb,md:myst
   text_representation:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.1
+    jupytext_version: 1.13.0
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-+++ {"deletable": true, "editable": true}
-
 <p><font size="6"><b>Visualisation: Seaborn </b></font></p>
 
-> *Data wrangling in Python*  
-> *November, 2020*
->
-> *© 2020, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+
+> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: true
----
 import pandas as pd
 import matplotlib.pyplot as plt
 ```
 
-+++ {"deletable": true, "editable": true}
-
 # Seaborn
 
-+++ {"deletable": true, "editable": true}
++++
 
 [Seaborn](https://seaborn.pydata.org/) is a Python data visualization library:
 
@@ -48,121 +38,67 @@ import matplotlib.pyplot as plt
 * Interacts well with Pandas
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: true
----
 import seaborn as sns
 ```
 
-+++ {"deletable": true, "editable": true}
-
 ## Introduction
 
-+++ {"deletable": true, "editable": true}
++++
 
 We will use the Titanic example data set:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: true
----
 titanic = pd.read_csv('data/titanic.csv')
 ```
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 titanic.head()
 ```
-
-+++ {"deletable": true, "editable": true}
 
 Let's consider following question:
 >*For each class at the Titanic, how many people survived and how many died?*
 
-+++ {"deletable": true, "editable": true}
++++
 
 Hence, we should define the *size/count* of respectively the zeros (died) and ones (survived) groups of column `Survived`, also grouped by the `Pclass`. In Pandas terminology:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 survived_stat = titanic.groupby(["Pclass", "Survived"]).size().rename('count').reset_index()
 survived_stat
 # Remark: the `rename` syntax is to provide the count column a column name 
 ```
 
-+++ {"deletable": true, "editable": true}
-
 Providing this data in a bar chart with pure Pandas is still partly supported:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 survived_stat.plot(x='Survived', y='count', kind='bar')
 ## A possible other way of plotting this could be using groupby again:   
 # survived_stat.groupby('Pclass').plot(x='Survived', y='count', kind='bar') # (try yourself by uncommenting)
 ```
 
-+++ {"deletable": true, "editable": true}
-
 but with mixed results.
 
-+++ {"deletable": true, "editable": true}
++++
 
 __Seaborn__ provides another level of abstraction to visualize such *grouped* plots with different categories:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 sns.catplot(data=survived_stat, 
             x="Survived", y="count", 
             col="Pclass", kind="bar")
 ```
 
-+++ {"deletable": true, "editable": true}
-
 Moreover, these `count` operations are embedded in Seaborn (similar to other 'Grammar of Graphics' packages such as ggplot in R and plotnine/altair in Python). We can do these operations directly on the original `titanic` data set in a single coding step:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 sns.catplot(data=titanic, 
             x="Survived", 
             col="Pclass", kind="count")
 ```
 
-+++ {"deletable": true, "editable": true}
-
 Check <a href="#this_is_tidy">here</a> for a short recap about `tidy` data.
 
-+++ {"deletable": true, "editable": true}
++++
 
 <div class="alert alert-info">
 
@@ -174,11 +110,11 @@ Check <a href="#this_is_tidy">here</a> for a short recap about `tidy` data.
 
 </div>
 
-+++ {"deletable": true, "editable": true}
++++
 
 ## Interaction with Matplotlib
 
-+++ {"deletable": true, "editable": true}
++++
 
 Seaborn builds on top of Matplotlib/Pandas, adding an additional layer of convenience. 
 
@@ -197,93 +133,53 @@ Remember the Matplotlib `Figure`, `axes` and `axis` anatomy explained in [visual
 
 Each plot module has a single `Figure`-level function, which offers a unitary interface to its various `Axes`-level functions. The organization looks like this:
 
-+++ {"deletable": true, "editable": true}
++++
 
 ![](../img/seaborn_overview_modules.png)
 
-+++ {"deletable": true, "editable": true}
++++
 
 ### Figure level functions
 
-+++ {"deletable": true, "editable": true}
++++
 
 Let's start from: _What is the relation between Age and Fare?_
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 # A relation between variables in a Pandas DataFrame -> `relplot`
 sns.relplot(data=titanic, x="Age", y="Fare")
 ```
 
-+++ {"deletable": true, "editable": true}
-
 Extend to: _Is the relation between Age and Fare different for people how survived?_
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 sns.relplot(data=titanic, x="Age", y="Fare",
             hue="Survived")
 ```
 
-+++ {"deletable": true, "editable": true}
-
 Extend to: _Is the relation between Age and Fare different for people how survived and/or the gender of the passengers?_
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 age_fare = sns.relplot(data=titanic, x="Age", y="Fare",
                        hue="Survived",
                        col="Sex")
 ```
 
-+++ {"deletable": true, "editable": true}
-
 The function returns a Seaborn `FacetGrid`, which is related to a Matplotlib `Figure`:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 type(age_fare), type(age_fare.fig)
 ```
-
-+++ {"deletable": true, "editable": true}
 
 As we are dealing here with 2 subplots, the `FacetGrid` consists of two Matplotlib `Axes`:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 age_fare.axes, type(age_fare.axes.flatten()[0])
 ```
 
-+++ {"deletable": true, "editable": true}
-
 Hence, we can still apply all the power of Matplotlib, but start from the convenience of Seaborn.
 
-+++ {"deletable": true, "editable": true}
++++
 
 <div class="alert alert-info">
 
@@ -296,65 +192,35 @@ The `Figure` level Seaborn functions:
 
 </div>
 
-+++ {"deletable": true, "editable": true}
++++
 
 ### Axes level functions
 
-+++ {"deletable": true, "editable": true}
++++
 
 We can ask the same question: _Is the relation between Age and Fare different for people how survived?_
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 scatter_out = sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived")
 ```
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 type(scatter_out)
 ```
-
-+++ {"deletable": true, "editable": true}
 
 But we can't use the `col`/`row` options for facetting:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: true
----
 # sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived", col="Sex")  # uncomment to check the output
 ```
-
-+++ {"deletable": true, "editable": true}
 
 We can use these functions to create custom combinations of plots:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 6))
 sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived", ax=ax0)
 sns.violinplot(data=titanic, x="Survived", y="Fare", ax=ax1)  # boxplot, stripplot,.. as alternative to represent distribution per category
 ```
-
-+++ {"deletable": true, "editable": true}
 
 __Note!__ Check the similarity with the _best of both worlds_ approach:
 
@@ -362,7 +228,7 @@ __Note!__ Check the similarity with the _best of both worlds_ approach:
 2. Plot using Seaborn 
 3. Further adjust specific elements with Matplotlib if needed
 
-+++ {"deletable": true, "editable": true}
++++
 
 <div class="alert alert-info">
 
@@ -375,11 +241,11 @@ The `Axes` level Seaborn functions:
 
 </div>
 
-+++ {"deletable": true, "editable": true}
++++
 
 ## (OPTIONAL) exercises
 
-+++ {"deletable": true, "editable": true}
++++
 
 <div class="alert alert-success">
 
@@ -398,17 +264,10 @@ The `Axes` level Seaborn functions:
 </details>
 
 ```{code-cell} ipython3
----
-clear_cell: true
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
+:clear_cell: true
+
 sns.displot(data=titanic, x="Age", row="Sex", aspect=3, height=2)
 ```
-
-+++ {"deletable": true, "editable": true}
 
 <div class="alert alert-success">
 
@@ -428,13 +287,8 @@ Make a violin plot showing the `Age` distribution for each `Sex` in each of the 
 </details>
 
 ```{code-cell} ipython3
----
-clear_cell: true
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
+:clear_cell: true
+
 # Figure based
 sns.catplot(data=titanic, x="Pclass", y="Age", 
             hue="Sex", split=True,
@@ -443,13 +297,8 @@ sns.despine(left=True)
 ```
 
 ```{code-cell} ipython3
----
-clear_cell: true
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
+:clear_cell: true
+
 # Axes based
 sns.violinplot(data=titanic, x="Pclass", y="Age", 
                hue="Sex", split=True,
@@ -457,98 +306,60 @@ sns.violinplot(data=titanic, x="Pclass", y="Age",
 sns.despine(left=True)
 ```
 
-+++ {"deletable": true, "editable": true}
-
 ## Some more Seaborn functionalities to remember
 
-+++ {"deletable": true, "editable": true}
++++
 
 Whereas the `relplot`, `catplot` and `displot` represent the main components of the Seaborn library, more interesting functions are available. You can check the [gallery](https://seaborn.pydata.org/examples/index.html) yourself, but let's introduce a few rof them:
 
-+++ {"deletable": true, "editable": true}
++++
 
 __jointplot()__ and __pairplot()__
 
 `jointplot()` and `pairplot()` are Figure-level functions and create figures with specific subplots by default:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 # joined distribution plot
 sns.jointplot(data=titanic, x="Fare", y="Age", 
               hue="Sex", kind="scatter") # kde
 ```
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 sns.pairplot(data=titanic[["Age", "Fare", "Sex"]], hue="Sex")  # Also called scattermatrix plot
 ```
 
-+++ {"deletable": true, "editable": true}
-
 __heatmap()__
 
-+++ {"deletable": true, "editable": true}
++++
 
 Plot rectangular data as a color-encoded matrix.
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 titanic_age_summary = titanic.pivot_table(columns="Pclass", index="Sex", 
                                           values="Age", aggfunc="mean")
 titanic_age_summary
 ```
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 sns.heatmap(titanic_age_summary, cmap="Reds")
 ```
 
-+++ {"deletable": true, "editable": true}
-
 __lmplot() regressions__
 
-+++ {"deletable": true, "editable": true}
++++
 
 `Figure` level function to generate a regression model fit across a FacetGrid:
 
 ```{code-cell} ipython3
----
-deletable: true
-editable: true
-jupyter:
-  outputs_hidden: false
----
 g = sns.lmplot(
     data=titanic, x="Age", y="Fare", 
     hue="Survived", col="Survived",  # hue="Pclass"
 )
 ```
 
-+++ {"deletable": true, "editable": true}
-
 # Need more Seaborn inspiration? 
 
-+++ {"deletable": true, "editable": true}
++++
 
 <div class="alert alert-info" style="font-size:18px">
 
@@ -558,21 +369,21 @@ __Remember__
 
 </div>
 
-+++ {"deletable": true, "editable": true}
++++
 
 <a id='this_is_tidy'></a>
 
-+++ {"deletable": true, "editable": true}
++++
 
 # Recap: what is `tidy`?
 
-+++ {"deletable": true, "editable": true}
++++
 
 If you're wondering what *tidy* data representations are, you can read the scientific paper by Hadley Wickham, http://vita.had.co.nz/papers/tidy-data.pdf. 
 
 Here, we just introduce the main principle very briefly:
 
-+++ {"deletable": true, "editable": true}
++++
 
 Compare:
 
@@ -600,11 +411,11 @@ Compare:
 | Dendermonde | B  | 6.2 |
 | Eeklo | B  | 7.2 |
 
-+++ {"deletable": true, "editable": true}
++++
 
 This is sometimes also referred as *short* versus *long* format for a specific variable... Seaborn (and other grammar of graphics libraries) work better on `tidy` (long format) data, as it better supports `groupby`-like transactions!
 
-+++ {"deletable": true, "editable": true}
++++
 
 <div class="alert alert-info" style="font-size:16px">
 

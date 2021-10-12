@@ -1,21 +1,20 @@
 ---
 jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
   text_representation:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.1
+    jupytext_version: 1.13.0
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
 <p><font size="6"><b> CASE - Observation data - data cleaning and enrichment</b></font></p>
 
-> *DS Data manipulation, analysis and visualization in Python*
-> *May/June, 2021*
->
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
@@ -727,7 +726,6 @@ An alternative to apply such a custom function to the `plot_data` `DataFrame` is
     transformer = Transformer.from_crs("EPSG:32612", "epsg:4326")
     plot_data.apply(lambda row : transformer.transform(row['xutm'], row['yutm']), axis=1)
 
-+++
 
 <div class="alert alert-warning">
 
