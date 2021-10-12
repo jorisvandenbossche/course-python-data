@@ -14,9 +14,6 @@ kernelspec:
 
 <p><font size="6"><b>Visualization - Matplotlib</b></font></p>
 
-> *DS Python for GIS and Geoscience*  
-> *October, 2021*
->
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey. Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
@@ -454,8 +451,12 @@ For more in-depth material:
 
 Galleries are great to get inspiration, see the plot you want, and check the code how it is created:
     
-* [matplotlib gallery](http://matplotlib.org/gallery.html) is an important resource to start from
+* [matplotlib gallery](https://matplotlib.org/stable/gallery/index.html)
 * [seaborn gallery](https://seaborn.pydata.org/examples/index.html)
-* The Python Graph Gallery (https://python-graph-gallery.com/)
+* [python Graph Gallery](https://python-graph-gallery.com/)
 
 </div>
+
+```{code-cell} ipython3
+
+```
