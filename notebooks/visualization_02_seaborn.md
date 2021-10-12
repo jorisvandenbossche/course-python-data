@@ -389,7 +389,7 @@ titanic_age_summary
 ```
 
 ```{code-cell} ipython3
-sns.heatmap(titanic_age_summary, cmap="Reds")
+sns.heatmap(data=titanic_age_summary, cmap="Reds")
 ```
 
 __lmplot() regressions__
