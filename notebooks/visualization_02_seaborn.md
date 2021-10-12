@@ -288,29 +288,6 @@ sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar",
 
 </details>
 
-+++
-
-## (OPTIONAL) exercises
-
-+++
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-Make a violin plot showing the Age distribution for each Sex in each of the Pclass categories:
-
-- Use a different color for the Sex.
-- Use the Pclass to make a plot for each of the classes along the x-axis
-- Check the behavior of the split argument and apply it to compare male/female.
-- Use the sns.despine function to remove the boundaries around the plot.
-    
-<details><summary>Hints</summary>
-
-- Have a look at https://seaborn.pydata.org/examples/grouped_violinplots.html for inspiration.
-
-</details>
-
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
