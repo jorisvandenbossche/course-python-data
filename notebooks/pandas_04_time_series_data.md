@@ -1,16 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
 <p><font size="6"><b>04 - Pandas: Working with time series data</b></font></p>
@@ -19,7 +19,7 @@ jupyter:
 
 ---
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,61 +29,67 @@ plt.style.use('ggplot')
 
 # Introduction: `datetime` module
 
++++
 
 Standard Python contains the `datetime` module to handle date and time data:
 
-```python
+```{code-cell} ipython3
 import datetime
 ```
 
-```python
+```{code-cell} ipython3
 dt = datetime.datetime(year=2016, month=12, day=19, hour=13, minute=30)
 dt
 ```
 
-```python
+```{code-cell} ipython3
 print(dt) # .day,...
 ```
 
-```python
+```{code-cell} ipython3
 print(dt.strftime("%d %B %Y"))
 ```
 
 # Dates and times in pandas
 
++++
 
 ## The ``Timestamp`` object
 
++++
 
 Pandas has its own date and time objects, which are compatible with the standard `datetime` objects, but provide some more functionality to work with.  
 
 The `Timestamp` object can also be constructed from a string:
 
-```python
+```{code-cell} ipython3
 ts = pd.Timestamp('2016-12-19')
 ts
 ```
 
 Like with `datetime.datetime` objects, there are several useful attributes available on the `Timestamp`. For example, we can get the month (experiment with tab completion!):
 
-```python
+```{code-cell} ipython3
 ts.month
 ```
 
 There is also a `Timedelta` type, which can e.g. be used to add intervals of time:
 
-```python
+```{code-cell} ipython3
 ts + pd.Timedelta('5 days')
 ```
 
 ## Parsing datetime strings
 
++++
 
 ![](http://imgs.xkcd.com/comics/iso_8601.png)
 
++++
 
 Unfortunately, when working with real world data, you encounter many different `datetime` formats. Most of the time when you have to deal with them, they come in text format, e.g. from a `CSV` file. To work with those data in Pandas, we first have to *parse* the strings to actual `Timestamp` objects.
 
++++
 
 <div class="alert alert-info">
 <b>REMEMBER</b>: <br><br>
@@ -92,99 +98,103 @@ To convert string formatted dates to Timestamp objects: use the `pandas.to_datet
 
 </div>
 
-```python
+```{code-cell} ipython3
 pd.to_datetime("2016-12-09")
 ```
 
-```python
+```{code-cell} ipython3
 pd.to_datetime("09/12/2016")
 ```
 
-```python
+```{code-cell} ipython3
 pd.to_datetime("09/12/2016", dayfirst=True)
 ```
 
-```python
+```{code-cell} ipython3
 pd.to_datetime("09/12/2016", format="%d/%m/%Y")
 ```
 
 A detailed overview of how to specify the `format` string, see the table in the python documentation: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 
++++
 
 ## `Timestamp` data in a Series or DataFrame column
 
-```python
+```{code-cell} ipython3
 s = pd.Series(['2016-12-09 10:00:00', '2016-12-09 11:00:00', '2016-12-09 12:00:00'])
 ```
 
-```python
+```{code-cell} ipython3
 s
 ```
 
 The `to_datetime` function can also be used to convert a full series of strings:
 
-```python
+```{code-cell} ipython3
 ts = pd.to_datetime(s)
 ```
 
-```python
+```{code-cell} ipython3
 ts
 ```
 
 Notice the data type of this series has changed: the `datetime64[ns]` dtype. This indicates that we have a series of actual datetime values.
 
++++
 
 The same attributes as on single `Timestamp`s are also available on a Series with datetime data, using the **`.dt`** accessor:
 
-```python
+```{code-cell} ipython3
 ts.dt.hour
 ```
 
-```python
+```{code-cell} ipython3
 ts.dt.dayofweek
 ```
 
 To quickly construct some regular time series data, the [``pd.date_range``](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.date_range.html) function comes in handy:
 
-```python
+```{code-cell} ipython3
 pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3H'))
 ```
 
 # Time series data: `Timestamp` in the index
 
++++
 
 ## River discharge example data
 
++++
 
 For the following demonstration of the time series functionality, we use a sample of discharge data of the Maarkebeek (Flanders) with 3 hour averaged values, derived from the [Waterinfo website](https://www.waterinfo.be/).
 
-```python
+```{code-cell} ipython3
 data = pd.read_csv("data/vmm_flowdata.csv")
 ```
 
-```python
+```{code-cell} ipython3
 data.head()
 ```
 
 We already know how to parse a date column with Pandas:
 
-```python
+```{code-cell} ipython3
 data['Time'] = pd.to_datetime(data['Time'])
 ```
 
 With `set_index('datetime')`, we set the column with datetime values as the index, which can be done by both `Series` and `DataFrame`.
 
-```python
+```{code-cell} ipython3
 data = data.set_index("Time")
 ```
 
-```python
+```{code-cell} ipython3
 data
 ```
 
 The steps above are provided as built-in functionality of `read_csv`:
 
-```python
+```{code-cell} ipython3
 data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 ```
 
@@ -195,60 +205,64 @@ data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 
 </div>
 
++++
 
 ## The DatetimeIndex
 
++++
 
 When we ensure the DataFrame has a `DatetimeIndex`, time-series related functionality becomes available:
 
-```python
+```{code-cell} ipython3
 data.index
 ```
 
 Similar to a Series with datetime data, there are some attributes of the timestamp values available:
 
-```python
+```{code-cell} ipython3
 data.index.day
 ```
 
-```python
+```{code-cell} ipython3
 data.index.dayofyear
 ```
 
-```python
+```{code-cell} ipython3
 data.index.year
 ```
 
 The `plot` method will also adapt its labels (when you zoom in, you can see the different levels of detail of the datetime labels):
 
-```python
+```{code-cell} ipython3
 %matplotlib widget
 ```
 
-```python
+```{code-cell} ipython3
 data.plot()
 ```
 
-```python
+```{code-cell} ipython3
 # switching back to static inline plots (the default)
 %matplotlib inline
 ```
 
 We have too much data to sensibly plot on one figure. Let's see how we can easily select part of the data or aggregate the data to other time resolutions in the next sections.
 
++++
 
 ## Selecting data from a time series
 
++++
 
 We can use label based indexing on a timeseries as expected:
 
-```python
+```{code-cell} ipython3
 data[pd.Timestamp("2012-01-01 09:00"):pd.Timestamp("2012-01-01 19:00")]
 ```
 
 But, for convenience, indexing a time series also works with strings:
 
-```python
+```{code-cell} ipython3
 data["2012-01-01 09:00":"2012-01-01 19:00"]
 ```
 
@@ -256,13 +270,13 @@ A nice feature is **"partial string" indexing**, where we can do implicit slicin
 
 E.g. all data of 2013:
 
-```python
+```{code-cell} ipython3
 data['2013':]
 ```
 
 Or all data of January up to March 2012:
 
-```python
+```{code-cell} ipython3
 data['2012-01':'2012-03']
 ```
 
@@ -275,7 +289,9 @@ data['2012-01':'2012-03']
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data['2012':]
 ```
 
@@ -288,7 +304,9 @@ data['2012':]
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data[data.index.month == 1]
 ```
 
@@ -301,7 +319,9 @@ data[data.index.month == 1]
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data[data.index.month.isin([4, 5, 6])]
 ```
 
@@ -314,24 +334,27 @@ data[data.index.month.isin([4, 5, 6])]
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data[(data.index.hour > 8) & (data.index.hour < 20)]
 ```
 
 ## The power of pandas: `resample`
 
++++
 
 A very powerfull method is **`resample`: converting the frequency of the time series** (e.g. from hourly to daily data).
 
 The time series has a frequency of 1 hour. I want to change this to daily:
 
-```python
+```{code-cell} ipython3
 data.resample('D').mean().head()
 ```
 
 Other mathematical methods can also be specified:
 
-```python
+```{code-cell} ipython3
 data.resample('D').max().head()
 ```
 
@@ -344,7 +367,7 @@ These strings can also be combined with numbers, eg `'10D'`...
 
 </div>
 
-```python
+```{code-cell} ipython3
 data.resample('M').mean().plot() # 10D
 ```
 
@@ -357,7 +380,9 @@ data.resample('M').mean().plot() # 10D
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data.resample('M').std().plot() # 'A'
 ```
 
@@ -373,7 +398,9 @@ __Note__ Did you know <a href="https://pandas.pydata.org/pandas-docs/stable/refe
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 subset = data['2011':'2012']['L06_347']
 subset.resample('M').agg(['mean', 'median']).plot()
 ```
@@ -387,11 +414,15 @@ subset.resample('M').agg(['mean', 'median']).plot()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 daily = data['LS06_348'].resample('D').mean() # daily averages calculated
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum values of these daily averages
 ```
 
@@ -404,6 +435,8 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data['2013':'2013'].mean().plot(kind='barh')
 ```

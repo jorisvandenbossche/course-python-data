@@ -1,27 +1,25 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: editable,deletable,run_control,jupyter,clear_cell,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
-<!-- #region deletable=true editable=true -->
 <p><font size="6"><b>CASE - Observation data</b></font></p>
 
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
-<!-- #endregion -->
 
-```python deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
 %matplotlib inline
 
 import numpy as np
@@ -32,11 +30,10 @@ import seaborn as sns
 plt.style.use('seaborn-whitegrid')
 ```
 
-<!-- #region deletable=true editable=true -->
 ## Introduction
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 Observation data of species (when and where is a given species observed) is typical in biodiversity studies. Large international initiatives support the collection of this data by volunteers, e.g. [iNaturalist](https://www.inaturalist.org/). Thanks to initiatives like [GBIF](https://www.gbif.org/), a lot of these data is also openly available. 
 
 In this example, data originates from a [study](http://esapubs.org/archive/ecol/E090/118/metadata.htm) of a Chihuahuan desert ecosystem near Portal, Arizona. It is a long-term observation study in 24 different plots (each plot identified with a `verbatimLocality` identifier) and defines, apart from the species, location and date of the observations, also the sex and the weight (if available).
@@ -47,13 +44,13 @@ The data consists of two data sets:
 2. `species_names.csv` the overview list of the species names.
 
 Let's start with the observations data!
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 ## Reading in the observations data
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -69,21 +66,25 @@ Let's start with the observations data!
 - Remember `.head()` and `.info()`?
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations = pd.read_csv("data/observations.csv", index_col="occurrenceID")
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations.head()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations.info()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -96,14 +97,14 @@ Create a new column with the name `eventDate` which contains datetime-aware info
 - To create a new column, assign the result to new name, e.g. `df["my_new_col"] = df["my_col"] + 1`
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations["eventDate"] =  pd.to_datetime(observations[["year", "month", "day"]])
 observations
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -115,30 +116,28 @@ For convenience when this dataset will be combined with other datasets, add a ne
 - Pandas will automatically broadcast a single string value to each of the rows in the DataFrame.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true
+```{code-cell} ipython3
+:clear_cell: true
+
 observations["datasetName"] = "Ecological Archives E090-118-D1."
 ```
 
-<!-- #region deletable=true editable=true -->
 ## Cleaning the `verbatimSex` column
-<!-- #endregion -->
 
-```python deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 observations["verbatimSex"].unique()
 ```
 
-<!-- #region deletable=true editable=true -->
 For the further analysis (and the species concerned in this specific data set), the `sex` information should be either `male` or `female`. We want to create a new column, named `sex` and convert the current values to the corresponding sex, taking into account the following mapping:
 * `M` -> `male`
 * `F` -> `female`
 * `R` -> `male`
 * `P` -> `female`
 * `Z` -> nan
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -152,9 +151,10 @@ For the further analysis (and the species concerned in this specific data set), 
 - A dictionary is a Python data structure, https://docs.python.org/3/tutorial/datastructures.html#dictionaries
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true
+```{code-cell} ipython3
+:clear_cell: true
+
 sex_dict = {"M": "male",
             "F": "female",
             "R": "male",
@@ -162,21 +162,26 @@ sex_dict = {"M": "male",
             "Z": np.nan}
 ```
 
-```python clear_cell=true deletable=true editable=true
+```{code-cell} ipython3
+:clear_cell: true
+
 observations['sex'] = observations['verbatimSex'].replace(sex_dict)
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations["sex"].unique()
 ```
 
-<!-- #region deletable=true editable=true -->
 ## Tackle missing values (NaN) and duplicate values
-<!-- #endregion -->
+
++++
 
 See [pandas_08_missing_values.ipynb](pandas_08_missing_values.ipynb) for an overview of functionality to work with missing values.
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -189,13 +194,13 @@ How many records in the data set have no information about the `species_ID`? Use
 - The result of an (element-wise) condition returns a set of True/False values, corresponding to 1/0 values. The amount of True values is equal to the sum.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations['species_ID'].isna().sum()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -207,13 +212,13 @@ How many duplicate records are present in the dataset? Use the method `duplicate
 - The result of an (element-wise) condition returns a set of True/False values, corresponding to 1/0 values. The amount of True values is equal to the sum.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations.duplicated().sum()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -227,14 +232,14 @@ observations.duplicated().sum()
 - `sort_values()` can work with a single columns name as well as a list of names.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 duplicate_observations = observations[observations.duplicated(keep=False)]
 duplicate_observations.sort_values(["eventDate", "verbatimLocality"]).head(9)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -248,17 +253,19 @@ duplicate_observations.sort_values(["eventDate", "verbatimLocality"]).head(9)
 - The number of rows in a DataFrame is equal to the `len`gth    
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations_unique = observations.drop_duplicates()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 len(observations_unique)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -275,22 +282,26 @@ Use the `dropna()` method to find out:
 - To specify which specific columns to check, use the `subset` argument
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 len(observations_unique.dropna())
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 len(observations_unique.dropna(subset=['species_ID']))
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 observations_with_ID = observations_unique.dropna(subset=['species_ID'])
 observations_with_ID.head()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -303,49 +314,45 @@ Filter the  `observations` data and select only those records that do not have a
 - Pandas provides both a `isna()` and a `notna()` method to check the existence of `NaN` values.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 mask = observations['species_ID'].isna() & observations['sex'].notna()
 not_identified = observations[mask]
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 not_identified.head()
 ```
 
-<!-- #region deletable=true editable=true -->
 ## Adding the names of the observed species
-<!-- #endregion -->
 
-```python deletable=true editable=true
+```{code-cell} ipython3
 # Recap from previous exercises - remove duplicates and observations without species information
 observations_unique_ = observations.drop_duplicates()
 observations_data = observations_unique_.dropna(subset=['species_ID'])
 ```
 
-<!-- #region deletable=true editable=true -->
 In the data set `observations`, the column `specied_ID` provides only an identifier instead of the full name. The name information is provided in a separate file `species_names.csv`:
-<!-- #endregion -->
 
-```python deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 species_names = pd.read_csv("data/species_names.csv")
 species_names.head()
 ```
 
-<!-- #region deletable=true editable=true -->
 The species names contains for each identifier in the `ID` column the scientific name of a species. The `species_names` data set contains in total 38 different scientific names:
-<!-- #endregion -->
 
-```python deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 species_names.shape
 ```
 
-<!-- #region deletable=true editable=true -->
 For further analysis, let's combine both in a single DataFrame in the following exercise.
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -358,24 +365,22 @@ Combine the DataFrames `observations` and `species_names` by adding the correspo
 - Take into account that our key-column is different for `observations` and `species_names`, respectively `specied_ID` and `ID`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right dataframe to merge on.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data = pd.merge(observations_data, species_names, how="left",
                        left_on="species_ID", right_on="ID")
 survey_data
 ```
 
-<!-- #region deletable=true editable=true -->
 ## Select subsets according to taxa of species
-<!-- #endregion -->
 
-```python deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
 survey_data['taxa'].value_counts()
 #survey_data.groupby('taxa').size()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -387,17 +392,19 @@ survey_data['taxa'].value_counts()
 - You do not have to combine three different conditions, but use the `isin` operator with a list of names.
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 non_rodent_species = survey_data[survey_data['taxa'].isin(['Rabbit', 'Bird', 'Reptile'])]
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 len(non_rodent_species)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -410,21 +417,23 @@ Select the observations for which the `name` starts with the characters 'ro' (ma
 - If the presence of capital letters should not matter, make everything lowercase first before comparing (`.lower()`)    
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 r_species = survey_data[survey_data['name'].str.lower().str.startswith('r')]
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 len(r_species)
 ```
 
-```python deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 r_species["name"].value_counts()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -436,17 +445,19 @@ Select the observations that are not Birds. Call the resulting variable <code>no
 - Logical operators like `==`, `!=`, `>`,... can still be used.
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 non_bird_species = survey_data[survey_data['taxa'] != 'Bird']
 ```
 
-```python clear_cell=false deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: false
+
 len(non_bird_species)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -457,16 +468,19 @@ Select the __Bird__ (taxa is Bird) observations from 1985-01 till 1989-12 usint 
 
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 birds_85_89 = survey_data[(survey_data["eventDate"] >= "1985-01-01")
                           & (survey_data["eventDate"] <= "1989-12-31 23:59")
                           & (survey_data['taxa'] == 'Bird')]
 birds_85_89.head()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 # alternative solution
 birds_85_89 = survey_data[(survey_data["eventDate"].dt.year >= 1985)
                           & (survey_data["eventDate"].dt.year <= 1989) 
@@ -474,7 +488,6 @@ birds_85_89 = survey_data[(survey_data["eventDate"].dt.year >= 1985)
 birds_85_89.head()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -490,25 +503,27 @@ __Note__ You can do this all in a single line statement, but don't have to do it
 - You will need `dropna`, `groupby`, `median` and `sort_values`.
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 # Multiple lines
 obs_with_weight = survey_data.dropna(subset=["weight"])
 median_weight = obs_with_weight.groupby(['name'])["weight"].median()
 median_weight.sort_values(ascending=False)
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 # Single line statement
 survey_data.dropna(subset=["weight"]).groupby(['name'])["weight"].median().sort_values(ascending=False)
 ```
 
-<!-- #region deletable=true editable=true -->
 ## Species abundance
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -520,17 +535,19 @@ Which 8 species (use the `name` column to identify the different species) have b
 - Pandas provide a function to combine sorting and showing the first n records, see [here](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.nlargest.html)...
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data.groupby("name").size().nlargest(8)
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data['name'].value_counts()[:8]
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -544,19 +561,24 @@ survey_data['name'].value_counts()[:8]
 - `fig, ax = plt.subplots()` prepares a Matplotlib Figure and Axes.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 n_species_per_plot = survey_data.groupby(["verbatimLocality"])["name"].nunique()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots(figsize=(6, 6))
 n_species_per_plot.plot(kind="barh", ax=ax)
 ax.set_ylabel("Plot number");
 ```
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 # Alternative option to calculate the species per plot:
 # inspired on the pivot table we already had:
 # species_per_plot = survey_data.reset_index().pivot_table(
@@ -564,7 +586,6 @@ ax.set_ylabel("Plot number");
 # n_species_per_plot = species_per_plot.count()
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -577,9 +598,10 @@ ax.set_ylabel("Plot number");
 - Use the previous exercise to solve this one.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 n_plots_per_species = survey_data.groupby(["name"])["verbatimLocality"].nunique().sort_values()
 
 fig, ax = plt.subplots(figsize=(10, 8))
@@ -588,7 +610,6 @@ ax.set_xlabel("Number of plots");
 ax.set_ylabel("");
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -602,27 +623,27 @@ ax.set_ylabel("");
 - `reset_index()` is useful function to convert multiple indices into columns again.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 n_plot_sex = survey_data.groupby(["sex", "verbatimLocality"]).size().rename("count").reset_index()
 n_plot_sex.head()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 pivoted = n_plot_sex.pivot_table(columns="sex", index="verbatimLocality", values="count")
 pivoted.head()
 ```
 
-<!-- #region deletable=true editable=true -->
 As such, we can use the variable `pivoted` to plot the result:
-<!-- #endregion -->
 
-```python deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -636,14 +657,14 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.catplot(data=survey_data, x="verbatimLocality", 
             hue="sex", kind="count", height=3, aspect=3)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -657,20 +678,20 @@ sns.catplot(data=survey_data, x="verbatimLocality",
 - `resample` needs an aggregation function on how to combine the values within a single 'group' (in this case data within a year). In this example, we want to know the `size` of each group, i.e. the number of records within each year.
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 heatmap_prep = survey_data.pivot_table(index='year', columns='month', 
                                        values="ID", aggfunc='count')
 fig, ax = plt.subplots(figsize=(10, 8))
 ax = sns.heatmap(heatmap_prep, cmap='Reds')
 ```
 
-<!-- #region deletable=true editable=true -->
 Remark that we started from a `tidy` data format (also called *long* format) and converted to *short* format with in the row index the years, in the column the months and the counts for each of these year/month combinations as values.
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -682,9 +703,10 @@ Remark that we started from a `tidy` data format (also called *long* format) and
 
     
 </details>  
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 species_per_plot = survey_data.reset_index().pivot_table(index="name", 
                                                          columns="verbatimLocality", 
                                                          values="ID", 
@@ -692,12 +714,13 @@ species_per_plot = survey_data.reset_index().pivot_table(index="name",
 species_per_plot.head()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots(figsize=(8,8))
 sns.heatmap(species_per_plot, ax=ax, cmap='Greens')
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -710,21 +733,21 @@ Make a plot visualizing the evolution of the number of observations for each of 
 - `resample` needs an aggregation function on how to combine the values within a single 'group' (in this case data within a year). In this example, we want to know the `size` of each group, i.e. the number of records within each year.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data.resample('A', on='eventDate').size().plot()
 ```
 
-<!-- #region deletable=true editable=true -->
 ## (OPTIONAL SECTION) Evolution of species during monitoring period
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 *In this section, all plots can be made with the embedded Pandas plot function, unless specificly asked*
-<!-- #endregion -->
 
-<!-- #region deletable=true editable=true -->
++++
+
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -737,20 +760,22 @@ Plot using Pandas `plot` function the number of records for `Dipodomys merriami`
 - `resample` is not useful here, as we do not want to change the time-interval, but look at month of the year (over all years)
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 merriami = survey_data[survey_data["name"] == "Dipodomys merriami"]
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots()
 merriami.groupby(merriami['eventDate'].dt.month).size().plot(kind="barh", ax=ax)
 ax.set_xlabel("number of occurrences")
 ax.set_ylabel("Month of the year")
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -762,23 +787,27 @@ Plot, for the species 'Dipodomys merriami', 'Dipodomys ordii', 'Reithrodontomys 
 - `groupby` is not useful here, as we do want to change the time-interval to represent data as a function of time
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
 ```
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 species_evolution = month_evolution.unstack(level=0)
 axs = species_evolution.plot(subplots=True, figsize=(14, 8), sharey=True)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -790,9 +819,10 @@ Recreate the same plot as in the previous exercise using Seaborn `relplot` funct
 
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=false deletable=true editable=true
+```{code-cell} ipython3
+:clear_cell: false
+
 # Given as solution..
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
@@ -800,12 +830,13 @@ month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').si
 month_evolution = month_evolution.reset_index()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.relplot(data=month_evolution, x='eventDate', y="counts", 
             row="name", kind="line", hue="name", height=2, aspect=5)
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -819,25 +850,29 @@ Plot the annual amount of occurrences for each of the 'taxa' as a function of ti
 - Pass the `sharey=False` to the `facet_kws` argument as a dictionary.
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 year_evolution = survey_data.groupby("taxa").resample('A', on='eventDate').size()
 year_evolution.name = "counts"
 year_evolution = year_evolution.reset_index()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 year_evolution.head()
 ```
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.relplot(data=year_evolution, x='eventDate', y="counts", 
             col="taxa", col_wrap=2, kind="line", height=2, aspect=5, 
             facet_kws={"sharey": False})
 ```
 
-<!-- #region deletable=true editable=true -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -849,14 +884,13 @@ The observations where taken by volunteers. You wonder on which day of the week 
 - You can do this! 
     
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true deletable=true editable=true jupyter={"outputs_hidden": false} run_control={"frozen": false, "read_only": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots()
 survey_data.groupby(survey_data["eventDate"].dt.weekday).size().plot(kind='barh', color='#66b266', ax=ax)
 xticks = ax.set_yticklabels(['Monday', 'Tuesday', 'Wednesday', "Thursday", "Friday", "Saturday", "Sunday"])
 ```
 
-<!-- #region deletable=true editable=true -->
 Nice work!
-<!-- #endregion -->

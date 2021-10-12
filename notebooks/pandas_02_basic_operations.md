@@ -1,35 +1,33 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
-<!-- #region -->
 <p><font size="6"><b> 02 - Pandas: Basic operations on Series and DataFrames</b></font></p>
 
 
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
-<!-- #endregion -->
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 
 import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-```python
+```{code-cell} ipython3
 # redefining the example DataFrame
 
 countries = pd.DataFrame({'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
@@ -38,33 +36,34 @@ countries = pd.DataFrame({'country': ['Belgium', 'France', 'Germany', 'Netherlan
         'capital': ['Brussels', 'Paris', 'Berlin', 'Amsterdam', 'London']})
 ```
 
-```python
+```{code-cell} ipython3
 countries.head()
 ```
 
 # Elementwise-operations
 
++++
 
 The typical arithmetic (+, -, \*, /) and comparison (==, >, <, ...) operations work *element-wise*.
 
 With as scalar:
 
-```python
+```{code-cell} ipython3
 population = countries['population']
 population
 ```
 
-```python
+```{code-cell} ipython3
 population * 1000
 ```
 
-```python
+```{code-cell} ipython3
 population > 50
 ```
 
 With two Series objects:
 
-```python
+```{code-cell} ipython3
 countries['population'] / countries['area']
 ```
 
@@ -74,54 +73,57 @@ We can add a new column to a DataFrame with similar syntax as selecting a column
 
 For example, to add the population density calculated above, we can do:
 
-```python
+```{code-cell} ipython3
 countries['population_density'] = countries['population'] / countries['area'] * 1e6
 ```
 
-```python
+```{code-cell} ipython3
 countries
 ```
 
 # Aggregations (reductions)
 
++++
 
 Pandas provides a large set of **summary** functions that operate on different kinds of pandas objects (DataFrames, Series, Index) and produce single value. When applied to a DataFrame, the result is returned as a pandas Series (one value for each column).
 
++++
 
 The average population number:
 
-```python
+```{code-cell} ipython3
 population.mean()
 ```
 
 The minimum area:
 
-```python
+```{code-cell} ipython3
 countries['area'].min()
 ```
 
 For dataframes, often only the numeric columns are included in the result:
 
-```python
+```{code-cell} ipython3
 countries.median()
 ```
 
 # Application on a real dataset
 
++++
 
 Reading in the titanic data set...
 
-```python
+```{code-cell} ipython3
 df = pd.read_csv("data/titanic.csv")
 ```
 
 Quick exploration first...
 
-```python
+```{code-cell} ipython3
 df.head()
 ```
 
-```python
+```{code-cell} ipython3
 len(df)
 ```
 
@@ -141,6 +143,7 @@ Fare           | Passenger Fare
 Cabin          | Cabin
 Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southampton)
 
++++
 
 <div class="alert alert-success">
 <b>EXERCISE</b>:
@@ -151,7 +154,9 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Age'].mean()
 ```
 
@@ -163,7 +168,9 @@ df['Age'].mean()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Age'].hist() #bins=30, log=True
 ```
 
@@ -178,11 +185,15 @@ df['Age'].hist() #bins=30, log=True
 Note: the 'Survived' column indicates whether someone survived (1) or not (0).
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Survived'].sum() / len(df['Survived'])
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Survived'].mean()
 ```
 
@@ -194,11 +205,15 @@ df['Survived'].mean()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Fare'].max()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Fare'].median()
 ```
 
@@ -211,7 +226,9 @@ df['Fare'].median()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Fare'].quantile(0.75)
 ```
 
@@ -223,11 +240,15 @@ df['Fare'].quantile(0.75)
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Fare'] / df['Fare'].mean()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Fare_normalized'] = df['Fare'] / df['Fare'].mean()
 df.head()
 ```
@@ -240,12 +261,15 @@ df.head()
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 np.log(df['Fare'])
 ```
 
 # Numpy -  multidimensional data arrays
 
++++
 
 NumPy is the fundamental package for scientific computing with Python. It contains among other things:
 
@@ -257,54 +281,56 @@ NumPy is the fundamental package for scientific computing with Python. It contai
 
 Also known as *array oriented computing*. The recommended convention to import numpy is:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 ```
 
 ## Speed
 
++++
 
 Memory-efficient container that provides fast numerical operations:
 
-```python
+```{code-cell} ipython3
 L = range(1000)
 %timeit [i**2 for i in L]
 ```
 
-```python
+```{code-cell} ipython3
 a = np.arange(1000)
 %timeit a**2
 ```
 
 ## It's used by Pandas under the hood
 
++++
 
 The columns of a DataFrame are internally stored using numpy arrays. We can also retrieve this data as numpy arrays, for example using the `to_numpy()` method:
 
-```python
+```{code-cell} ipython3
 arr = countries["population"].to_numpy()
 arr
 ```
 
 What we said above about element-wise operations and reductions works the same for numpy arrays:
 
-```python
+```{code-cell} ipython3
 arr + 10
 ```
 
-```python
+```{code-cell} ipython3
 arr.mean()
 ```
 
 Numpy contains more numerical functions than pandas, for example to calculate the log:
 
-```python
+```{code-cell} ipython3
 np.log(arr)
 ```
 
 Those functions can *also* be applied on pandas objects:
 
-```python
+```{code-cell} ipython3
 np.log(countries["population"])
 ```
 
@@ -323,11 +349,11 @@ __Pandas__ provides
 
 </div>
 
-<!-- #region -->
++++
+
 # Acknowledgement
 
 
 > This notebook is partly based on material of Jake Vanderplas (https://github.com/jakevdp/OsloWorkshop2014).
 
 ---
-<!-- #endregion -->

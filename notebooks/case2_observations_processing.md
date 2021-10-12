@@ -1,16 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
 <p><font size="6"><b> CASE - Observation data - data cleaning and enrichment</b></font></p>
@@ -19,7 +19,7 @@ jupyter:
 
 ---
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,9 +31,11 @@ plt.style.use('seaborn-whitegrid')
 
 Observation data of species (when and where is a given species observed) is typical in biodiversity studies. Large international initiatives support the collection of this data by volunteers, e.g. [iNaturalist](https://www.inaturalist.org/). Thanks to initiatives like [GBIF](https://www.gbif.org/), a lot of these data is also openly available.
 
++++
 
 You decide to share data of a field campaign, but the data set still requires some cleaning and standardization. For example, the coordinates, can be named `x`/`y`, `decimalLatitude`/`decimalLongitude`, `lat`/`long`... Luckily, you know of an international **open data standard** to describe occurrence/observation data, i.e. [Darwin Core (DwC)](http://rs.tdwg.org/dwc/terms). Instead of inventing your own data model, you decide to comply to this international standard. The latter will enhance communication and will also make your data compliant with GBIF.
 
++++
 
 In short, the DwC describes a flat table (cfr. `CSV`) with an agreed name convention on the header names and conventions on how certain data types need to be represented (as a reference, an in depth description is given [here](https://www.tdwg.org/standards/dwc/)). For this tutorial, we will focus on a few of the existing terms to learn some elements about data cleaning:
 * `eventDate`: ISO 6801 format of dates
@@ -45,9 +47,11 @@ In short, the DwC describes a flat table (cfr. `CSV`) with an agreed name conven
 
 Furthermore, additional information concerning the taxonomy will be added using an external API service
 
++++
 
 **Dataset to work on:**
 
++++
 
 For this data set, the data is split up in the following main data files:
 * `surveys.csv` the data with the surveys in the individual plots
@@ -58,17 +62,19 @@ The data originates from a [study](http://esapubs.org/archive/ecol/E090/118/meta
 
 ![](../img/plot_overview.png)
 
++++
 
 ## 1. Survey-data
 
++++
 
 Reading in the data of the individual surveys:
 
-```python
+```{code-cell} ipython3
 survey_data = pd.read_csv("data/surveys.csv")
 ```
 
-```python
+```{code-cell} ipython3
 survey_data.head()
 ```
 
@@ -80,21 +86,25 @@ survey_data.head()
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(survey_data)
 ```
 
 ### Adding the data source information as static column
 
++++
 
 For convenience when this data-set will be combined with other datasets, we first add a column of static values, defining the `datasetName` of this particular data:
 
-```python
+```{code-cell} ipython3
 datasetname = "Ecological Archives E090-118-D1."
 ```
 
 Adding this static value as a new column `datasetName`:
 
++++
 
 <div class="alert alert-success">
 
@@ -111,12 +121,15 @@ Adding this static value as a new column `datasetName`:
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data["datasetName"] = datasetname
 ```
 
 ### Cleaning the sex_char column into a DwC called [sex](http://rs.tdwg.org/dwc/terms/#sex) column
 
++++
 
 <div class="alert alert-success">
 
@@ -132,7 +145,9 @@ survey_data["datasetName"] = datasetname
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data["sex_char"].unique().tolist()
 ```
 
@@ -145,16 +160,18 @@ So, apparently, more information is provided in this column, whereas according t
 
 At the same time, we will save the original information of the `sex_char` in a separate column, called `verbatimSex`, as a reference in case we need the original data later.
 
++++
 
 In summary, we have to:
 * rename the `sex_char` column to `verbatimSex`
 * create a new column with the name `sex`
 * map the original values of the `sex_char` to the values `male` and `female` according to the mapping above
 
++++
 
 First, let's convert the name of the column header `sex_char` to `verbatimSex` with the `rename` function:
 
-```python
+```{code-cell} ipython3
 survey_data = survey_data.rename(columns={'sex_char': 'verbatimSex'})
 ```
 
@@ -174,7 +191,9 @@ survey_data = survey_data.rename(columns={'sex_char': 'verbatimSex'})
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 sex_dict = {"M": "male",
             "F": "female",
             "R": "male",
@@ -182,18 +201,21 @@ sex_dict = {"M": "male",
             "Z": np.nan}
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data['sex'] = survey_data['verbatimSex'].replace(sex_dict)
 ```
 
 Checking the current frequency of values of the resulting `sex` column (this should result in the values `male`, `female` and `nan`):
 
-```python
+```{code-cell} ipython3
 survey_data["sex"].unique()
 ```
 
 To check what the frequency of occurrences is for male/female of the categories, a bar chart is a possible representation:
 
++++
 
 <div class="alert alert-success">
 
@@ -210,7 +232,9 @@ To check what the frequency of occurrences is for male/female of the categories,
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data["sex"].value_counts(dropna=False).plot(kind="barh", color="#00007f")
 ```
 
@@ -220,55 +244,57 @@ survey_data["sex"].value_counts(dropna=False).plot(kind="barh", color="#00007f")
 
 </div>
 
++++
 
 ### Solving double entry field by decoupling
 
++++
 
 When checking the species unique information:
 
-```python
+```{code-cell} ipython3
 survey_data["species"].unique()
 ```
 
-```python
+```{code-cell} ipython3
 survey_data.head(10)
 ```
 
 There apparently exists a double entry: `'DM and SH'`, which basically defines two records and should be decoupled to two individual records (i.e. rows). Hence, we should be able to create an additional row based on this split. To do so, Pandas provides a dedicated function since version 0.25, called `explode`. Starting from a small subset example:
 
-```python
+```{code-cell} ipython3
 example = survey_data.loc[7:10, "species"]
 example
 ```
 
 Using the `split` method on strings, we can split the string using a given character, in this case the word `and`:
 
-```python
+```{code-cell} ipython3
 example.str.split("and")
 ```
 
 The `explode` method will create a row for each element in the list:
 
-```python
+```{code-cell} ipython3
 example_split = example.str.split("and").explode()
 example_split
 ```
 
 Hence, the `DM` and `SH` are now enlisted in separate rows. Other rows remain unchanged. The only remaining issue is the spaces around the characters:
 
-```python
+```{code-cell} ipython3
 example_split.iloc[1], example_split.iloc[2]
 ```
 
 Which we can solve again using the string method `strip`, removing the spaces before and after the characters:
 
-```python
+```{code-cell} ipython3
 example_split.str.strip()
 ```
 
 To make this reusable, let's create a dedicated function to combine these steps, called `solve_double_field_entry`:
 
-```python
+```{code-cell} ipython3
 def solve_double_field_entry(df, keyword="and", column="verbatimEventDate"):
     """Split on keyword in column for an enumeration and create extra record
 
@@ -290,6 +316,7 @@ def solve_double_field_entry(df, keyword="and", column="verbatimEventDate"):
 
 The function takes a `DataFrame` as input, splits the record into separate rows and returns an updated `DataFrame`. We can use this function to get an update of the `DataFrame`, with an additional row (observation) added by decoupling the specific field. Let's apply this new function.
 
++++
 
 <div class="alert alert-success">
 
@@ -305,59 +332,63 @@ The function takes a `DataFrame` as input, splits the record into separate rows 
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data_decoupled = solve_double_field_entry(survey_data,
                                                  "and",
                                                  column="species") # get help of the function by SHIFT + TAB
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled["species"].unique()
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled.head(11)
 ```
 
 ### Create new occurrence identifier
 
++++
 
 The `record_id` is no longer a unique identifier for each observation after the decoupling of this data set. We will make a new data set specific identifier, by adding a column called `occurrenceID` that takes a new counter as identifier. As a simple and straightforward approach, we will use a new counter for the whole dataset, starting with 1:
 
-```python
+```{code-cell} ipython3
 np.arange(1, len(survey_data_decoupled) + 1, 1)
 ```
 
 To create a new column with header `occurrenceID` with the values 1 -> 35550 as field values:
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled["occurrenceID"] = np.arange(1, len(survey_data_decoupled) + 1, 1)
 ```
 
 To overcome the confusion on having both a `record_id` and `occurrenceID` field, we will remove the `record_id` term:
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled = survey_data_decoupled.drop(columns="record_id")
 ```
 
 Hence, columns can be `drop`-ped out of a DataFrame
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled.head(10)
 ```
 
 ### Converting the date values
 
++++
 
 In the survey data set we received, the `month`, `day`, and `year` columns are containing the information about the date, i.e. `eventDate` in DarwinCore terms. We want this data in a ISO format `YYYY-MM-DD`. A convenient Pandas function is the usage of `to_datetime`, which provides multiple options to interpret dates. One of the options is the automatic interpretation of some 'typical' columns, like `year`, `month` and `day`, when passing a `DataFrame`.
 
-```python
+```{code-cell} ipython3
 # pd.to_datetime(survey_data_decoupled[["year", "month", "day"]])  # uncomment the line and test this statement
 ```
 
 This is not working, not all dates can be interpreted... We should get some more information on the reason of the errors. By using the option `coerce`, the problem makers will be labeled as a missing value `NaT`. We can count the number of dates that can not be interpreted:
 
-```python
+```{code-cell} ipython3
 sum(pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coerce').isna())
 ```
 
@@ -375,31 +406,34 @@ sum(pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coer
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 mask = pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coerce').isna()
 trouble_makers = survey_data_decoupled[mask]
 ```
 
 Checking some charactersitics of the trouble_makers:
 
-```python
+```{code-cell} ipython3
 trouble_makers.head()
 ```
 
-```python
+```{code-cell} ipython3
 trouble_makers["day"].unique()
 ```
 
-```python
+```{code-cell} ipython3
 trouble_makers["month"].unique()
 ```
 
-```python
+```{code-cell} ipython3
 trouble_makers["year"].unique()
 ```
 
 The issue is the presence of day `31` during the months April and September of the year 2000. At this moment, we would have to recheck the original data in order to know how the issue could be solved. Apparently, - for this specific case - there has been a data-entry problem in 2000, making the `31` days during this period should actually be `30`. It would be optimal to correct this in the source data set, but for the exercise, we will correct it here.
 
++++
 
 <div class="alert alert-success">
 
@@ -417,19 +451,20 @@ The issue is the presence of day `31` during the months April and September of t
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 mask = pd.to_datetime(survey_data_decoupled[["year", "month", "day"]], errors='coerce').isna()
 survey_data_decoupled.loc[mask, "day"] = 30
 ```
 
 Now, we do the parsing again to create a proper `eventDate` field, containing the dates:
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled["eventDate"] = \
     pd.to_datetime(survey_data_decoupled[["year", "month", "day"]])
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -445,35 +480,38 @@ survey_data_decoupled["eventDate"] = \
 
 
 </div>
-<!-- #endregion -->
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 (survey_data_decoupled["year"]
      .value_counts(sort=False)
      .sort_index()
      .plot(kind='barh', color="#00007f", figsize=(10, 10)));
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 (survey_data_decoupled
      .groupby("year")
      .size()
      .plot(kind='barh', color="#00007f", figsize=(10, 10)))
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled.head()
 ```
 
 Currently, the dates are stored in a python specific date format:
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled["eventDate"].dtype
 ```
 
 This is great, because it allows for many functionalities using the `.dt` accessor:
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled.eventDate.dt #add a dot (.) and press TAB to explore the date options it provides
 ```
 
@@ -491,7 +529,9 @@ survey_data_decoupled.eventDate.dt #add a dot (.) and press TAB to explore the d
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 (survey_data_decoupled
      .groupby(survey_data_decoupled["eventDate"].dt.year)
      .size()
@@ -500,6 +540,7 @@ survey_data_decoupled.eventDate.dt #add a dot (.) and press TAB to explore the d
 
 We actually do not need the `day`, `month`, `year` columns anymore, but feel free to use what suits you best.
 
++++
 
 <div class="alert alert-success">
 
@@ -516,7 +557,9 @@ We actually do not need the `day`, `month`, `year` columns anymore, but feel fre
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 nrecords_by_dayofweek = survey_data_decoupled["eventDate"].dt.dayofweek.value_counts().sort_index()
 
 fig, ax = plt.subplots(figsize=(6, 6))
@@ -531,28 +574,31 @@ nrecords_by_dayofweek.plot(kind="barh", color="#00007f", ax=ax);
 
 When saving the information to a file (e.g. `CSV`-file), this data type will be automatically converted to a string representation. However, we could also decide to explicitly provide the string format the dates are stored (losing the date type functionalities), in order to have full control on the way these dates are formatted:
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled["eventDate"] = survey_data_decoupled["eventDate"].dt.strftime('%Y-%m-%d')
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled["eventDate"].head()
 ```
 
 For the remainder, let's remove the day/year/month columns.
 
-```python
+```{code-cell} ipython3
 survey_data_decoupled = survey_data_decoupled.drop(columns=["day", "month", "year"])
 ```
 
 ## 2. Add coordinates from the plot locations
 
++++
 
 ### Loading the coordinate data
 
++++
 
 The individual plots are only identified by a `plot` identification number. In order to provide sufficient information to external users, additional information about the coordinates should be added. The coordinates of the individual plots are saved in another file: `plot_location.xlsx`. We will use this information to further enrich our data set and add the Darwin Core Terms `decimalLongitude` and `decimalLatitude`.
 
++++
 
 <div class="alert alert-success">
 
@@ -568,40 +614,45 @@ The individual plots are only identified by a `plot` identification number. In o
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 plot_data = pd.read_excel("data/plot_location.xlsx", skiprows=3, index_col=0)
 ```
 
-```python
+```{code-cell} ipython3
 plot_data.head()
 ```
 
 ### Transforming to other coordinate reference system
 
++++
 
 These coordinates are in meters, more specifically in the [UTM 12 N](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) coordinate system. However, the agreed coordinate representation for Darwin Core is the [World Geodetic System 1984 (WGS84)](http://spatialreference.org/ref/epsg/wgs-84/).
 
 As this is not a GIS course, we will shortcut the discussion about different projection systems, but provide an example on how such a conversion from `UTM12N` to `WGS84` can be performed with the projection toolkit `pyproj` and by relying on the existing EPSG codes (a registry originally setup by the association of oil & gas producers).
 
++++
 
 First, we define out two projection systems, using their corresponding EPSG codes:
 
-```python
+```{code-cell} ipython3
 from pyproj import Transformer
 ```
 
-```python
+```{code-cell} ipython3
 transformer = Transformer.from_crs("EPSG:32612", "epsg:4326")
 ```
 
 The reprojection can be done by the function `transform` of the projection toolkit, providing the coordinate systems and a set of x, y coordinates. For example, for a single coordinate, this can be applied as follows:
 
-```python
+```{code-cell} ipython3
 transformer.transform(681222.131658, 3.535262e+06)
 ```
 
 Such a transformation is a function not supported by Pandas itself (it is in https://geopandas.org/). In such an situation, we want to _apply_ a custom function to _each row of the DataFrame_. Instead of writing a `for` loop to do this for each of the coordinates in the list, we can `.apply()` this function with Pandas.
 
++++
 
 <div class="alert alert-success">
 
@@ -625,7 +676,9 @@ Apply the pyproj function `transform` to plot_data, using the columns `xutm` and
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 def transform_utm_to_wgs(row):
     """Converts the x and y coordinates
 
@@ -643,20 +696,26 @@ def transform_utm_to_wgs(row):
     return pd.Series(transformer.transform(row['xutm'], row['yutm']))
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # test the new function on a single row of the DataFrame
 transform_utm_to_wgs(plot_data.loc[0])
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 plot_data.apply(transform_utm_to_wgs, axis=1)
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 plot_data[["decimalLongitude" ,"decimalLatitude"]] = plot_data.apply(transform_utm_to_wgs, axis=1)
 ```
 
-```python
+```{code-cell} ipython3
 plot_data.head()
 ```
 
@@ -676,14 +735,17 @@ Do not abuse the usage of the `apply` method, but always look for an existing Pa
 
 </div>
 
++++
 
 ### Join the coordinate information to the survey data set
 
++++
 
 We can extend our survey data set with this coordinate information. Making the combination of two data sets based on a common identifier is completely similar to the usage of `JOIN` operations in databases. In Pandas, this functionality is provided by [`pd.merge`](http://pandas.pydata.org/pandas-docs/stable/merging.html#database-style-DataFrame-joining-merging).
 
 In practice, we have to add the columns `decimalLongitude`/`decimalLatitude` to the current data set `survey_data_decoupled`, by using the plot identification number as key to join.
 
++++
 
 <div class="alert alert-success">
 
@@ -699,7 +761,9 @@ In practice, we have to add the columns `decimalLongitude`/`decimalLatitude` to 
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 plot_data_selection = plot_data[["plot", "decimalLongitude", "decimalLatitude"]]
 ```
 
@@ -716,26 +780,30 @@ Combine the `DataFrame` `plot_data_selection` and the `DataFrame` `survey_data_d
 
 </details>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data_plots = pd.merge(survey_data_decoupled, plot_data_selection,
                              how="left", on="plot")
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_plots.head()
 ```
 
 The plot locations need to be stored with the variable name `verbatimLocality` indicating the identifier as integer value of the plot:
 
-```python
+```{code-cell} ipython3
 survey_data_plots = survey_data_plots.rename(columns={'plot': 'verbatimLocality'})
 ```
 
 ## 3. Add species names to dataset
 
++++
 
 The column `species` only provides a short identifier in the survey overview. The name information is stored in a separate file `species.csv`. We want our data set to include this information, read in the data and add it to our survey data set:
 
++++
 
 <div class="alert alert-success">
 
@@ -751,19 +819,23 @@ The column `species` only provides a short identifier in the survey overview. Th
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 species_data = pd.read_csv("data/species.csv", sep=";")
 ```
 
-```python
+```{code-cell} ipython3
 species_data.head()
 ```
 
 ### Fix a wrong acronym naming
 
++++
 
 When reviewing the metadata, you see that in the data-file the acronym `NE` is used to describe `Neotoma albigula`, whereas in the [metadata description](http://esapubs.org/archive/ecol/E090/118/Portal_rodent_metadata.htm), the acronym `NA` is used.
 
++++
 
 <div class="alert alert-success">
 
@@ -780,18 +852,23 @@ When reviewing the metadata, you see that in the data-file the acronym `NE` is u
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 species_data.loc[species_data["species_id"] == "NE", "species_id"] = "NA"
 ```
 
 ### Merging surveys and species
 
++++
 
 As we now prepared the two series, we can combine the data, using again the `pd.merge` operation.
 
++++
 
 We want to add the data of the species to the survey data, in order to see the full species names in the combined data table.
 
++++
 
 <div class="alert alert-success">
 
@@ -806,49 +883,52 @@ Combine the `DataFrame` `survey_data_plots` and the `DataFrame` `species_data` b
 
 </details>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data_species = pd.merge(survey_data_plots, species_data, how="left",  # LEFT OR INNER?
                                 left_on="species", right_on="species_id")
 ```
 
-```python
+```{code-cell} ipython3
 len(survey_data_species) # check length after join operation
 ```
 
 The join is ok, but we are left with some redundant columns and wrong naming:
 
-```python
+```{code-cell} ipython3
 survey_data_species.head()
 ```
 
 We do not need the columns `species_x` and `species_id` column anymore, as we will use the scientific names from now on:
 
-```python
+```{code-cell} ipython3
 survey_data_species = survey_data_species.drop(["species_x", "species_id"], axis=1)
 ```
 
 The column `species_y` could just be named `species`:
 
-```python
+```{code-cell} ipython3
 survey_data_species = survey_data_species.rename(columns={"species_y": "species"})
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_species.head()
 ```
 
-```python
+```{code-cell} ipython3
 len(survey_data_species)
 ```
 
 Let's now save our clean data to a `csv` file, so we can further analyze the data in a following notebook:
 
-```python
+```{code-cell} ipython3
 survey_data_species.to_csv("interim_survey_data_species.csv", index=False)
 ```
 
 ## (OPTIONAL SECTION) 4. Using a API service to match the scientific names
 
++++
 
 As the current species names are rather short and could eventually lead to confusion when shared with other users, retrieving additional information about the different species in our dataset would be useful to integrate our work with other research. An option is to match our names with an external service to request additional information about the different species.
 
@@ -859,20 +939,21 @@ Therefore, GBIF (as many other organizations!) provides a service (or API) to ex
 
 The same can be done using Python. The main library we need to this kind of automated searches is the [`requests` package](http://docs.python-requests.org/en/master/), which can be used to do request to any kind of API out there.
 
-```python
+```{code-cell} ipython3
 import requests
 ```
 
 ### Example matching with Alcedo Atthis
 
++++
 
 For the example of `Alcedo atthis`:
 
-```python
+```{code-cell} ipython3
 species_name = 'Alcedo atthis'
 ```
 
-```python
+```{code-cell} ipython3
 base_string = 'http://api.gbif.org/v1/species/match?'
 request_parameters = {'verbose': False, 'strict': True, 'name': species_name}
 message = requests.get(base_string, params=request_parameters).json()
@@ -881,10 +962,11 @@ message
 
 From which we get a dictionary containing more information about the taxonomy of the `Alcedo atthis`.
 
++++
 
 In the species data set available, the name to match is provided in the combination of two columns, so we have to combine those to in order to execute the name matching:
 
-```python
+```{code-cell} ipython3
 genus_name = "Callipepla"
 species_name = "squamata"
 name_to_match = '{} {}'.format(genus_name, species_name)
@@ -896,9 +978,11 @@ message
 
 To apply this on our species data set, we will have to do this request for each of the individual species/genus combination. As, this is a returning functionality, we will write a small function to do this:
 
++++
 
 ### Writing a custom matching function
 
++++
 
 <div class="alert alert-success">
 
@@ -908,7 +992,9 @@ To apply this on our species data set, we will have to do this request for each 
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 def name_match(genus_name, species_name, strict=True):
     """
     Perform a GBIF name matching using the species and genus names
@@ -943,10 +1029,11 @@ For many of these API request handling, dedicated packages do exist, e.g. <a hre
 
 </div>
 
++++
 
 Testing our custom matching function:
 
-```python
+```{code-cell} ipython3
 genus_name = "Callipepla"
 species_name = "squamata"
 name_match(genus_name, species_name, strict=True)
@@ -954,7 +1041,7 @@ name_match(genus_name, species_name, strict=True)
 
 However, the matching won't provide an answer for every search:
 
-```python
+```{code-cell} ipython3
 genus_name = "Lizard"
 species_name = "sp."
 name_match(genus_name, species_name, strict=True)
@@ -962,6 +1049,7 @@ name_match(genus_name, species_name, strict=True)
 
 ### Match each of the species names of the survey data set
 
++++
 
 Hence, in order to add this information to our survey DataFrame, we need to perform the following steps:
 1. extract the unique genus/species combinations in our dataset and combine them in single column
@@ -971,6 +1059,7 @@ Hence, in order to add this information to our survey DataFrame, we need to perf
     * if no match was found: nan-values
 4. Join the DataFrame of unique genus/species information with the enriched GBIF info to the `survey_data_species` data set
 
++++
 
 <div class="alert alert-success">
 
@@ -980,12 +1069,14 @@ Hence, in order to add this information to our survey DataFrame, we need to perf
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 #%%timeit
 unique_species = survey_data_species[["genus", "species"]].drop_duplicates().dropna()
 ```
 
-```python
+```{code-cell} ipython3
 len(unique_species)
 ```
 
@@ -1004,13 +1095,15 @@ len(unique_species)
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 #%%timeit
 unique_species = \
     survey_data_species.groupby(["genus", "species"]).first().reset_index()[["genus", "species"]]
 ```
 
-```python
+```{code-cell} ipython3
 len(unique_species)
 ```
 
@@ -1022,13 +1115,15 @@ len(unique_species)
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 unique_species["name"] = unique_species["genus"] + " " + unique_species["species"]
 # an alternative approach worthwhile to know:
 #unique_species["name"] = unique_species["genus"].str.cat(unique_species["species"], " ")
 ```
 
-```python
+```{code-cell} ipython3
 unique_species.head()
 ```
 
@@ -1042,19 +1137,20 @@ species_annotated = {O: {'canonicalName': 'Squamata', 'class': 'Reptilia', 'clas
                      2:...}
 ```
 
-```python
+```{code-cell} ipython3
 # this will take a bit as we do a request to gbif for each individual species
 species_annotated = {}
 for key, row in unique_species.iterrows():
     species_annotated[key] = name_match(row["genus"], row["species"], strict=True)
 ```
 
-```python
+```{code-cell} ipython3
 #species_annotated  # uncomment to see output
 ```
 
 We can now transform this to a pandas `DataFrame`:
 
++++
 
 <div class="alert alert-success">
 
@@ -1071,16 +1167,19 @@ We can now transform this to a pandas `DataFrame`:
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df_species_annotated = pd.DataFrame(species_annotated).transpose()
 ```
 
-```python
+```{code-cell} ipython3
 df_species_annotated.head()
 ```
 
 ### Select relevant information and add this to the survey data
 
++++
 
 <div class="alert alert-success">
 
@@ -1090,12 +1189,14 @@ df_species_annotated.head()
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df_species_annotated_subset = df_species_annotated[['class', 'kingdom', 'order', 'phylum',
                                                     'scientificName', 'status', 'usageKey']]
 ```
 
-```python
+```{code-cell} ipython3
 df_species_annotated_subset.head()
 ```
 
@@ -1106,12 +1207,14 @@ df_species_annotated_subset.head()
 - Join the `df_species_annotated_subset` information to the `unique_species` overview of species. Save the result as variable `unique_species_annotated`.
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 unique_species_annotated = pd.merge(unique_species, df_species_annotated_subset,
                                     left_index=True, right_index=True)
 ```
 
-```python
+```{code-cell} ipython3
 unique_species_annotated.head()
 ```
 
@@ -1123,27 +1226,30 @@ unique_species_annotated.head()
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 survey_data_completed = pd.merge(survey_data_species, unique_species_annotated,
                                  how='left', on= ["genus", "species"])
 ```
 
-```python
+```{code-cell} ipython3
 len(survey_data_completed)
 ```
 
-```python
+```{code-cell} ipython3
 survey_data_completed.head()
 ```
 
 Congratulations! You did a great cleaning job, save your result:
 
-```python
+```{code-cell} ipython3
 survey_data_completed.to_csv("survey_data_completed.csv", index=False)
 ```
 
 ## Acknowledgements
 
++++
 
 * `species.csv` and `survey.csv` are used from the [data carpentry workshop](https://github.com/datacarpentry/python-ecology-lesson) This data is from the paper S. K. Morgan Ernest, Thomas J. Valone, and James H.
 Brown. 2009. Long-term monitoring and experimental manipulation of a Chihuahuan Desert ecosystem near Portal, Arizona, USA. Ecology 90:1708. http://esapubs.org/archive/ecol/E090/118/

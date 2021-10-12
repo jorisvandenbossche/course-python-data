@@ -1,32 +1,30 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
-<!-- #region -->
 <p><font size="6"><b>03 - Pandas: Indexing and selecting data - part I</b></font></p>
 
 
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
-<!-- #endregion -->
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 ```
 
-```python
+```{code-cell} ipython3
 # redefining the example DataFrame
 
 data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
@@ -39,15 +37,17 @@ countries
 
 # Subsetting data
 
++++
 
 ## Subset variables (columns)
 
++++
 
 For a DataFrame, basic indexing selects the columns (cfr. the dictionaries of pure python)
 
 Selecting a **single column**:
 
-```python
+```{code-cell} ipython3
 countries['area'] # single []
 ```
 
@@ -55,38 +55,41 @@ Remember that the same syntax can also be used to *add* a new columns: `df['new'
 
 We can also select **multiple columns** by passing a list of column names into `[]`:
 
-```python
+```{code-cell} ipython3
 countries[['area', 'population']] # double [[]]
 ```
 
 ## Subset observations (rows)
 
++++
 
 Using `[]`, slicing or boolean indexing accesses the **rows**:
 
++++
 
 ### Slicing
 
-```python
+```{code-cell} ipython3
 countries[0:4]
 ```
 
 ### Boolean indexing (filtering)
 
++++
 
 Often, you want to select rows based on a certain condition. This can be done with *'boolean indexing'* (like a where clause in SQL) and comparable to numpy. 
 
 The indexer (or boolean mask) should be 1-dimensional and the same length as the thing being indexed.
 
-```python
+```{code-cell} ipython3
 countries['area'] > 100000
 ```
 
-```python
+```{code-cell} ipython3
 countries[countries['area'] > 100000]
 ```
 
-```python
+```{code-cell} ipython3
 countries[countries['population'] > 50]
 ```
 
@@ -108,6 +111,7 @@ Operator   |  Description
 &       | And (`cond1 & cond2`)
 \|       | Or (`cond1 \| cond2`)
 
++++
 
 <div class="alert alert-info" style="font-size:120%">
 <b>REMEMBER</b>: <br><br>
@@ -120,56 +124,59 @@ So as a summary, `[]` provides the following convenience shortcuts:
 
 </div>
 
++++
 
 ## Some other useful methods: `isin` and `string` methods
 
++++
 
 The `isin` method of Series is very useful to select rows that may contain certain values:
 
-```python
+```{code-cell} ipython3
 s = countries['capital']
 ```
 
-```python
+```{code-cell} ipython3
 s.isin?
 ```
 
-```python
+```{code-cell} ipython3
 s.isin(['Berlin', 'London'])
 ```
 
 This can then be used to filter the dataframe with boolean indexing:
 
-```python
+```{code-cell} ipython3
 countries[countries['capital'].isin(['Berlin', 'London'])]
 ```
 
 Let's say we want to select all data for which the capital starts with a 'B'. In Python, when having a string, we could use the `startswith` method:
 
-```python
+```{code-cell} ipython3
 string = 'Berlin'
 ```
 
-```python
+```{code-cell} ipython3
 string.startswith('B')
 ```
 
 In pandas, these are available on a Series through the `str` namespace:
 
-```python
+```{code-cell} ipython3
 countries['capital'].str.startswith('B')
 ```
 
 For an overview of all string methods, see: https://pandas.pydata.org/pandas-docs/stable/reference/series.html#string-handling
 
++++
 
 # Exercises using the Titanic dataset
 
-```python
+```{code-cell} ipython3
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```python
+```{code-cell} ipython3
 df.head()
 ```
 
@@ -182,20 +189,27 @@ df.head()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 males = df[df['Sex'] == 'male']
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 males['Age'].mean()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df[df['Sex'] == 'female']['Age'].mean()
 ```
 
 We will later see an easier way to calculate both averages at the same time with groupby.
 
++++
 
 <div class="alert alert-success">
 
@@ -206,11 +220,15 @@ We will later see an easier way to calculate both averages at the same time with
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(df[df['Age'] > 70])
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 (df['Age'] > 70).sum()
 ```
 
@@ -223,7 +241,9 @@ len(df[df['Age'] > 70])
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df[(df['Age'] > 30) & (df['Age'] <= 40)]
 ```
 
@@ -239,38 +259,54 @@ Split the 'Name' column on the `,` extract the first part (the surname), and add
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 name = df['Name'][0]
 name
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 name.split(",")
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 name.split(",")[0]
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 def get_surname(name):
     return name.split(",")[0]
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Name'].apply(get_surname)
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Surname'] = df['Name'].apply(get_surname)
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # alternative using an "inline" lambda function
 df['Surname'] = df['Name'].apply(lambda x: x.split(',')[0])
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # alternative solution with pandas' string methods
 df['Surname'] = df['Name'].str.split(",").str.get(0)
 ```
@@ -284,7 +320,9 @@ df['Surname'] = df['Name'].str.split(",").str.get(0)
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df[df['Surname'].str.startswith('Williams')]
 ```
 
@@ -298,21 +336,24 @@ df[df['Surname'].str.startswith('Williams')]
     
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df[df['Surname'].str.len() > 15]
 ```
 
 # [OPTIONAL] more exercises
 
++++
 
 For the quick ones among you, here are some more exercises with some larger dataframe with film data. These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so all credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKajNMa1pfSzN6Q3M) and [`cast.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKal9UYTJSR2ZhSW8) and put them in the `/notebooks/data` folder.
 
-```python
+```{code-cell} ipython3
 cast = pd.read_csv('data/cast.csv')
 cast.head()
 ```
 
-```python
+```{code-cell} ipython3
 titles = pd.read_csv('data/titles.csv')
 titles.head()
 ```
@@ -327,7 +368,9 @@ titles.head()
     
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(titles)
 ```
 
@@ -340,7 +383,9 @@ len(titles)
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 titles.sort_values('year').head(2)
 ```
 
@@ -353,7 +398,9 @@ titles.sort_values('year').head(2)
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(titles[titles['title'] == 'Hamlet'])
 ```
 
@@ -366,7 +413,9 @@ len(titles[titles['title'] == 'Hamlet'])
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 titles[titles['title'] == 'Treasure Island'].sort_values('year')
 ```
 
@@ -379,11 +428,15 @@ titles[titles['title'] == 'Treasure Island'].sort_values('year')
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(titles[(titles['year'] >= 1950) & (titles['year'] <= 1959)])
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(titles[titles['year'] // 10 == 195])
 ```
 
@@ -396,15 +449,21 @@ len(titles[titles['year'] // 10 == 195])
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 inception = cast[cast['title'] == 'Inception']
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(inception[inception['n'].isna()])
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 inception['n'].isna().sum()
 ```
 
@@ -417,7 +476,9 @@ inception['n'].isna().sum()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(inception[inception['n'].notna()])
 ```
 
@@ -430,7 +491,9 @@ len(inception[inception['n'].notna()])
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 titanic = cast[(cast['title'] == 'Titanic') & (cast['year'] == 1997)]
 titanic = titanic[titanic['n'].notna()]
 titanic.sort_values('n')
@@ -445,18 +508,18 @@ titanic.sort_values('n')
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 brad = cast[cast['name'] == 'Brad Pitt']
 brad = brad[brad['year'] // 10 == 199]
 brad = brad[brad['n'] == 2]
 brad.sort_values('year')
 ```
 
-<!-- #region -->
 # Acknowledgement
 
 
 > The optional exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so all credit to him!) and the datasets he prepared for that.
 
 ---
-<!-- #endregion -->

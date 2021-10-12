@@ -1,16 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
 <p><font size="6"><b> CASE - air quality data of European monitoring stations (AirBase)</b></font></p>
@@ -19,7 +19,7 @@ jupyter:
 
 ---
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -34,37 +34,39 @@ We processed some raw data files of the AirBase air quality data. The data conta
 
 See http://www.eea.europa.eu/themes/air/interactive/no2
 
++++
 
 # Importing and quick exploration
 
++++
 
 We processed the individual data files in the previous notebook ([case4_air_quality_processing.ipynb](case4_air_quality_processing.ipynb)), and saved it to a csv file `airbase_data_processed.csv`. Let's import the file here (if you didn't finish the previous notebook, a set of the pre-processed dataset if also available in `data/airbase_data.csv`):
 
-```python
+```{code-cell} ipython3
 alldata = pd.read_csv('data/airbase_data.csv', index_col=0, parse_dates=True)
 ```
 
 We only use the data from 1999 onwards:
 
-```python
+```{code-cell} ipython3
 data = alldata['1999':].copy()
 ```
 
 Some first exploration with the *typical* functions:
 
-```python
+```{code-cell} ipython3
 data.head() # tail()
 ```
 
-```python
+```{code-cell} ipython3
 data.info()
 ```
 
-```python
+```{code-cell} ipython3
 data.describe(percentiles=[0.1, 0.5, 0.9])
 ```
 
-```python
+```{code-cell} ipython3
 data.plot(figsize=(12,6))
 ```
 
@@ -78,22 +80,25 @@ When just using `.plot()` without further notice (selection, aggregation,...)
 </ul>
 </div>
 
++++
 
 **Plot only a subset**
 
++++
 
 Why not just using the `head`/`tail` possibilities?
 
-```python
+```{code-cell} ipython3
 data.tail(500).plot(figsize=(12,6))
 ```
 
 **Summary figures**
 
++++
 
 Use summary statistics...
 
-```python
+```{code-cell} ipython3
 data.plot(kind='box', ylim=[0,250])
 ```
 
@@ -101,21 +106,20 @@ Also with seaborn plots function, just start with some subsets as first impressi
 
 As we already have seen previously, the plotting library [seaborn](http://seaborn.pydata.org/generated/seaborn.heatmap.html) provides some high-level plotting functions on top of matplotlib (check the [docs](http://seaborn.pydata.org/examples/index.html)!). One of those functions is `pairplot`, which we can use here to quickly visualize the concentrations at the different stations and their relation:
 
-```python
+```{code-cell} ipython3
 import seaborn as sns
 ```
 
-```python
+```{code-cell} ipython3
 sns.pairplot(data.tail(5000).dropna())
 ```
 
 # Is this a tidy dataset ?
 
-```python
+```{code-cell} ipython3
 data.head()
 ```
 
-<!-- #region -->
 In principle this is not a tidy dataset. The variable that was measured is the NO2 concentration, and is divided in 4 columns. Of course those measurements were made at different stations, so one could interpret it as separate variables. But in any case, such format does not always work well with libraries like `seaborn` which expects a pure tidy format.
 
 
@@ -124,7 +128,8 @@ Reason to not use a tidy dataset here:
 * smaller memory use
 * timeseries functionality like resample works better
 * pandas plotting already does what we want when having different columns for *some* types of plots (eg line plots of the timeseries)
-<!-- #endregion -->
+
++++
 
 <div class="alert alert-success">
 
@@ -137,24 +142,32 @@ Reason to not use a tidy dataset here:
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data_tidy = data.reset_index().melt(id_vars=["datetime"], var_name='station', value_name='no2')
 data_tidy.head()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data_tidy['no2'].isna().sum()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data_tidy = data_tidy.dropna()
 ```
 
 In the following exercises we will mostly do our analysis on `data`and often use pandas plotting, but once we produced some kind of summary dataframe as the result of an analysis, then it becomes more interesting to convert that result to a tidy format to be able to use the more advanced plotting functionality of seaborn.
 
++++
 
 # Exercises
 
++++
 
 <div class="alert alert-warning">
 
@@ -171,6 +184,7 @@ Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [seaborn]
 
 </div>
 
++++
 
 <div class="alert alert-success">
 
@@ -181,7 +195,9 @@ Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [seaborn]
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots()
 data.loc['2009':, 'FR04037'].resample('M').mean().plot(ax=ax, label='mean')
 data.loc['2009':, 'FR04037'].resample('M').median().plot(ax=ax, label='median')
@@ -189,7 +205,9 @@ ax.legend(ncol=2)
 ax.set_title("FR04037");
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data.loc['2009':, 'FR04037'].resample('M').agg(['mean', 'median']).plot()
 ```
 
@@ -206,14 +224,18 @@ _NOTE:_ In this case, we can use seaborn both with the data not in a long format
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # with wide dataframe
 fig, ax = plt.subplots()
 sns.violinplot(data=data['2011-01': '2011-08'], palette="GnBu_d", ax=ax)
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # with tidy dataframe
 data_tidy_subset = data_tidy[(data_tidy['datetime'] >= "2011-01") & (data_tidy['datetime'] < "2011-09")]
 
@@ -222,7 +244,9 @@ sns.violinplot(data=data_tidy_subset, x="station", y="no2", palette="GnBu_d", ax
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # with figure-level function
 sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette="GnBu_d")
 ```
@@ -240,7 +264,9 @@ sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette=
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots()
 data['2012':].mean().plot(kind='bar', ax=ax, rot=0, color='C0')
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
@@ -250,7 +276,6 @@ ax.text(0.01, 0.48, 'Yearly limit is 40 µg/m³',
         transform=ax.transAxes, color='darkorange');
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 <b>EXERCISE:</b> Did the air quality improve over time?
@@ -263,9 +288,10 @@ ax.text(0.01, 0.48, 'Yearly limit is 40 µg/m³',
 
 </ul>
 </div>
-<!-- #endregion -->
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, ax = plt.subplots()
 
 data['1999':].resample('A').mean().plot(ax=ax)
@@ -322,6 +348,7 @@ DatetimeIndex(['1999-12-31', '2000-12-31', '2001-12-31', '2002-12-31',
 But, `groupby` is more flexible and can also do resamples that do not result in a new continuous time series, e.g. by grouping by the hour of the day to get the diurnal cycle.
 </div>
 
++++
 
 <div class="alert alert-success">
 
@@ -333,7 +360,9 @@ But, `groupby` is more flexible and can also do resamples that do not result in 
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # add a column to the dataframe that indicates the month (integer value of 1 to 12):
 data['month'] = data.index.month
 
@@ -346,12 +375,13 @@ data.groupby('month').mean().plot()
 
 Remove the temporary 'month' column generated in the solution of the previous exercise:
 
-```python
+```{code-cell} ipython3
 data = data.drop("month", axis=1, errors="ignore")
 ```
 
 Note: Technically, we could reshape the result of the groupby operation to a tidy format (we no longer have a real time series), but since we already have the things we want to plot as lines in different columns, doing `.plot` already does what we want.
 
++++
 
 <div class="alert alert-success">
 
@@ -363,13 +393,17 @@ Note: Technically, we could reshape the result of the groupby operation to a tid
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # Groupby wise
 df2011 = data['2011']
 df2011.groupby(df2011.index.week)[['BETN029', 'BETR801']].quantile(0.95).plot()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # Resample wise
 # Note the different x-axis labels
 df2011[['BETN029', 'BETR801']].resample('W').quantile(0.75).plot()
@@ -385,7 +419,9 @@ df2011[['BETN029', 'BETR801']].resample('W').quantile(0.75).plot()
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data.groupby(data.index.hour).mean().plot()
 ```
 
@@ -407,31 +443,41 @@ Start with only visualizing the different in diurnal profile for the 'BETR801' s
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data['weekend'] = data.index.dayofweek.isin([5, 6])
 data['weekend'] = data['weekend'].replace({True: 'weekend', False: 'weekday'})
 data['hour'] = data.index.hour
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data_weekend = data.groupby(['weekend', 'hour']).mean()
 data_weekend.head()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # using unstack and pandas plotting
 data_weekend_BETR801 = data_weekend['BETR801'].unstack(level=0)
 data_weekend_BETR801.plot()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # using a tidy dataset and seaborn
 data_weekend_BETR801_tidy = data_weekend['BETR801'].reset_index()
 
 sns.lineplot(data=data_weekend_BETR801_tidy, x="hour", y="BETR801", hue="weekend")
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # tidy dataset that still includes all stations
 
 data_weekend_tidy = pd.melt(data_weekend.reset_index(), id_vars=['weekend', 'hour'],
@@ -439,7 +485,9 @@ data_weekend_tidy = pd.melt(data_weekend.reset_index(), id_vars=['weekend', 'hou
 data_weekend_tidy.head()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # when still having multiple factors, it becomes useful to convert to tidy dataset and use seaborn
 sns.relplot(data=data_weekend_tidy, x="hour", y="no2", kind="line",
             hue="weekend", col="station", col_wrap=2)
@@ -447,7 +495,7 @@ sns.relplot(data=data_weekend_tidy, x="hour", y="no2", kind="line",
 
 Remove the temporary columns 'hour' and 'weekend' used in the solution of previous exercise:
 
-```python
+```{code-cell} ipython3
 data = data.drop(['hour', 'weekend'], axis=1, errors="ignore")
 ```
 
@@ -459,7 +507,9 @@ Calculate the correlation between the different stations (check in the documenta
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data[['BETR801', 'BETN029', 'FR04037', 'FR04012']].corr()
 ```
 
@@ -481,16 +531,22 @@ Count the number of exceedances of hourly values above the European limit 200 µ
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 exceedances = data > 200
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # group by year and count exceedances (sum of boolean)
 exceedances = exceedances.groupby(exceedances.index.year).sum()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # Make a barplot of the yearly number of exceedances
 ax = exceedances.loc[2005:].plot(kind='bar')
 ax.axhline(18, color='k', linestyle='--')
@@ -498,7 +554,7 @@ ax.axhline(18, color='k', linestyle='--')
 
 # More advanced exercises...
 
-```python
+```{code-cell} ipython3
 data = alldata['1999':].copy()
 ```
 
@@ -518,17 +574,23 @@ Perform the following actions for the station `'FR04012'` only:
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 FR_station = data['FR04012'] # select the specific data series
 FR_station = FR_station[(FR_station.notnull()) & (FR_station != 0.0)]  # exclude the Nan and zero values
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 FR_sorted = FR_station.sort_values(ascending=True)
 FR_scaled = (FR_sorted - FR_sorted.min())/(FR_sorted.max() - FR_sorted.min())
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 fig, axfr = plt.subplots()
 FR_scaled.plot(use_index=False, ax = axfr)  #alternative version: FR_scaled.reset_index(drop=True).plot(use_index=False)  
 axfr.set_ylabel('FR04012')
@@ -548,7 +610,9 @@ axfr.axvline(x=FR_scaled.searchsorted(0.3), color='0.6', linestyle='--', linewid
 </ul>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # Mixing an matching matplotlib and Pandas
 fig, (ax1, ax2) = plt.subplots(1, 2, 
                                sharex=True, 
@@ -562,7 +626,9 @@ ax2.set_title('BETR801')
 # Remark: the width of the bins is calculated over the x data range for both plots together
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # A more step by step approach (equally valid)
 fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True, sharex=True)
 data.loc['2009', 'BETN029'].plot(kind='hist', bins=30, ax=ax1)
@@ -588,21 +654,29 @@ ax2.set_title('BETR801')
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 subset = data['2009-01'].copy()
 subset["dayofweek"] = subset.index.dayofweek
 subset = subset[subset['dayofweek'].isin([0, 6])]
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 subset["dayofweek"] = subset["dayofweek"].replace(to_replace={0:"Monday", 6:"Sunday"})
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.set_style("whitegrid")
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.lmplot(
     data=subset, x="BETN029", y="FR04037", hue="dayofweek"
 )
@@ -625,16 +699,19 @@ This is not an actual limit for NO$_2$, but a nice exercise to introduce the `ro
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 exceedances = data.rolling(8).mean().resample('D').max() > 100
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 exceedances = exceedances.groupby(exceedances.index.year).sum()
 ax = exceedances.plot(kind='bar')
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 <b>EXERCISE</b>:
@@ -650,15 +727,20 @@ The boxplot method of a DataFrame expects the data for the different boxes in di
 
 
 </div>
-<!-- #endregion -->
+
++++
 
 Calculating daily means and add day of the week information:
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 data_daily = data.resample('D').mean()
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # add a dayofweek column
 data_daily['dayofweek'] = data_daily.index.dayofweek
 data_daily.head()
@@ -666,14 +748,18 @@ data_daily.head()
 
 Plotting with seaborn:
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # seaborn
 sns.boxplot(data=data_daily["2012":], x='dayofweek', y='BETR801', color="grey")
 ```
 
 Reshaping and plotting with pandas:
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # when using pandas to plot, the different boxplots should be different columns
 # therefore, pivot table so that the weekdays are the different columns
 data_daily['week'] = data_daily.index.isocalendar().week
@@ -683,7 +769,9 @@ data_pivoted.head()
 data_pivoted.boxplot();
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 # An alternative method using `groupby` and `unstack`
 data_daily['2012':].groupby(['dayofweek', 'week'])['BETR801'].mean().unstack(level=0).boxplot();
 ```

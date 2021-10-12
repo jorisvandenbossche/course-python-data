@@ -1,16 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: tags,-run_control,-deletable,-editable,-jupyter,-slideshow
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
 <p><font size="6"><b>Visualization - Python's Visualization Landscape</b></font></p>
@@ -19,6 +19,7 @@ jupyter:
 
 ---
 
++++
 
 ---
 **Remark:**
@@ -50,10 +51,11 @@ conda install -c patrikhlobil pandas-bokeh
 ```
 ---
 
-
++++
 
 ## What have we done so far?
 
++++
 
 What we have encountered until now:
 
@@ -61,7 +63,7 @@ What we have encountered until now:
 * [pandas .plot](https://pandas.pydata.org/pandas-docs/stable/visualization.html)
 * [seaborn](https://seaborn.pydata.org/)
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import pandas as pd
 
@@ -72,16 +74,17 @@ import seaborn as sns
 
 ### When should I use Seaborn versus Matplotlib?
 
++++
 
 There is `titanic` data again...
 
-```python
+```{code-cell} ipython3
 titanic = pd.read_csv("data/titanic.csv")
 ```
 
 Pandas/Matplotlib plot...
 
-```python tags=[]
+```{code-cell} ipython3
 with plt.style.context('seaborn-whitegrid'):  # context manager for styling the figure
     
     fig, ax = plt.subplots()
@@ -96,7 +99,7 @@ with plt.style.context('seaborn-whitegrid'):  # context manager for styling the 
 
 Using Seaborn:
 
-```python
+```{code-cell} ipython3
 with sns.axes_style("whitegrid"):    # context manager for styling the figure
     
     g = sns.catplot(data=titanic, 
@@ -109,6 +112,7 @@ with sns.axes_style("whitegrid"):    # context manager for styling the figure
 
 An important difference is the *imperative* approach from `matplotlib` versus the *declarative* approach from `seaborn`:
 
++++
 
 | imperative | declarative |
 |------------|-------------|
@@ -116,9 +120,11 @@ An important difference is the *imperative* approach from `matplotlib` versus th
 | **Manually specify** the individual plotting steps | Individual plotting steps based on **declaration** |
 | e.g. `for ax in axes: ax.plot(...` | e.g. `, col=my_variable` |
 
++++
 
 Which approach to use, is sometimes just a matter of personal preference... Although, take following elements into account:
 
++++
 
 * When your data consists of only **1 categorical variable**, such as
 
@@ -159,6 +165,7 @@ Which approach to use, is sometimes just a matter of personal preference... Alth
 
 * When you want to visualize __distributions__ of data or __regressions__ between variables, the added value of using Seaborn approach is HIGH.
 
++++
 
 <div class="alert alert-info">
 
@@ -169,6 +176,7 @@ Which approach to use, is sometimes just a matter of personal preference... Alth
 
 </div>
 
++++
 
 Still...
 
@@ -176,7 +184,7 @@ Still...
 
 ![](https://imgs.xkcd.com/comics/is_it_worth_the_time.png)
 
-```python
+```{code-cell} ipython3
 fig.savefig("my_plot_with_one_issue.pdf")
 ```
 
@@ -188,9 +196,11 @@ fig.savefig("my_plot_with_one_issue.pdf")
 
 </div>
 
++++
 
 ## The 'Grammar of graphics'
 
++++
 
 Seaborn provides a high level abstraction to create charts and is highly related to the concept of the so-called (layered) `Grammar of Graphics`, a visualization framework originally described [by Leland Wilkinson](https://www.springer.com/gp/book/9780387245447), which became famous due to the [ggplot2](https://ggplot2.tidyverse.org/) R package. 
 
@@ -216,10 +226,11 @@ In the Python visualization ecosystem, both `Plotnine` as well as `Altair` provi
 | Python-clone of the R package `ggplot` | Plot specification to define a vega-lite 'JSON string' |
 | Static plots | Web/interactive plots |
 
-
++++
 
 ### Plotnine
 
++++
 
 > _[Plotnine](https://plotnine.readthedocs.io/en/stable/) is an implementation of a grammar of graphics in Python, it is based on `ggplot2`. The grammar allows users to compose plots by explicitly mapping data to the visual objects that make up the plot._
 
@@ -227,7 +238,7 @@ The syntax of the package will feel _very familiar_ to users familiar with the R
 
 The main ingredients (data, geometry, aesthetics) of the `Grammar of Graphics` framework need to be defined to create a chart:
 
-```python
+```{code-cell} ipython3
 import plotnine as p9
 
 myplot = (p9.ggplot(titanic)              # 1. DATA         
@@ -243,7 +254,7 @@ myplot
 
 And further customization (_layers_) can be added to the specification, e.g.
 
-```python
+```{code-cell} ipython3
 import plotnine as p9
 
 myplot = (p9.ggplot(titanic)              # 1. DATA         
@@ -264,7 +275,7 @@ As Plotnine is built on top of Matplotlib, one can still retrieve the Matplotlib
 
 The trick is to use the `.draw()` function in Plotnine:
 
-```python
+```{code-cell} ipython3
 my_plt_version = myplot.draw();  # extract as Matplotlib Figure
 
 # Do some Matplotlib magick...
@@ -281,18 +292,19 @@ ax2 = my_plt_version.add_axes([0.7, 0.5, 0.3, 0.3], label="ax2")
 
 </div>
 
++++
 
 ### Altair
 
 > *[Altair](https://altair-viz.github.io/) is a declarative statistical visualization library for Python, based on Vega-Lite.*
 
-```python tags=[]
+```{code-cell} ipython3
 import altair as alt
 ```
 
 Altair implements the `Grammar of Graphics` with the same main ingredients, but a different syntax:
 
-```python
+```{code-cell} ipython3
 (alt.Chart(titanic)                       # 1. DATA         
     .mark_bar()                           # 2. GEOMETRY, geom_*
     .encode(                              # 3. AESTHETICS - relate variables to geometry
@@ -314,10 +326,11 @@ ordinal |		O |		a discrete ordered quantity
 nominal |		N |		a discrete unordered category
 temporal |		T |		a time or date value
 
++++
 
 Altair is made for the web, providing interactive features for the plots. See more examples [here](https://altair-viz.github.io/gallery/index.html#interactive-charts).
 
-```python
+```{code-cell} ipython3
 brush = alt.selection(type='interval')
 
 (alt.Chart(titanic)
@@ -339,38 +352,43 @@ brush = alt.selection(type='interval')
 
 </div>
 
++++
 
 ## Interactivity and the web
 
++++
 
 Whereas Matplotlib/Seaborn/Plotnine are packages to create static charts, the charts created by Altair are mainly targeted to __integrate in websites and web applications__. 
 
 With the increasing interest for interactive data visualization and dashboards, other packages were designed to fulfill this requirement. Both the [Bokeh](https://bokeh.org/) package and the [Plotly](https://plotly.com/python/) package can be used as a stand-alone data visualization tool or as part of web applications and dashboards.
 
++++
 
 __Note:__ Bokeh and Plotly are also the components for some packages to build interactive web applications, respectively [Panel](https://panel.holoviz.org/) and [Dash](https://dash.plotly.com/).
 
++++
 
 ### Bokeh
 
++++
 
 > *[Bokeh](https://bokeh.pydata.org/en/latest/) is a Python interactive visualization library that targets modern web browsers for presentation*.
 
-```python
+```{code-cell} ipython3
 from bokeh.plotting import figure, output_file, show
 ```
 
 By default, Bokeh will open a new webpage to plot the figure. Still, an **integration with Jupyter notebooks** is provided:
 
-```python
+```{code-cell} ipython3
 from bokeh.io import output_notebook
 ```
 
-```python
+```{code-cell} ipython3
 output_notebook()
 ```
 
-```python
+```{code-cell} ipython3
 p = figure()
 p.line(x=[1, 2, 3], 
        y=[4,6,2])
@@ -385,10 +403,11 @@ __Warning__
 
 </div>
 
++++
 
 To accomodate the users of **Pandas**, a `pd.DataFrame` can also be used as the input for a Bokeh plot:
 
-```python
+```{code-cell} ipython3
 from bokeh.models import ColumnDataSource
 
 flow_data = pd.read_csv("data/vmm_flowdata.csv", parse_dates=True, index_col=0)
@@ -399,7 +418,7 @@ source_data = ColumnDataSource(data=flow_data)
 Useful to know when you want to use the index as well:
 > *If the DataFrame has a named index column, then CDS will also have a column with this name. However, if the index name (or any subname of a MultiIndex) is None, then the CDS will have a column generically named index for the index.*
 
-```python
+```{code-cell} ipython3
 p = figure(x_axis_type="datetime", plot_height=200, plot_width=600)
 p.line(x='Time', y='LS06_347', source=source_data)
 show(p)
@@ -407,11 +426,11 @@ show(p)
 
 Bokeh has lots of functionalities to adjust and customize charts, e.g. by adding new annotations to the figure object:
 
-```python
+```{code-cell} ipython3
 from bokeh.models import ColumnDataSource, BoxAnnotation, Label
 ```
 
-```python
+```{code-cell} ipython3
 p = figure(x_axis_type="datetime", plot_height=200, plot_width=600)
 p.line(x='Time', y='L06_347', source=source_data)
 p.circle(x='Time', y='L06_347', source=source_data, 
@@ -430,9 +449,11 @@ show(p)
 
 ### hvplot/holoviews
 
++++
 
 > hvPlot provides an alternative for the static plotting API provided by Pandas and other libraries, with an interactive Bokeh-based plotting API that supports panning, zooming, hovering, and clickable/selectable legends
 
++++
 
 Similar to Matplotlib, Bokeh is a low-level package. Whereas Matplotlib provides the building blocks to define static plots, Bokeh provides the building blocks to create interactive visualizations. 
 
@@ -440,7 +461,7 @@ Just as Seaborn provides an abstraction on top of the Matplotlib package, the [h
 
 _Actually, hvplot is built on top of Holoviews, which is built on top of Bokeh_
 
-```python
+```{code-cell} ipython3
 import hvplot.pandas
 
 flow_data.hvplot()
@@ -448,7 +469,7 @@ flow_data.hvplot()
 
 The link in between hvplot/holoviews and Bokeh (for further adjustments) can be made using the `render` function:
 
-```python
+```{code-cell} ipython3
 import holoviews as hv
 
 fig = hv.render(flow_data.hvplot())
@@ -467,13 +488,15 @@ A similar advice as with Matplotlib: "do as much as you easily can in your conve
     
 </div>
 
++++
 
 ### Plotly
 
++++
 
 > _[plotly.py](https://plot.ly/python/) is an interactive, browser-based graphing library for Python_
 
-```python
+```{code-cell} ipython3
 import plotly
 ```
 
@@ -481,7 +504,7 @@ Similar to Bokeh, Plotly provides a lot of building blocks for interactive plott
 
 As an example: create a our example plot using the plotly `graph_objects`:
 
-```python
+```{code-cell} ipython3
 import plotly.graph_objects as go
 
 survival_rate = titanic.groupby("Pclass")['Survived'].mean().reset_index()
@@ -501,7 +524,7 @@ fig.show()
 
 Similar to other high-level interfaces, this can be done by `Plotly Express` as well, supporting direct interaction with a Pandas `DataFrame`:
 
-```python
+```{code-cell} ipython3
 import plotly.express as px
 
 # plotly express does not provide the count statistics out of the box, so calculating these
@@ -518,10 +541,11 @@ Prior versions of plotly.py contained functionality for creating figures in both
 
 </div>
 
++++
 
 The main interface to use plotly with Pandas is using Plotly Express:
 
-```python
+```{code-cell} ipython3
 df = flow_data.reset_index()
 
 fig = px.line(flow_data.reset_index(), x="Time", y=df.columns,
@@ -541,6 +565,7 @@ A similar advice as with Matplotlib/Bokeh: "do as much as you easily can in your
 
 </div>
 
++++
 
 <div class="alert alert-warning">
 
@@ -551,35 +576,38 @@ Both plotly and Bokeh provide interactivity (sliders,..), but are not the full e
 
 </div>
 
++++
 
 ## Change the default Pandas plotting backend
 
++++
 
 > _All slightly different syntax to create plots?!_
 
++++
 
 Different people have different preferences in terms of style/syntax/... So having alternatives is nice. However, Pandas also provides the option to work with different plotting packages without changing the syntax...
 
 During the course, we used the `.plot()` method of Pandas to create charts, which relied on Matplotlib. Matplotlib is the default back-end for Pandas to create plots:
 
-```python
+```{code-cell} ipython3
 pd.options.plotting.backend = 'matplotlib'
 flow_data.plot()
 ```
 
 However, Holoviews/hvplot, Bokeh and Plotly can be used as Pandas back-end for plotting, by defining the `pd.options.plotting.backend` variable:
 
-```python
+```{code-cell} ipython3
 pd.options.plotting.backend = 'holoviews'
 flow_data.plot()
 ```
 
-```python
+```{code-cell} ipython3
 pd.options.plotting.backend = 'plotly'
 flow_data.plot()
 ```
 
-```python
+```{code-cell} ipython3
 # https://github.com/PatrikHlobil/Pandas-Bokeh
 pd.options.plotting.backend = 'pandas_bokeh'
 flow_data.plot()
@@ -593,6 +621,7 @@ To get an interactive version of a plot created with Pandas, switch the `pd.opti
 
 </div>
 
++++
 
 <div class="alert alert-warning">
 
@@ -604,26 +633,32 @@ Consider saving your notebook with the outputs cleared (Menu > `Kernel` > `Resta
 
 </div>
 
++++
 
 ## You're data sets are HUGE?
 
++++
 
 When you're working with a lot of records, the visualization of the individual points does not always make sense as there are simply to many dots overlapping each other (check [this](https://bokeh.github.io/datashader-docs/user_guide/1_Plotting_Pitfalls.html) notebook for a more detailed explanation).
 
++++
 
 Consider the open data set:
 > Bird tracking - GPS tracking of Lesser Black-backed Gulls and Herring Gulls breeding at the southern North Sea coast https://www.gbif.org/dataset/83e20573-f7dd-4852-9159-21566e1e691e with > 8e6 records
 
++++
 
 Working with such a data set on a local machine is not straightforward anymore, as this data set will consume a lot of memory to be handled by the default plotting libraries. Moreover, visualizing every single dot is not useful anymore at coarser zoom levels. 
 
++++
 
 The package [datashader](https://bokeh.github.io/datashader-docs/index.html) provides a solution for this size of data sets and works together with other packages such as `Bokeh` and `Holoviews`.
 
++++
 
 The data from [the gull data set](https://zenodo.org/record/3541812#.XfZYcNko-V6) is downloaded and stored it in the `data` folder and is not part of the Github repository. For example, downloading the [2018 data set](https://zenodo.org/record/3541812/files/HG_OOSTENDE-acceleration-2018.csv?download=1) from Zenodo:
 
-```python
+```{code-cell} ipython3
 import pandas as pd, holoviews as hv
 from colorcet import fire
 from datashader.utils import lnglat_to_meters
@@ -635,7 +670,7 @@ df = pd.read_csv('data/HG_OOSTENDE-gps-2018.csv', nrows=1_000_000, # for the liv
 df.loc[:,'location-long'], df.loc[:,'location-lat'] = lnglat_to_meters(df["location-long"], df["location-lat"])
 ```
 
-```python
+```{code-cell} ipython3
 hv.extension('bokeh')
 
 map_tiles  = EsriImagery().opts(alpha=1.0, width=600, height=600, bgcolor='black')
@@ -670,6 +705,7 @@ map_tiles * rasterized
 
 </div>
 
++++
 
 <div class="alert alert-info">
 
@@ -683,22 +719,26 @@ map_tiles * rasterized
 
 </div>
 
++++
 
 ## You want to dive deeper into Python viz?
 
++++
 
 For a overview of the status of Python visualisation packages and tools, have a look at the [pyviz](https://pyviz.org) website.
 
-```python
+```{code-cell} ipython3
 from IPython.display import Image
 Image('https://raw.githubusercontent.com/rougier/python-visualization-landscape/master/landscape.png')
 ```
 
 or check the interactive version [here](https://rougier.github.io/python-visualization-landscape/landscape-colors.html).
 
++++
 
 Further reading: http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003833
 
++++
 
 <div class="alert alert-info">
 
@@ -711,9 +751,9 @@ Further reading: http://journals.plos.org/ploscompbiol/article?id=10.1371/journa
 
 </div>
 
-<!-- #region -->
++++
+
 ## Acknowledgements
 
 
 - https://speakerdeck.com/jakevdp/pythons-visualization-landscape-pycon-2017
-<!-- #endregion -->

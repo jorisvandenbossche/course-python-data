@@ -1,16 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: clear_cell,-run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
 <p><font size="6"><b>01 - Pandas: Data Structures </b></font></p>
@@ -19,26 +19,28 @@ jupyter:
 
 ---
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 import matplotlib.pyplot as plt
 ```
 
 # Introduction
 
++++
 
 Let's directly start with importing some data: the `titanic` dataset about the passengers of the Titanic and their survival:
 
-```python
+```{code-cell} ipython3
 df = pd.read_csv("data/titanic.csv")
 ```
 
-```python
+```{code-cell} ipython3
 df.head()
 ```
 
 Starting from reading such a tabular dataset, Pandas provides the functionalities to answer questions about this data in a few lines of code. Let's start with a few examples as illustration:
 
++++
 
 <div class="alert alert-warning">
 
@@ -46,7 +48,7 @@ Starting from reading such a tabular dataset, Pandas provides the functionalitie
 
 </div>
 
-```python
+```{code-cell} ipython3
 df['Age'].hist()
 ```
 
@@ -58,7 +60,7 @@ df['Age'].hist()
 
 </div>
 
-```python
+```{code-cell} ipython3
 df.groupby('Sex')[['Survived']].aggregate(lambda x: x.sum() / len(x))
 ```
 
@@ -70,7 +72,7 @@ df.groupby('Sex')[['Survived']].aggregate(lambda x: x.sum() / len(x))
 
 </div>
 
-```python
+```{code-cell} ipython3
 df.groupby('Pclass')['Survived'].aggregate(lambda x: x.sum() / len(x)).plot(kind='bar')
 ```
 
@@ -82,24 +84,26 @@ df.groupby('Pclass')['Survived'].aggregate(lambda x: x.sum() / len(x)).plot(kind
 
 </div>
 
-```python
+```{code-cell} ipython3
 df['Survived'].sum() / df['Survived'].count()
 ```
 
-```python
+```{code-cell} ipython3
 df25 = df[df['Age'] <= 25]
 df25['Survived'].sum() / len(df25['Survived'])
 ```
 
 All the needed functionality for the above examples will be explained throughout the course, but as a start: the data types to work with.
 
++++
 
 # The pandas data structures: `DataFrame` and `Series`
 
++++
 
 To load the pandas package and start working with it, we first import the package. The community agreed alias for pandas is `pd`,  which we will also use here:
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 ```
 
@@ -109,7 +113,7 @@ In practice, most of the time you will import the data from some data source (te
 
 But to start here, let's create a small dataset about a few countries manually from a dictionar of lists:
 
-```python
+```{code-cell} ipython3
 data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
         'population': [11.3, 64.3, 81.3, 16.9, 64.9],
         'area': [30510, 671308, 357050, 41526, 244820],
@@ -120,7 +124,7 @@ countries
 
 The object created here is a **DataFrame**:
 
-```python
+```{code-cell} ipython3
 type(countries)
 ```
 
@@ -128,10 +132,11 @@ A `DataFrame` is a 2-dimensional, **tablular data structure** comprised of rows 
 
 <img align="center" width=50% src="../img/pandas/01_table_dataframe1.svg">
 
++++
 
 A DataFrame can store data of different types (including characters, integers, floating point values, categorical data and more) in columns. In pandas, we can check the data types of the columns with the `dtypes` attribute:
 
-```python
+```{code-cell} ipython3
 countries.dtypes
 ```
 
@@ -141,11 +146,11 @@ When selecting a single column of a pandas `DataFrame`, the result is a pandas `
 
 To select the column, use the column label in between square brackets `[]`.
 
-```python
+```{code-cell} ipython3
 countries['population']
 ```
 
-```python
+```{code-cell} ipython3
 s = countries['population']
 type(s)
 ```
@@ -154,7 +159,7 @@ type(s)
 
 Pandas provides a lot of functionalities for the DataFrame and Series. The `.dtypes` shown above is an *attribute* of the DataFrame. Another example is the `.columns` attribute, returning the column names of the DataFrame:
 
-```python
+```{code-cell} ipython3
 countries.columns
 ```
 
@@ -162,35 +167,35 @@ In addition, there are also functions that can be called on a DataFrame or Serie
 
 A few examples that can help exploring the data:
 
-```python
+```{code-cell} ipython3
 countries.head() # Top rows
 ```
 
-```python
+```{code-cell} ipython3
 countries.tail() # Bottom rows
 ```
 
 The ``describe`` method computes summary statistics for each column:
 
-```python
+```{code-cell} ipython3
 countries['population'].describe()
 ```
 
 **Sort**ing your data **by** a specific column is another important first-check:
 
-```python
+```{code-cell} ipython3
 countries.sort_values(by='population')
 ```
 
 The **`plot`** method can be used to quickly visualize the data in different ways:
 
-```python
+```{code-cell} ipython3
 countries.plot()
 ```
 
 However, for this dataset, it does not say that much:
 
-```python
+```{code-cell} ipython3
 countries['population'].plot(kind='barh')
 ```
 
@@ -202,6 +207,7 @@ countries['population'].plot(kind='barh')
 
 </div>
 
++++
 
 <div style="border: 5px solid #3776ab; border-radius: 2px; padding: 2em;">
 
@@ -214,9 +220,11 @@ Python objects have **attributes** and **methods**:
 
 </div>
 
++++
 
 # Importing and exporting data
 
++++
 
 A wide range of input/output formats are natively supported by pandas:
 
@@ -231,11 +239,11 @@ A wide range of input/output formats are natively supported by pandas:
 * Parquet
 * ...
 
-```python
+```{code-cell} ipython3
 # pd.read_
 ```
 
-```python
+```{code-cell} ipython3
 # countries.to_
 ```
 
@@ -248,10 +256,12 @@ A wide range of input/output formats are natively supported by pandas:
 
 </div>
 
++++
 
 # Application on a real dataset
 
-<!-- #region -->
++++
+
 Throughout the pandas notebooks, many of exercises will use the titanic dataset. This dataset has records of all the passengers of the Titanic, with characteristics of the passengers (age, class, etc. See below), and an indication whether they survived the disaster.
 
 
@@ -270,7 +280,8 @@ Ticket         | Ticket Number
 Fare           | Passenger Fare
 Cabin          | Cabin
 Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southampton)
-<!-- #endregion -->
+
++++
 
 <div class="alert alert-success">
 
@@ -280,7 +291,9 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df = pd.read_csv("data/titanic.csv")
 ```
 
@@ -292,7 +305,9 @@ df = pd.read_csv("data/titanic.csv")
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df.head()
 ```
 
@@ -309,7 +324,9 @@ df.head()
 </details>
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 len(df)
 ```
 
@@ -320,7 +337,9 @@ len(df)
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Age']
 ```
 
@@ -331,7 +350,9 @@ df['Age']
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df['Fare'].plot(kind='box')
 ```
 
@@ -343,14 +364,14 @@ df['Fare'].plot(kind='box')
 
 </div>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 df.sort_values(by='Age', ascending=False)
 ```
 
-<!-- #region -->
 ---
 # Acknowledgement
 
 
 > This notebook is partly based on material of Jake Vanderplas (https://github.com/jakevdp/OsloWorkshop2014).
-<!-- #endregion -->

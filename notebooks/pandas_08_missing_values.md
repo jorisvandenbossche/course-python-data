@@ -1,33 +1,31 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
-<!-- #region -->
 <p><font size="6"><b>08 - Pandas: Working with missing data </b></font></p>
 
 
 > *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
-<!-- #endregion -->
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import pandas as pd
 ```
 
-```python
+```{code-cell} ipython3
 df = pd.DataFrame({'A': [1, 2, np.nan],
                    'B': [4, np.nan, np.nan],
                    'C': [7, 8, 9]})
@@ -36,14 +34,15 @@ df
 
 ## Missing values in Pandas
 
++++
 
 For numerical data, the "NaN" (Not-A-Number) floating point value is used as missing value indicator:
 
-```python
+```{code-cell} ipython3
 df.loc[2, 'A']
 ```
 
-```python
+```{code-cell} ipython3
 np.nan
 ```
 
@@ -53,84 +52,89 @@ np.nan
 
 </div>
 
++++
 
 ### Missing values are skipped by default in *reductions*
 
-```python
+```{code-cell} ipython3
 df['A'].mean()
 ```
 
-```python
+```{code-cell} ipython3
 df['A'].mean(skipna=False)
 ```
 
 ### ... but propagated in *element-wise arithmetic*
 
-```python
+```{code-cell} ipython3
 df['A'] + 3
 ```
 
 ## Checking missing values
 
++++
 
 Checking for a missing value cannot be done with an equality operation (`==`) because NaN is not equal to iself:
 
-```python
+```{code-cell} ipython3
 df['A'] == np.nan
 ```
 
-```python
+```{code-cell} ipython3
 np.nan == np.nan
 ```
 
 Therefore, dedicated methods are available: `isna()` and `notna()`
 
-```python
+```{code-cell} ipython3
 df['A'].isna()
 ```
 
-```python
+```{code-cell} ipython3
 df['A'].notna()
 ```
 
-```python
+```{code-cell} ipython3
 df['A'].isna().sum()
 ```
 
-```python
+```{code-cell} ipython3
 df.isna().sum()
 ```
 
-```python
+```{code-cell} ipython3
 df
 ```
 
 ## Dropping missing values
 
++++
 
 Dropping missing values can be done with `isna()`/`notna()` and boolean indexing (eg `df[df['A'].notna()]`), but pandas also provides some convenient helper functions for this:
 
-```python
+```{code-cell} ipython3
 df.dropna()
 ```
 
 By default it drop rows if there is a NaN in any of the columns. To limit this to we subset of the columns, use the `subset` keyword:
 
-```python
+```{code-cell} ipython3
 df.dropna(subset=['A', 'C'])
 ```
 
 ## Filling missing values
 
++++
 
 Filling missing values with a scalar:
 
-```python
+```{code-cell} ipython3
 df.fillna(0)
 ```
 
 Further, more advanced filling techniques are available in the ``interpolate()`` method.
 
++++
 
 <div class="alert alert-info" style="font-size:120%">
 
@@ -146,6 +150,6 @@ Further, more advanced filling techniques are available in the ``interpolate()``
 
 </div>
 
-```python
+```{code-cell} ipython3
 
 ```

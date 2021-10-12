@@ -1,16 +1,16 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  cell_metadata_filter: jupyter,clear_cell,-run_control,-deletable,-editable,-slideshow,-tags
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.0
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
 <p><font size="6"><b>CASE - Bacterial resistance experiment</b></font></p>
@@ -19,19 +19,22 @@ jupyter:
 
 ---
 
++++
 
 In this case study, we will make use of the open data, affiliated to the following [journal article](http://rsbl.royalsocietypublishing.org/content/12/5/20160064):
 
 >Arias-Sánchez FI, Hall A (2016) Effects of antibiotic resistance alleles on bacterial evolutionary responses to viral parasites. Biology Letters 12(5): 20160064. https://doi.org/10.1098/rsbl.2016.0064
 
++++
 
 <img src="../img/bacteriophage.jpeg">
 
++++
 
 Check the full paper on the [web version](http://rsbl.royalsocietypublishing.org/content/12/5/20160064). The study handles:
 > Antibiotic resistance has wide-ranging effects on bacterial phenotypes and evolution. However, the influence of antibiotic resistance on bacterial responses to parasitic viruses remains unclear, despite the ubiquity of such viruses in nature and current interest in therapeutic applications. We experimentally investigated this by exposing various Escherichia coli genotypes, including eight antibiotic-resistant genotypes and a mutator, to different viruses (lytic bacteriophages). Across 960 populations, we measured changes in population density and sensitivity to viruses, and tested whether variation among bacterial genotypes was explained by their relative growth in the absence of parasites, or mutation rate towards phage resistance measured by fluctuation tests for each phage
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -39,7 +42,8 @@ import matplotlib.pyplot as plt
 
 ## Reading and processing the data
 
-<!-- #region -->
++++
+
 The data is available on [Dryad](http://www.datadryad.org/resource/doi:10.5061/dryad.90qb7.3), a general purpose data repository providing all kinds of data sets linked to journal papers. The downloaded data is available in this repository in the `data` folder as an excel-file called `Dryad_Arias_Hall_v3.xlsx`.
 
 For the exercises, two sheets of the excel file will be used:
@@ -66,11 +70,12 @@ For the exercises, two sheets of the excel file will be used:
 | **log10 Mc** |	Log 10 of corrected mutation rate |
 | **log10 UBc** |	Log 10 of corrected upper bound |
 | **log10 LBc** |	Log 10 of corrected lower bound |
-<!-- #endregion -->
+
++++
 
 Reading the `main experiment` data set from the corresponding sheet:
 
-```python jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 main_experiment = pd.read_excel("data/Dryad_Arias_Hall_v3.xlsx",
                                 sheet_name="Main experiment")
 main_experiment
@@ -78,7 +83,7 @@ main_experiment
 
 Read the `Falcor` data and subset the columns of interest:
 
-```python jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 falcor = pd.read_excel("data/Dryad_Arias_Hall_v3.xlsx", sheet_name="Falcor",
                        skiprows=1)
 falcor = falcor[["Phage", "Bacterial_genotype", "log10 Mc", "log10 UBc", "log10 LBc"]]
@@ -87,16 +92,19 @@ falcor.head()
 
 ## Tidy the `main_experiment` data
 
++++
 
 *(If you're wondering what `tidy` data representations are, check again the `pandas_07_reshaping_data.ipynb` notebook)*
 
++++
 
 Actually, the columns `OD_0h`, `OD_20h` and `OD_72h` are representing the same variable (i.e. `optical_density`) and the column names itself represent a variable, i.e. `experiment_time_h`. Hence, it is stored in the table as *short* format and we could *tidy* these columns by converting them to 2 columns: `experiment_time_h` and `optical_density`.
 
++++
 
 Before making any changes to the data, we will add an identifier column for each of the current rows to make sure we keep the connection in between the entries of a row when converting from wide to long format.
 
-```python jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 main_experiment["experiment_ID"] = ["ID_" + str(idx) for idx in range(len(main_experiment))]
 main_experiment
 ```
@@ -116,7 +124,9 @@ Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the val
 
 </div>
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 tidy_experiment = main_experiment.melt(id_vars=['AB_r', 'Bacterial_genotype', 'Phage_t',
                                                 'Survival_72h', 'PhageR_72h', 'experiment_ID'],
                                        value_vars=['OD_0h', 'OD_20h', 'OD_72h'],
@@ -127,11 +137,10 @@ tidy_experiment
 
 ## Visual data exploration
 
-```python jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 tidy_experiment.head()
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 <b>EXERCISE</b>:
@@ -151,9 +160,10 @@ tidy_experiment.head()
 
 
 </div>
-<!-- #endregion -->
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.set_style("white")
 sns.displot(tidy_experiment, x="optical_density",
             color='grey', edgecolor='white')
@@ -172,7 +182,9 @@ Use a Seaborn `violin plot` to check the distribution of the `optical_density` i
 
 </details>
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.catplot(data=tidy_experiment, x="experiment_time_h",
             y="optical_density", kind="violin")
 ```
@@ -190,7 +202,9 @@ For each `Phage_t` in an individual subplot, use a `violin plot` to check the di
 
 </details>
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.catplot(data=tidy_experiment, x="experiment_time_h", y="optical_density",
             col="Phage_t", col_wrap=2, kind="violin")
 ```
@@ -207,7 +221,9 @@ Create a summary table of the __average__ `optical_density` with the `Bacterial_
 
 </details>
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 pd.pivot_table(tidy_experiment, values='optical_density',
                index='Bacterial_genotype',
                columns='experiment_time_h',
@@ -216,12 +232,13 @@ pd.pivot_table(tidy_experiment, values='optical_density',
 
 Advanced/optional solution:
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 # advanced/optional solution
 tidy_experiment.groupby(['Bacterial_genotype', 'experiment_time_h'])['optical_density'].mean().unstack()
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -241,15 +258,18 @@ tidy_experiment.groupby(['Bacterial_genotype', 'experiment_time_h'])['optical_de
 - Seaborn in fact has six variations of matplotlib’s palette, called `deep`, `muted`, `pastel`, `bright`, `dark`, and `colorblind`. See https://seaborn.pydata.org/tutorial/color_palettes.html#qualitative-color-palettes
 
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 density_mean = (tidy_experiment
                 .groupby(['Bacterial_genotype','Phage_t', 'experiment_time_h'])['optical_density']
                 .mean().reset_index())
 ```
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.catplot(data=density_mean, kind="bar",
             x='Bacterial_genotype',
             y='optical_density',
@@ -262,16 +282,16 @@ sns.catplot(data=density_mean, kind="bar",
 
 ## (Optional) Reproduce chart of the original paper
 
++++
 
 Check Figure 2 of the original journal paper in the 'correction' part of the <a href="http://rsbl.royalsocietypublishing.org/content/roybiolett/12/5/20160064.full.pdf">pdf</a>:
 
 <img src="https://royalsocietypublishing.org/cms/attachment/eb511c57-4167-4575-b8b3-93fbcf728572/rsbl20160064f02.jpg" width="500">
 
-```python jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
 falcor.head()
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**
@@ -290,15 +310,18 @@ We will first reproduce 'Figure 2' without the error bars:
 - One combination appears multiple times, so make sure to not yet use confidence intervals by setting `ci` to `Null`.
 
 </details>
-<!-- #endregion -->
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 falcor["Bacterial_genotype"] = falcor["Bacterial_genotype"].replace({'WT(2)': 'WT',
                                                                      'MUT(2)': 'MUT'})
 falcor.head()
 ```
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.catplot(data=falcor, kind="point",
             x='Bacterial_genotype',
             y='log10 Mc',
@@ -312,6 +335,7 @@ Seaborn supports confidence intervals by different estimators when multiple valu
 
 Stackoverflow can help you with this, see [this thread](https://stackoverflow.com/questions/38385099/adding-simple-error-bars-to-seaborn-factorplot) to solve the following exercise.
 
++++
 
 <div class="alert alert-success">
 
@@ -328,18 +352,24 @@ Reproduce 'Figure 2' with the error bars using the information from [this Stacko
 
 </details>
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 falcor["Bacterial_genotype"] = falcor["Bacterial_genotype"].replace({'WT(2)': 'WT',
                                                                      'MUT(2)': 'MUT'})
 ```
 
-```python clear_cell=true
+```{code-cell} ipython3
+:clear_cell: true
+
 def errorbar(x, y, low, high, **kws):
     """Utility function to link falcor data representation with the errorbar representation"""
     plt.errorbar(x, y, (y - low, high - y), capsize=3, fmt="o", color="black", ms=4)
 ```
 
-```python clear_cell=true jupyter={"outputs_hidden": false}
+```{code-cell} ipython3
+:clear_cell: true
+
 sns.set_style("ticks")
 g = sns.FacetGrid(falcor, row="Phage", aspect=3, height=3)
 g.map(errorbar,
@@ -347,6 +377,6 @@ g.map(errorbar,
       "log10 LBc", "log10 UBc")
 ```
 
-```python
+```{code-cell} ipython3
 
 ```
