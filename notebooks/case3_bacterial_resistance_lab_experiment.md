@@ -246,7 +246,7 @@ tidy_experiment.groupby(['Bacterial_genotype', 'experiment_time_h'])['optical_de
 **EXERCISE**
 
 - Calculate for each combination of `Bacterial_genotype`, `Phage_t` and `experiment_time_h` the <i>mean</i> `optical_density` and store the result as a DataFrame called `density_mean` (tip: use `reset_index()` to convert the resulting Series to a DataFrame).
-- Based on `density_mean`, make a _barplot_ of the (mean) values for each `Bacterial_genotype`, with for each `Bacterial_genotype` an individual bar and with each `Phage_t` in a different color/hue (i.e. grouped bar chart).
+- Based on `density_mean`, make a _barplot_ of the mean optical density for each `Bacterial_genotype`, with for each `Bacterial_genotype` an individual bar and with each `Phage_t` in a different color/hue (i.e. grouped bar chart).
 - Use the `experiment_time_h` to split into subplots. As we mainly want to compare the values within each subplot, make sure the scales in each of the subplots are adapted to its own data range, and put the subplots on different rows.
 - Adjust the size and aspect ratio of the Figure to your own preference.
 - Change the color scale of the bars to another Seaborn palette.
