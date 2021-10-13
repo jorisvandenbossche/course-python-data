@@ -1,6 +1,6 @@
 ---
 jupytext:
-  cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow
+  formats: ipynb,md:myst
   text_representation:
     extension: .md
     format_name: myst
@@ -127,7 +127,7 @@ ax2.plot(x, y*2, 'r-')
 <b>REMEMBER</b>:
 
  <ul>
-  <li>Use the <b>object oriented</b> power of Matplotlib!</li>
+  <li>Use the <b>object oriented</b> power of Matplotlib</li>
   <li>Get yourself used to writing <code>fig, ax = plt.subplots()</code></li>
 </ul>
 </div>
@@ -234,7 +234,7 @@ or go all the way and define your own custom style, see the [official documentat
 
  <ul>
   <li>If you just want <b>quickly a good-looking plot</b>, use one of the available styles (<code>plt.style.use('...')</code>)</li>
-  <li>Otherwise, the object-oriented way of working makes it possible to change everything!</li>
+  <li>Otherwise, creating `Figure` and `Axes` objects makes it possible to change everything!</li>
 </ul>
 </div>
 

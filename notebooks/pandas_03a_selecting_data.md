@@ -250,25 +250,18 @@ df[(df['Age'] > 30) & (df['Age'] <= 40)]
 
 <b>EXERCISE</b>:
 
-Split the 'Name' column on the `,` extract the first part (the surname), and add this as new column 'Surname'.
+For a single string `name = 'Braund, Mr. Owen Harris'`, split this string (check the `split()` method of a string) and get the first element of the resulting list.
+    
+<details><summary>Hints</summary>
 
-* Get the first value of the 'Name' column.
-* Split this string (check the `split()` method of a string) and get the first element of the resulting list.
-* Write the previous step as a function, and 'apply' this function to each element of the 'Name' column (check the `apply()` method of a Series).
+- No Pandas in this exercise, just standard Python.
+    
+</details> 
 
 </div>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-name = df['Name'][0]
-name
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-name.split(",")
+name = 'Braund, Mr. Owen Harris'
 ```
 
 ```{code-cell} ipython3
@@ -277,37 +270,27 @@ name.split(",")
 name.split(",")[0]
 ```
 
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
+<div class="alert alert-success">
 
-def get_surname(name):
-    return name.split(",")[0]
-```
+<b>EXERCISE</b>:
+    
+Convert the solution of the previous exercise to all strings of the `Name` column at once. Split the 'Name' column on the `,`, extract the first part (the surname), and add this as new column 'Surname'. 
+    
+<details><summary>Hints</summary>
 
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
+- Pandas uses the `str` accessor to use the string methods such as `split`, e.g. `.str.split(...)`
+- The [`.str.get()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.get.html#pandas.Series.str.get) can be used to get the n-th element of a list, which is what the `str.split()` returns. This is the equivalent of selecting an element of a single list (`a_list[i]`) but then for all values of the Series.
+- One can chain multiple `.str` methods, e.g. `str.SOMEMETHOD(...).str.SOMEOTHERMETHOD(...)`.
+    
+</details>    
 
-df['Name'].apply(get_surname)
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-df['Surname'] = df['Name'].apply(get_surname)
-```
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-# alternative using an "inline" lambda function
-df['Surname'] = df['Name'].apply(lambda x: x.split(',')[0])
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-# alternative solution with pandas' string methods
 df['Surname'] = df['Name'].str.split(",").str.get(0)
+df['Surname']
 ```
 
 <div class="alert alert-success">
