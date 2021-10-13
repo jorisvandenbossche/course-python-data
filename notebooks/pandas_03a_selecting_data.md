@@ -274,12 +274,12 @@ name.split(",")[0]
 
 <b>EXERCISE</b>:
     
-Convert the previous exercise to all strings of the `Name` column. Split the 'Name' column on the `,` extract the first part (the surname), and add this as new column 'Surname'. 
+Convert the solution of the previous exercise to all strings of the `Name` column at once. Split the 'Name' column on the `,`, extract the first part (the surname), and add this as new column 'Surname'. 
     
 <details><summary>Hints</summary>
 
 - Pandas uses the `str` accessor to use the string methods such as `split`, e.g. `.str.split(...)`
-- The [`.str.get()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.get.html#pandas.Series.str.get) can be used to get the n-th element of a list, which is what the `str.split()` returns.
+- The [`.str.get()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.get.html#pandas.Series.str.get) can be used to get the n-th element of a list, which is what the `str.split()` returns. This is the equivalent of selecting an element of a single list (`a_list[i]`) but then for all values of the Series.
 - One can chain multiple `.str` methods, e.g. `str.SOMEMETHOD(...).str.SOMEOTHERMETHOD(...)`.
     
 </details>    
