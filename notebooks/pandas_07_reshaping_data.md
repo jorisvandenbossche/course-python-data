@@ -361,7 +361,7 @@ df.groupby(['Pclass', 'Sex'])['Survived'].mean().unstack()
 
 +++
 
-These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKajNMa1pfSzN6Q3M) and [`cast.csv`](https://drive.google.com/open?id=0B3G70MlBnCgKal9UYTJSR2ZhSW8) and put them in the `/data` folder.
+These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKajNMa1pfSzN6Q3M/view?usp=sharing&resourcekey=0-EC8vCWiiKisQIkhYLBvOpQ) and [`cast.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKal9UYTJSR2ZhSW8/view?usp=sharing&resourcekey=0-w_mAR11xVeXm84sRZtyAhg) and put them in the `/data` folder.
 
 ```{code-cell} ipython3
 cast = pd.read_csv('data/cast.csv')
