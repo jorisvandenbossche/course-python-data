@@ -28,5 +28,29 @@ In case you do not want to install everything and just want to try out the cours
 Found any typo or have a suggestion, see [how to contribute](./CONTRIBUTING.md).
 
 
+## Development
+
+In addition to the environment.yml, install the following packages:
+
+```
+conda install jupytext jlab-enhanced-cell-toolbar nbdime
+```
+
+Creating the student version materials from this repo:
+
+```
+git clone https://github.com/jorisvandenbossche/FLAMES-python-data-wrangling.git FLAMES-2021
+git clone --depth 1 https://github.com/jorisvandenbossche/course-python-data.git course-python-data-clean
+cp course-python-data-clean/notebooks/*.ipynb FLAMES-2021/_solved/
+cp course-python-data-clean/notebooks/data/ FLAMES-2021/notebooks/ -r
+cp course-python-data-clean/img/ FLAMES-2021/ -r
+cp course-python-data-clean/environment.yml FLAMES-2021/
+cp course-python-data-clean/check_environment.py FLAMES-2021/
+cd FLAMES-2021/
+jupyter nbconvert --clear-output _solved/*.ipynb
+./convert_notebooks.sh
+```
+
+
 ## Meta 
 Authors: Joris Van den Bossche, Stijn Van Hoey
