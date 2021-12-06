@@ -41,6 +41,7 @@ Matplotlib comes with a convenience sub-package called ``pyplot`` which, for con
 
 ```{code-cell} ipython3
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 ```
 
@@ -159,8 +160,10 @@ ax.plot(x, x**2, color='0.4', label='power 2')
 ax.plot(x, x**3, color='0.8', linestyle='--', label='power 3')
 
 ax.vlines(x=-0.75, ymin=0., ymax=0.8, color='0.4', linestyle='-.') 
+ax.fill_between(x=x, y1=x**2, y2=1.1*x**2, color='0.85')
+
 ax.axhline(y=0.1, color='0.4', linestyle='-.')
-ax.fill_between(x=[-1, 1.1], y1=[0.65], y2=[0.75], color='0.85')
+ax.axhspan(ymin=0.65, ymax=0.75, color='0.95')
 
 fig.suptitle('Figure title', fontsize=18, 
              fontweight='bold')
@@ -191,6 +194,97 @@ Adjusting specific parts of a plot is a matter of accessing the correct element 
 For more information on legend positioning, check [this post](http://stackoverflow.com/questions/4700614/how-to-put-the-legend-out-of-the-plot) on stackoverflow!
 
 +++
+
+## Exercises
+
++++
+
+For these exercises we will use some random generated example data (as a Numpy array), representing daily measured values:
+
+```{code-cell} ipython3
+data = np.random.randint(-2, 3, 100).cumsum()
+data
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Make a line chart of the `data` using Matplotlib. The figure should be 12 (width) by 4 (height) in inches. Make the line color 'darkgrey' and provide an x-label ('days since start') and a y-label ('measured value').
+    
+Use the object oriented approach to create the chart.
+
+<details><summary>Hints</summary>
+
+- When Matplotlib only receives a single input variable, it will interpret this as the variable for the y-axis
+- Check the cheat sheet above for the functions.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, ax  = plt.subplots(figsize=(12, 4))
+
+ax.plot(data, color='darkgrey')
+ax.set_xlabel('days since start');
+ax.set_ylabel('measured value');
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+The data represents each a day starting from Jan 1st 2021. Create an array (variable name `dates`) of the same length as the original data (length 100) with the corresponding dates ('2021-01-01', '2021-01-02',...). Create the same chart as in the previous exercise, but use the `dates` values for the x-axis data.
+    
+Mark the region inside `[-5, 5]` with a green color to show that these values are within an acceptable range.
+
+<details><summary>Hints</summary>
+
+- As seen in notebook `pandas_04_time_series_data`, Pandas provides a useful function `pd.date_range` to create a set of datetime values. In this case 100 values with `freq="D"`.
+- Make sure to understand the difference between `axhspan` and `fill_between`, which one do you need?
+- When adding regions, adding an `alpha` level is mostly a good idea.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+dates = pd.date_range("2021-01-01", periods=100, freq="D")
+
+fig, ax  = plt.subplots(figsize=(12, 4))
+
+ax.plot(dates, data, color='darkgrey')
+ax.axhspan(ymin=-5, ymax=5, color='green', alpha=0.2)
+
+ax.set_xlabel('days since start');
+ax.set_ylabel('measured value');
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Compare the __last ten days__ ('2021-04-01' till '2021-04-10') in a bar chart using darkgrey color. For the data on '2021-04-01', use an orange bar to highlight the measurement on this day.
+
+<details><summary>Hints</summary>
+
+- Select the last 10 days from the `data` and `dates` variable, i.e. slice [-10:].
+- Similar to a `plot` method, Matplotlib provides a `bar` method.
+- By plotting a single orange bar on top of the grey bars with a second bar chart, that one is highlithed.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+fig, ax  = plt.subplots(figsize=(12, 4))
+
+ax.bar(dates[-10:], data[-10:], color='darkgrey')
+ax.bar(dates[-6], data[-6], color='orange')
+```
 
 ## I do not like the style...
 
@@ -228,7 +322,7 @@ with plt.style.context('seaborn-whitegrid'):  # 'seaborn', ggplot', 'bmh', 'gray
 We should not start discussing about colors and styles, just pick **your favorite style**!
 
 ```{code-cell} ipython3
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn')
 ```
 
 or go all the way and define your own custom style, see the [official documentation](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html) or [this tutorial](https://colcarroll.github.io/yourplotlib/#/).
@@ -245,7 +339,25 @@ or go all the way and define your own custom style, see the [official documentat
 </ul>
 </div>
 
-+++
+```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+
+```
 
 ## Advanced subplot configuration
 
@@ -380,7 +492,7 @@ fig.suptitle('Flow station time series', fontsize=15)
 fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(16, 6)) #provide with matplotlib 2 axis
 
 flowdata[["L06_347", "LS06_347"]].plot(ax=ax0) # plot the two timeseries of the same location on the first plot
-flowdata["LS06_348"].plot(ax=ax1, color='0.2') # plot the other station on the second plot
+flowdata["LS06_348"].plot(ax=ax1, color='0.7') # plot the other station on the second plot
 
 # further adapt with matplotlib
 ax0.set_ylabel("L06_347")
@@ -396,78 +508,46 @@ ax1.legend()
 * The preformatting of Pandas provides mostly enough flexibility for quick analysis and draft reporting. It is not for paper-proof figures or customization
 
 If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figure: Make it a <b>reusable function</b>!
+    
+`fig.savefig()` to save your Figure object!    
 
 </div>
 
 +++
 
-An example of such a reusable function to plot data:
+## Exercise
 
 ```{code-cell} ipython3
-%%file plotter.py  
-#this writes a file in your directory, check it(!)
+<div class="alert alert-success">
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
+**EXERCISE**
 
-from matplotlib import cm
-from matplotlib.ticker import MaxNLocator
 
-def vmm_station_plotter(flowdata, label="flow (m$^3$s$^{-1}$)"):
-    colors = [cm.viridis(x) for x in np.linspace(0.0, 1.0, len(flowdata.columns))] # list comprehension to set up the color sequence
 
-    fig, axs = plt.subplots(3, 1, figsize=(16, 8))
+<details><summary>Hints</summary>
 
-    for ax, col, station in zip(axs, colors, flowdata.columns):
-        ax.plot(flowdata.index, flowdata[station], label=station, color=col) # this plots the data itself
-        
-        ax.legend(fontsize=15)
-        ax.set_ylabel(label, size=15)
-        ax.yaxis.set_major_locator(MaxNLocator(4)) # smaller set of y-ticks for clarity
-        
-        if not ax.get_subplotspec().is_last_row():  # hide the xticklabels from the none-lower row x-axis
-            ax.xaxis.set_ticklabels([])
-            ax.xaxis.set_major_locator(mdates.YearLocator())
-        else:                     # yearly xticklabels from the lower x-axis in the subplots
-            ax.xaxis.set_major_locator(mdates.YearLocator())
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-        ax.tick_params(axis='both', labelsize=15, pad=8) # enlarge the ticklabels and increase distance to axis (otherwise overlap)
-    return fig, axs
-```
 
-```{code-cell} ipython3
-from plotter import vmm_station_plotter
-# fig, axs = vmm_station_plotter(flowdata)
-```
 
-```{code-cell} ipython3
-fig, axs = vmm_station_plotter(flowdata, 
-                               label="NO$_3$ (mg/l)")
-fig.suptitle('Ammonium concentrations in the Maarkebeek', 
-             fontsize='17')
-fig.savefig('ammonium_concentration.png', dpi=150)
-```
-
-<div class="alert alert-warning">
-
-**NOTE**
-
-- Let your hard work pay off, write your own custom functions!
+</details>
 
 </div>
+```
 
-+++
+```{code-cell} ipython3
 
-<div class="alert alert-info" style="font-size:18px">
+```
 
-**Remember** 
+```{code-cell} ipython3
 
-`fig.savefig()` to save your Figure object!
+```
 
-</div>
+```{code-cell} ipython3
 
-+++
+```
+
+```{code-cell} ipython3
+
+```
 
 # Need more matplotlib inspiration?
 
