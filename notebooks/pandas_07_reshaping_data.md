@@ -147,7 +147,7 @@ Well, they need to be combined, according to an `aggregation` functionality, whi
 
 +++
 
-# Pivot tables - aggregating while pivoting
+## Pivot tables - aggregating while pivoting
 
 ```{code-cell} ipython3
 df = pd.read_csv("data/titanic.csv")
@@ -187,6 +187,8 @@ df.pivot_table(index='Sex', columns='Pclass',
 ```{code-cell} ipython3
 pd.crosstab(index=df['Sex'], columns=df['Pclass'])
 ```
+
+## Exercises
 
 +++ {"clear_cell": false}
 
@@ -380,6 +382,8 @@ df = pd.read_csv("data/titanic.csv")
 ```{code-cell} ipython3
 df.head()
 ```
+
+## Exercises
 
 ```{code-cell} ipython3
 df.pivot_table(index='Pclass', columns='Sex', 
