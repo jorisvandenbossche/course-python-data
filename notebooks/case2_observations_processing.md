@@ -1245,7 +1245,7 @@ survey_data_completed.head()
 Congratulations! You did a great cleaning job, save your result:
 
 ```{code-cell} ipython3
-survey_data_completed.to_csv("survey_data_completed.csv", index=False)
+survey_data_completed.to_csv("survey_data_completed_.csv", index=False)
 ```
 
 ## Acknowledgements
