@@ -544,17 +544,23 @@ oz_roles[oz_roles > 1].sort_values()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
 
- <ul>
-  <li> Add a new column to the `cast` DataFrame that indicates the number of roles for each movie. [Hint](http://pandas.pydata.org/pandas-docs/stable/groupby.html#transformation)</li>
-</ul>
+Add a new column to the `cast` DataFrame that indicates the number of roles for each movie. 
+    
+<details><summary>Hints</summary>
+
+- [Transformation](https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#transformation) returns an object that is indexed the same (same size) as the one being grouped.
+
+</details>  
+    
+
 </div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-cast['n_total'] = cast.groupby(['title', 'year'])['n'].transform('max') # transform will return an element for each row, so the max value is given to the whole group
+cast['n_total'] = cast.groupby(['title', 'year'])['n'].transform('size') # transform will return an element for each row, so the size value is given to the whole group
 cast.head()
 ```
 
