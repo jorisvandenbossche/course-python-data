@@ -1,13 +1,14 @@
 ---
 jupytext:
+  cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow
   formats: ipynb,md:myst
   text_representation:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -87,13 +88,13 @@ Observe the following difference:
 
 +++
 
-**1. pyplot style: plt...** (you will see this a lot for code online!)
+**1. pyplot style: plt.** (you will see this a lot for code online!)
 
 ```{code-cell} ipython3
 ax = plt.plot(x, y, '-')
 ```
 
-**2. creating objects**
+**2. object oriented**
 
 ```{code-cell} ipython3
 from matplotlib import ticker
@@ -121,6 +122,12 @@ ax2 = fig.add_axes([0.2, 0.5, 0.4, 0.3]) # inset axes
 ax2.set_xlabel('x')
 ax2.plot(x, y*2, 'r-')
 ```
+
+And also Matplotlib advices the object oriented style:
+
+![](../img/matplotlib_oo.png)
+
++++
 
 <div class="alert alert-info" style="font-size:18px">
 
