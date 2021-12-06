@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -147,7 +147,8 @@ For the further analysis (and the species concerned in this specific data set), 
 
 <details><summary>Hints</summary>
     
-- A dictionary is a Python data structure, https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+- A dictionary is a Python standard library data structure, see https://docs.python.org/3/tutorial/datastructures.html#dictionaries - no Pandas magic involved when you need a key/value mapping.
+- When you need to replace values, look for the Pandas method `replace`.    
     
 </details>
 
