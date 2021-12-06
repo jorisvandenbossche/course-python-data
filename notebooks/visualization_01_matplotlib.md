@@ -252,6 +252,8 @@ Mark the region inside `[-5, 5]` with a green color to show that these values ar
 </div>
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 dates = pd.date_range("2021-01-01", periods=100, freq="D")
 
 fig, ax  = plt.subplots(figsize=(12, 4))
@@ -280,6 +282,8 @@ Compare the __last ten days__ ('2021-04-01' till '2021-04-10') in a bar chart us
 </div>
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 fig, ax  = plt.subplots(figsize=(12, 4))
 
 ax.bar(dates[-10:], data[-10:], color='darkgrey')
@@ -339,25 +343,7 @@ or go all the way and define your own custom style, see the [official documentat
 </ul>
 </div>
 
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
-```
++++
 
 ## Advanced subplot configuration
 
@@ -404,7 +390,7 @@ flowdata = pd.read_csv('data/vmm_flowdata.csv',
 ```
 
 ```{code-cell} ipython3
-flowdata.head()
+flowdata.plot.line()  # remarkk default plot() is aline plot
 ```
 
 Under the hood, it creates an Matplotlib Figure with an Axes object.
@@ -465,7 +451,7 @@ for ax, col, station in zip(axs, colors, flowdata.columns):
     ax.tick_params(labelsize=15)
 ```
 
-Is already a bit harder ;-)
+Is already a bit harder ;-). Pandas provides as set of default configurations on top of Matplotlib.
 
 +++
 
@@ -518,35 +504,111 @@ If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figur
 ## Exercise
 
 ```{code-cell} ipython3
+flowdata = pd.read_csv('data/vmm_flowdata.csv', 
+                       index_col='Time', 
+                       parse_dates=True)
+```
+
+```{code-cell} ipython3
+flowdata.head()
+```
+
 <div class="alert alert-success">
 
 **EXERCISE**
 
-
+Pandas supports different types of charts besides line plots, all available from `.plot.xxx`, e.g. `.plot.scatter`, `.plot.bar`,... Make a bar chart to compare the mean discharge in the three measurement stations L06_347, LS06_347, LS06_348. Add a y-label 'mean discharge'. To do so, prepare a Figure and Axes with Matplotlib and add the chart to the created Axes.
 
 <details><summary>Hints</summary>
 
+* You can either use Pandas `ylabel` parameter to set the label or add it with Matploltib `ax.set_ylabel()`
+* To link an Axes object with Pandas output, pass the Axes created by `fig, ax = plt.subplots()` as parameter to the Pandas plot function.
+</details>
 
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, ax = plt.subplots()
+flowdata.mean().plot.bar(ylabel="mean discharge", ax=ax)
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+To compare the stations data, make two subplots next to each other:
+    
+- In the left subplot, make a bar chart of the minimal measured value for each of the station.
+- In the right subplot, make a bar chart of the maximal measured value for each of the station.    
+
+Add a title to the Figure containing 'Minimal and maximal discharge from 2009-01-01 till 2013-01-02'. Extract these dates from the data itself instead of hardcoding it.
+
+<details><summary>Hints</summary>
+
+- One can directly unpack the result of multiple axes, e.g. `fig, (ax0, ax1) = plt.subplots(1, 2,..` and link each of them to a Pands plot function.
+- Remember the remark about `constrained_layout=True` to overcome overlap with subplots?
+- A Figure title is called `suptitle` (which is different from an Axes title)
+- f-string ([_formatted string literals_](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)) is a powerful Python feature (since Python 3.6) to use variables inside a string, e.g. `f"some text with a {variable:HOWTOFORMAT}"`
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, (ax0, ax1) = plt.subplots(1, 2, constrained_layout=True)
+
+flowdata.min().plot.bar(ylabel="min discharge", ax=ax0)
+flowdata.max().plot.bar(ylabel="max discharge", ax=ax1)
+
+fig.suptitle(f"Minimal and maximal discharge from {flowdata.index[0]:%Y-%m-%d} till {flowdata.index[-1]:%Y-%m-%d}");
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Make a line plot of the discharge measurements in station `LS06_347`. 
+    
+The main event on November 13th caused a flood event. To support the reader in the interpretation of the graph, add the following elements:
+    
+- Add an horizontal red line at 20 m3/s to define the alarm level.
+- Add the text 'Alarm level' in red just above the alarm levl line.
+- Add an arrow pointing to the main peak in the data (event on November 13th) with the text 'Flood event on 2020-11-13'
+    
+Check the Matplotlib documentation on [annotations](https://matplotlib.org/stable/gallery/text_labels_and_annotations/annotation_demo.html#annotating-plots) for the text annotation
+
+<details><summary>Hints</summary>
+
+- The horizontal line is explained in the cheat sheet in this notebook.
+- Whereas `àx.text` would work as well for the 'alarm level' text, the `annotate` method provides easier options to shift the text slightly relative to a data point.
+- Extract the main peak event by filtering the data on the maximal value. Different approaches are possible, but the `max` and `idxmax` functions are a convenient option in this case.
 
 </details>
 
 </div>
-```
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
 
-```
+alarm_level = 20
+max_datetime, max_value = flowdata["LS06_347"].idxmax(), flowdata["LS06_347"].max()
 
-```{code-cell} ipython3
+fig, ax = plt.subplots(figsize=(18, 4))
+flowdata["LS06_347"].plot(ax=ax)
 
-```
-
-```{code-cell} ipython3
-
-```
-
-```{code-cell} ipython3
-
+ax.axhline(y=alarm_level, color='red', linestyle='-', alpha=0.8)
+ax.annotate('Alarm level', xy=(flowdata.index[0], alarm_level), 
+            xycoords="data", xytext=(10, 10), textcoords="offset points",
+            color="red", fontsize=12)
+ax.annotate(f"Flood event on {max_datetime:%Y-%m-%d}",
+            xy=(max_datetime, max_value), xycoords='data',
+            xytext=(-30, -30), textcoords='offset points',
+            arrowprops=dict(facecolor='black', shrink=0.05),
+            horizontalalignment='right', verticalalignment='bottom',
+            fontsize=12)
 ```
 
 # Need more matplotlib inspiration?
