@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -145,11 +145,10 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 +++
 
 <div class="alert alert-success">
-<b>EXERCISE</b>:
 
- <ul>
-  <li>What is the average age of the passengers?</li>
-</ul>
+**EXERCISE**
+
+What is the average age of the passengers?
 
 </div>
 
@@ -160,11 +159,11 @@ df['Age'].mean()
 ```
 
 <div class="alert alert-success">
-<b>EXERCISE</b>:
 
- <ul>
-  <li>Plot the age distribution of the titanic passengers</li>
-</ul>
+**EXERCISE**
+
+Plot the age distribution of the titanic passengers
+
 </div>
 
 ```{code-cell} ipython3
@@ -174,14 +173,17 @@ df['Age'].hist() #bins=30, log=True
 ```
 
 <div class="alert alert-success">
-<b>EXERCISE</b>:
 
- <ul>
-  <li>What is the survival rate? (the relative number of people that survived)</li>
-</ul>
-<br>
+**EXERCISE**
 
-Note: the 'Survived' column indicates whether someone survived (1) or not (0).
+What is the survival rate? (the relative number of people that survived)
+
+<details><summary>Hints</summary>
+
+- the 'Survived' column indicates whether someone survived (1) or not (0).
+
+</details>
+    
 </div>
 
 ```{code-cell} ipython3
@@ -197,11 +199,11 @@ df['Survived'].mean()
 ```
 
 <div class="alert alert-success">
-<b>EXERCISE</b>:
 
- <ul>
-  <li>What is the maximum Fare? And the median?</li>
-</ul>
+**EXERCISE**
+
+What is the maximum Fare? And the median?
+
 </div>
 
 ```{code-cell} ipython3
@@ -218,11 +220,16 @@ df['Fare'].median()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
+    
+Calculate the 75th percentile (`quantile`) of the Fare price 
+    
+<details><summary>Hints</summary>
 
- <ul>
-  <li>Calculate the 75th percentile (`quantile`) of the Fare price (Tip: look in the docstring how to specify the percentile)</li>
-</ul>
+- look in the 'docstring' how to specify the percentile, either range [0, 1] or [0, 100]
+
+</details>    
+
 </div>
 
 ```{code-cell} ipython3
@@ -232,11 +239,11 @@ df['Fare'].quantile(0.75)
 ```
 
 <div class="alert alert-success">
-<b>EXERCISE</b>:
 
- <ul>
-  <li>Calculate the normalized Fares (normalized relative to its mean), and add this as a new column ('Fare_normalized') to the DataFrame.</li>
-</ul>
+**EXERCISE**
+
+Calculate the normalized Fares (normalized relative to its mean), and add this as a new column ('Fare_normalized') to the DataFrame.
+
 </div>
 
 ```{code-cell} ipython3
@@ -253,10 +260,16 @@ df.head()
 ```
 
 <div class="alert alert-success">
-    
-**EXERCISE**:
 
-* Calculate the log of the Fares. Tip: check the `np.log` function.
+**EXERCISE**
+
+* Calculate the log of the Fares. 
+    
+<details><summary>Hints</summary>
+
+- check the `np.log` function.
+
+</details>  
 
 </div>
 
