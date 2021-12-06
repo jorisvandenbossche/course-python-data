@@ -1,13 +1,14 @@
 ---
 jupytext:
+  cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow
   formats: ipynb,md:myst
   text_representation:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -190,8 +191,8 @@ glob.glob??
 
 ## *edit* mode to *command* mode
 
-* *edit* mode means you're editing a cell, i.e. with your cursor inside a cell to type content --> <font color="green">green colored side</font>
-* *command* mode means you're NOT editing(!), i.e. NOT with your cursor inside a cell to type content --> <font color="blue">blue colored side</font>
+* *edit* mode means you're editing a cell, i.e. with your cursor inside a cell to type content
+* *command* mode means you're NOT editing(!), i.e. NOT with your cursor inside a cell to type content
 
 To start editing, click inside a cell or 
 <img src="../img/enterbutton.png" alt="Key enter" style="width:150px">
