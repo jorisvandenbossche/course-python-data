@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -226,6 +226,40 @@ countries
 countries[(countries['density'] > 100) & (countries['density'] < 300)]
 ```
 
+The next exercise uses the titanic data set:
+
+```{code-cell} ipython3
+df = pd.read_csv("data/titanic.csv")
+```
+
+```{code-cell} ipython3
+df.head()
+```
+
+<div class="alert alert-success">
+
+<b>EXERCISE</b>:
+
+* Select all rows for male passengers and calculate the mean age of those passengers. Do the same for the female passengers. Do this now using `.loc`.
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df.loc[df['Sex'] == 'male', 'Age'].mean()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df.loc[df['Sex'] == 'female', 'Age'].mean()
+```
+
+We will later see an easier way to calculate both averages at the same time with `groupby`.
+
++++
+
 # Alignment on the index
 
 +++
@@ -309,37 +343,3 @@ What to do when encountering the *value is trying to be set on a copy of a slice
 * Or `copy` explicitly if you don't want to change the original data.
 
 </div>
-
-+++
-
-# Exercises using the Titanic dataset
-
-```{code-cell} ipython3
-df = pd.read_csv("data/titanic.csv")
-```
-
-```{code-cell} ipython3
-df.head()
-```
-
-<div class="alert alert-success">
-
-<b>EXERCISE</b>:
-
-* Select all rows for male passengers and calculate the mean age of those passengers. Do the same for the female passengers. Do this now using `.loc`.
-
-</div>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-df.loc[df['Sex'] == 'male', 'Age'].mean()
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-df.loc[df['Sex'] == 'female', 'Age'].mean()
-```
-
-We will later see an easier way to calculate both averages at the same time with groupby.
