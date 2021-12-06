@@ -247,6 +247,34 @@ or go all the way and define your own custom style, see the [official documentat
 
 +++
 
+## Advanced subplot configuration
+
++++
+
+Using the proposed function to setup a Matplotlib Figure,  `fig, ax = plt.subplots()`, supports both a single and multiple subplots with a regular number of rows/columns:
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(2, 3, figsize=(5, 5))
+```
+
+A typical issue when plotting multiple elements in the same Figure is the overlap of the subplots. A straight-forward approach is using a larger Figure size, but this is not always possible and does not make the content independent from the Figure size. Matplotlib provides the usage of a [__constrained-layout__](https://matplotlib.org/stable/tutorials/intermediate/constrainedlayout_guide.html) to fit plots within your Figure cleanly.
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(2, 3, figsize=(5, 5), constrained_layout=True)
+```
+
+When more advanced layout configurations are required, the usage of the [gridspec](https://matplotlib.org/stable/api/gridspec_api.html#module-matplotlib.gridspec) module is a good reference. See [gridspec demo](https://matplotlib.org/stable/gallery/userdemo/demo_gridspec03.html#sphx-glr-gallery-userdemo-demo-gridspec03-py) for more information. A useful shortcut to know about is the [__string-shorthand__](https://matplotlib.org/stable/tutorials/provisional/mosaic.html#string-short-hand) to setup subplot layouts in a more intuitive way, e.g.
+
+```{code-cell} ipython3
+axd = plt.figure(constrained_layout=True).subplot_mosaic(
+    """
+    ABD
+    CCD
+    """
+)
+axd;
+```
+
 ## Interaction with Pandas
 
 +++
