@@ -109,7 +109,7 @@ Adding this static value as a new column `datasetName`:
 
 **EXERCISE**
 
-- Add a new column, `datasetName`, to the survey data set with `datasetname` as value for all of the records (static value for the entire data set)
+Add a new column, `datasetName`, to the survey data set with `datasetname` as value for all of the records (static value for the entire data set)
 
 <details><summary>Hints</summary>
 
@@ -126,7 +126,7 @@ Adding this static value as a new column `datasetName`:
 survey_data["datasetName"] = datasetname
 ```
 
-### Cleaning the sex_char column into a DwC called [sex](http://rs.tdwg.org/dwc/terms/#sex) column
+### Cleaning the `sex_char` column into a DwC called [sex](http://rs.tdwg.org/dwc/terms/#sex) column
 
 +++
 
@@ -183,7 +183,7 @@ survey_data = survey_data.rename(columns={'sex_char': 'verbatimSex'})
 
 <details><summary>Hints</summary>
 
-- A dictionary is a Python standard library data structure - no Pandas magic involved when you need a key/value mapping.
+- A dictionary is a Python standard library data structure, see https://docs.python.org/3/tutorial/datastructures.html#dictionaries - no Pandas magic involved when you need a key/value mapping.
 - When you need to replace values, look for the Pandas method `replace`.
 
 </details>
@@ -664,7 +664,7 @@ We want to add the data of the species to the survey data, in order to see the f
 
 **EXERCISE**
 
-Combine the `DataFrame` `survey_data_plots` and the `DataFrame` `species_data` by adding the corresponding species information (name, class, kingdom,..) to the individual observations. Assign the output to a new variable `survey_data_species`.
+Combine the DataFrames `survey_data_plots` and the `DataFrame` `species_data` by adding the corresponding species information (name, class, kingdom,..) to the individual observations. Assign the output to a new variable `survey_data_species`.
 
 <details><summary>Hints</summary>
 

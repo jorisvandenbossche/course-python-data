@@ -112,6 +112,7 @@ For convenience when this dataset will be combined with other datasets, add a ne
 
 <details><summary>Hints</summary>
 
+- When a column does not exist, a new `df["a_new_column"]` can be created by assigning a value to it.
 - Pandas will automatically broadcast a single string value to each of the rows in the DataFrame.
     
 </details>
@@ -186,11 +187,11 @@ See [pandas_08_missing_values.ipynb](pandas_08_missing_values.ipynb) for an over
 
 **EXERCISE**
 
-How many records in the data set have no information about the `species_ID`? Use the `isna()` method to find out.
+How many records in the data set have no information about the `species`? Use the `isna()` method to find out.
 
 <details><summary>Hints</summary>
-    
-- Do NOT use `observations['species_ID'] == np.nan`, but use the available method `isna()` to check if a value is NaN
+
+- Do NOT use `survey_data_processed['species'] == np.nan`, but use the available method `isna()` to check if a value is NaN
 - The result of an (element-wise) condition returns a set of True/False values, corresponding to 1/0 values. The amount of True values is equal to the sum.
     
 </details>
@@ -223,14 +224,14 @@ observations.duplicated().sum()
 
 **EXERCISE**
 
-- Select all duplicate data by filtering the `observations` data and assign the result to a new variable `duplicate_observations`. The `duplicated()` method provides an `keep` argument define which duplicates (if any) to mark.
+- Select all duplicate data by filtering the `observations` data and assign the result to a new variable `duplicate_observations`. The `duplicated()` method provides a `keep` argument define which duplicates (if any) to mark.
 - Sort the `duplicate_observations` data on both the columns `eventDate` and `verbatimLocality` and show the first 9 records.
 
 <details><summary>Hints</summary>
-    
+
 - Check the documentation of the `duplicated` method to find out which value the argument `keep` requires to select all duplicate data.
 - `sort_values()` can work with a single columns name as well as a list of names.
-    
+
 </details>
 
 ```{code-cell} ipython3
@@ -248,10 +249,10 @@ duplicate_observations.sort_values(["eventDate", "verbatimLocality"]).head(9)
 - How many observations are still left in the data set?    
 
 <details><summary>Hints</summary>
-    
+
 - `keep=First` is the default option for `drop_duplicates`
-- The number of rows in a DataFrame is equal to the `len`gth    
-    
+- The number of rows in a DataFrame is equal to the `len`gth
+
 </details>
 
 ```{code-cell} ipython3
@@ -277,10 +278,10 @@ Use the `dropna()` method to find out:
 - Remove the data without `species_ID` data from the observations and assign the result to a new variable `observations_with_ID`
 
 <details><summary>Hints</summary>
-    
-- `dropna` by default removes by default all rows for which _any_ of the columns contains a `NaN` value. 
+
+- `dropna` by default removes by default all rows for which _any_ of the columns contains a `NaN` value.
 - To specify which specific columns to check, use the `subset` argument
-    
+
 </details>
 
 ```{code-cell} ipython3
@@ -309,10 +310,10 @@ observations_with_ID.head()
 Filter the  `observations` data and select only those records that do not have a `species_ID` while having information on the `sex`. Store the result as variable `not_identified`.
 
 <details><summary>Hints</summary>
-    
+
 - To combine logical operators element-wise in Pandas, use the `&` operator.
 - Pandas provides both a `isna()` and a `notna()` method to check the existence of `NaN` values.
-    
+
 </details>
 
 ```{code-cell} ipython3
@@ -362,7 +363,7 @@ Combine the DataFrames `observations` and `species_names` by adding the correspo
 <details><summary>Hints</summary>
 
 - This is an example of a database JOIN operation. Pandas provides the `pd.merge` function to join two data sets using a common identifier.
-- Take into account that our key-column is different for `observations` and `species_names`, respectively `specied_ID` and `ID`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right dataframe to merge on.
+- Take into account that our key-column is different for `observations` and `species_names`, respectively `specied_ID` and `ID`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right `DataFrame` to merge on.
     
 </details>
 
@@ -409,7 +410,7 @@ len(non_rodent_species)
 
 **EXERCISE**
 
-Select the observations for which the `name` starts with the characters 'ro' (make sure it does not matter if a capital character is used in the 'taxa' name). Call the resulting variable `r_species`.
+Select the observations for which the `name` starts with the characters 'r' (make sure it does not matter if a capital character is used in the 'taxa' name). Call the resulting variable `r_species`.
 
 <details><summary>Hints</summary>
 
@@ -466,6 +467,7 @@ Select the __Bird__ (taxa is Bird) observations from 1985-01 till 1989-12 usint 
 
 <details><summary>Hints</summary>
 
+- No hints, you can do this! (with the help of some `<=` and `&`, and don't forget the put brackets around each comparison that you combine)
     
 </details>
 
@@ -614,12 +616,13 @@ ax.set_ylabel("");
 
 **EXERCISE**
 
-- Starting from the `survey_data`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex`.
+- Starting from the `survey_data`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex` and ensure the counts are in a column named "count".
 - Use a `pivot_table` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
 
 <details><summary>Hints</summary>
 
 - _...for each of the combinations..._ `groupby` can also be used with multiple columns at the same time.
+- If a `groupby` operation gives a Series as result, you can give that Series a name with the `.rename(..)` method.
 - `reset_index()` is useful function to convert multiple indices into columns again.
     
 </details>
@@ -669,13 +672,35 @@ sns.catplot(data=survey_data, x="verbatimLocality",
 
 **EXERCISE**
 
-- Create a table, called `heatmap_prep`, based on the `survey_data` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
-- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> make a heatmap starting from the `heatmap_prep_sns` variable.    
+Recreate the previous plot with the `catplot` function from the Seaborn library directly starting from `survey_data`.
 
 <details><summary>Hints</summary>
 
-- You want to `resample` the data using the `eventDate` columns to create annual counts
-- `resample` needs an aggregation function on how to combine the values within a single 'group' (in this case data within a year). In this example, we want to know the `size` of each group, i.e. the number of records within each year.
+- Check the `kind`argument of the `catplot` function to find out how to use counts to define the bars instead of a `y` value.
+- To link a column to different colors, use the `hue` argument
+
+
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+sns.catplot(data=survey_data, x="verbatimLocality",
+            hue="sex", kind="count", height=3, aspect=3)
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- Create a table, called `heatmap_prep`, based on the `survey_data` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
+- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> make a heatmap starting from the `heatmap_prep` variable.    
+
+<details><summary>Hints</summary>
+
+- A `pivot_table` has an `aggfunc` parameter by which the aggregation of the cells combined into the year/month element are combined (e.g. mean, max, count,...). 
+- You can use the `ID` to count the number of observations.
+- seaborn has an `heatmap` function which requires a short-form DataFrame, comparable to giving each element in a table a color value.
     
 </details>
 
@@ -701,7 +726,8 @@ Remark that we started from a `tidy` data format (also called *long* format) and
 
 <details><summary>Hints</summary>
 
-    
+- Make sure to pass the correct columns to respectively the `index`, `columns`, `values` and `aggfunc` parameters of the `pivot_table` function. You can use the `ID` to count the number of observations for each name/locality combination (when counting rows, the exact column doesn't matter).
+
 </details>
 
 ```{code-cell} ipython3
@@ -784,7 +810,9 @@ Plot, for the species 'Dipodomys merriami', 'Dipodomys ordii', 'Reithrodontomys 
 
 <details><summary>Hints</summary>
 
-- `groupby` is not useful here, as we do want to change the time-interval to represent data as a function of time
+- `isin` is useful to select from within a list of elements.
+- `groupby` AND `resample` need to be combined. We do want to change the time-interval to represent data as a function of time (`resample`) and we want to do this _for each name/species_ (`groupby`). The order matters!
+- `unstack` is a Pandas function a bit similar to `pivot`. Check the [unstack documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.unstack.html) as it might be helpful for this exercise.
     
 </details>
 
@@ -816,7 +844,9 @@ Recreate the same plot as in the previous exercise using Seaborn `relplot` funct
 
 <details><summary>Hints</summary>
 
-
+- We want to have the `counts` as a function of `eventDate`, so link these columns to y and x respectively.
+- To create subplots in Seaborn, the usage of _facetting_ (splitting data sets to multiple facets) is used by linking a column name to the `row`/`col` parameter. 
+- Using `height` and `widht`, the figure size can be optimized.
     
 </details>
 
@@ -881,8 +911,8 @@ The observations where taken by volunteers. You wonder on which day of the week 
 
 <details><summary>Hints</summary>
 
-- You can do this! 
-    
+- Did you know the Python standard Library has a module `calendar` which contains names of week days, month names,...?
+
 </details>
 
 ```{code-cell} ipython3
@@ -890,7 +920,9 @@ The observations where taken by volunteers. You wonder on which day of the week 
 
 fig, ax = plt.subplots()
 survey_data.groupby(survey_data["eventDate"].dt.weekday).size().plot(kind='barh', color='#66b266', ax=ax)
-xticks = ax.set_yticklabels(['Monday', 'Tuesday', 'Wednesday', "Thursday", "Friday", "Saturday", "Sunday"])
+
+import calendar
+xticks = ax.set_yticklabels(calendar.day_name)
 ```
 
 Nice work!
