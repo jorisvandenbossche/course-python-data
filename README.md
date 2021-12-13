@@ -39,14 +39,15 @@ conda install jupytext jlab-enhanced-cell-toolbar nbdime
 Creating the student version materials from this repo:
 
 ```
-git clone https://github.com/jorisvandenbossche/FLAMES-python-data-wrangling.git FLAMES-2021
+export COURSE_DIR="DS-python-2021"
+git clone --depth 1 https://github.com/jorisvandenbossche/DS-python-data-analysis.git $COURSE_DIR
 git clone --depth 1 https://github.com/jorisvandenbossche/course-python-data.git course-python-data-clean
-cp course-python-data-clean/notebooks/*.ipynb FLAMES-2021/_solved/
-cp course-python-data-clean/notebooks/data/ FLAMES-2021/notebooks/ -r
-cp course-python-data-clean/img/ FLAMES-2021/ -r
-cp course-python-data-clean/environment.yml FLAMES-2021/
-cp course-python-data-clean/check_environment.py FLAMES-2021/
-cd FLAMES-2021/
+cp course-python-data-clean/notebooks/*.ipynb $COURSE_DIR/_solved/
+cp course-python-data-clean/notebooks/data/ $COURSE_DIR/notebooks/ -r
+cp course-python-data-clean/img/ $COURSE_DIR/ -r
+cp course-python-data-clean/environment.yml $COURSE_DIR/
+cp course-python-data-clean/check_environment.py $COURSE_DIR/
+cd $COURSE_DIR/
 jupyter nbconvert --clear-output _solved/*.ipynb
 ./convert_notebooks.sh
 ```
