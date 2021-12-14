@@ -102,9 +102,11 @@ For the sake of this tutorial, we will disregard the 'flag' columns (indicating 
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
-<br><br>
+**EXERCISE**:
+
 Drop all 'flag' columns ('flag1', 'flag2', ...)
+
+</div>
 
 ```{code-cell} ipython3
 flag_columns = [col for col in data.columns if 'flag' in col]

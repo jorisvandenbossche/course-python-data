@@ -114,9 +114,9 @@ main_experiment
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
-Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the values stored in a column `optical_density` and the time in the experiment as `experiment_time_h`. Save the variable as <code>tidy_experiment</code>
+Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the values stored in a column `optical_density` and the time in the experiment as `experiment_time_h`. Save the variable as `tidy_experiment`.
 
 <details><summary>Hints</summary>
 
@@ -145,7 +145,7 @@ tidy_experiment.head()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
 * Make a histogram using the [Seaborn package](https://seaborn.pydata.org/index.html) to visualize the distribution of the `optical_density`
 * Change the overall theme to any of the available Seaborn themes
@@ -165,7 +165,6 @@ Using Matplotlib, further adjust the histogram:
 - The output of a Seaborn plot is an object from which the Matplotlib `Figure` and `Axes` can be accessed, respectively `snsplot.fig` and `snsplot.axes`. Note that the `axes` are always returned as a 2x2 array of Axes (also if it only contains a single element).
 
 </details>
-
 
 </div>
 
