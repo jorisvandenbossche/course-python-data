@@ -200,8 +200,6 @@ df.groupby('Pclass')['Survived'].mean().plot(kind='bar') #and what if you would 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 df['AgeClass'] = pd.cut(df['Age'], bins=np.arange(0,90,10))
 ```
 

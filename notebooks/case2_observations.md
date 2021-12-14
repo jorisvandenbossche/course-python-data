@@ -7,7 +7,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -454,8 +454,6 @@ non_bird_species = survey_data[survey_data['taxa'] != 'Bird']
 ```
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 len(non_bird_species)
 ```
 
@@ -655,7 +653,7 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 
 <details><summary>Hints</summary>
 
-- Check the `kind`argument of the `catplot` function to find out how to use counts to define the bars instead of a `y` value.
+- Check the `kind` argument of the `catplot` function to find out how to use counts to define the bars instead of a `y` value.
 - To link a column to different colors, use the `hue` argument
 
     
@@ -672,29 +670,8 @@ sns.catplot(data=survey_data, x="verbatimLocality",
 
 **EXERCISE**
 
-Recreate the previous plot with the `catplot` function from the Seaborn library directly starting from `survey_data`.
-
-<details><summary>Hints</summary>
-
-- Check the `kind`argument of the `catplot` function to find out how to use counts to define the bars instead of a `y` value.
-- To link a column to different colors, use the `hue` argument
-
-
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-sns.catplot(data=survey_data, x="verbatimLocality",
-            hue="sex", kind="count", height=3, aspect=3)
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
 - Create a table, called `heatmap_prep`, based on the `survey_data` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
-- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> make a heatmap starting from the `heatmap_prep` variable.    
+- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a>, make a heatmap starting from the `heatmap_prep` variable.
 
 <details><summary>Hints</summary>
 
@@ -722,7 +699,7 @@ Remark that we started from a `tidy` data format (also called *long* format) and
 **EXERCISE**
 
 - Make a summary table with the number of records of each of the species in each of the plots (called `verbatimLocality`)? Each of the species `name`s is a row index and each of the `verbatimLocality` plots is a column name.
-- Using the Seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> to make a heatmap.
+- Use the Seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> to make a heatmap.
 
 <details><summary>Hints</summary>
 
@@ -851,8 +828,6 @@ Recreate the same plot as in the previous exercise using Seaborn `relplot` funct
 </details>
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 # Given as solution..
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]

@@ -7,7 +7,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -272,7 +272,7 @@ In this case, this is not fully what we want. We would like to keep the 'Sex' co
 pd.melt(pivoted, id_vars=['Sex']) #, var_name='Pclass', value_name='Fare')
 ```
 
-__Tidy data__
+## Tidy data
 
 `melt `can be used to make a dataframe longer, i.e. to make a *tidy* version of your data. In a [tidy dataset](https://vita.had.co.nz/papers/tidy-data.pdf) (also sometimes called 'long-form' data or 'denormalized' data) each observation is stored in its own row and each column contains a single variable:
 
@@ -289,14 +289,14 @@ data = pd.DataFrame({
 data
 ```
 
-This data representation is not 'tidy':
+This data representation is not "tidy":
 
 - Each row contains two observations of pH (each from a different treatment)
 - 'Treatment' (A or B) is a variable not in its own column, but used as column headers
 
 +++
 
-We can `melt` the data set tidy the data:
+We can `melt` the data set to tidy the data:
 
 ```{code-cell} ipython3
 data_long = pd.melt(data, id_vars=["WWTP"], 
@@ -308,6 +308,10 @@ The usage of the tidy data representation has some important benefits when worki
 
 ```{code-cell} ipython3
 data_long.groupby("Treatment")["pH"].mean()  # switch to `WWTP`
+```
+
+```{code-cell} ipython3
+sns.catplot(data=data, x="WWTP", y="...", hue="...", kind="bar")  # this doesn't work that easily
 ```
 
 ```{code-cell} ipython3

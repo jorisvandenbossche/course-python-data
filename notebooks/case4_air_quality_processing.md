@@ -7,7 +7,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -381,8 +381,6 @@ station
 ```
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 test = read_airbase_file(filename, station)
 test.head()
 ```
@@ -399,7 +397,7 @@ Use the [pathlib module](https://docs.python.org/3/library/pathlib.html) `Path` 
 
 <details><summary>Hints</summary>
 
-- The pathlib module provides a object oriented way to handle file paths. First, create a `Path` object of the dat folder, `pathlib.Path("./data")`. Next, apply the `glob` function to extract all the files containing `*0008001*` (use wildcard * to say 'any characters'). The output is a Python generator, which you can collect as a `list()`.
+- The pathlib module provides a object oriented way to handle file paths. First, create a `Path` object of the data folder, `pathlib.Path("./data")`. Next, apply the `glob` function to extract all the files containing `*0008001*` (use wildcard * to say "any characters"). The output is a Python generator, which you can collect as a `list()`.
 
 </details>    
 
@@ -407,8 +405,6 @@ Use the [pathlib module](https://docs.python.org/3/library/pathlib.html) `Path` 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 from pathlib import Path
 ```
 

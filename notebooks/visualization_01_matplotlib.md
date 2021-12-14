@@ -336,10 +336,9 @@ or go all the way and define your own custom style, see the [official documentat
 
 <b>REMEMBER</b>:
 
- <ul>
-  <li>If you just want <b>quickly a good-looking plot</b>, use one of the available styles (<code>plt.style.use('...')</code>)</li>
-  <li>Otherwise, creating `Figure` and `Axes` objects makes it possible to change everything!</li>
-</ul>
+* If you just want **quickly a good-looking plot**, use one of the available styles (`plt.style.use('...')`)
+* Otherwise, creating `Figure` and `Axes` objects makes it possible to change everything!
+
 </div>
 
 +++
@@ -348,7 +347,7 @@ or go all the way and define your own custom style, see the [official documentat
 
 +++
 
-Using the proposed function to setup a Matplotlib Figure,  `fig, ax = plt.subplots()`, supports both a single and multiple subplots with a regular number of rows/columns:
+The function to setup a Matplotlib Figure we have seen up to now,  `fig, ax = plt.subplots()`, supports creating both a single plot and multiple subplots with a regular number of rows/columns:
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots(2, 3, figsize=(5, 5))
@@ -389,7 +388,7 @@ flowdata = pd.read_csv('data/vmm_flowdata.csv',
 ```
 
 ```{code-cell} ipython3
-flowdata.plot.line()  # remarkk default plot() is aline plot
+flowdata.plot.line()  # remark default plot() is a line plot
 ```
 
 Under the hood, it creates an Matplotlib Figure with an Axes object.
@@ -582,8 +581,8 @@ Check the Matplotlib documentation on [annotations](https://matplotlib.org/stabl
 <details><summary>Hints</summary>
 
 - The horizontal line is explained in the cheat sheet in this notebook.
-- Whereas `àx.text` would work as well for the 'alarm level' text, the `annotate` method provides easier options to shift the text slightly relative to a data point.
-- Extract the main peak event by filtering the data on the maximal value. Different approaches are possible, but the `max` and `idxmax` functions are a convenient option in this case.
+- Whereas `ax.text` would work as well for the 'alarm level' text, the `annotate` method provides easier options to shift the text slightly relative to a data point.
+- Extract the main peak event by filtering the data on the maximum value. Different approaches are possible, but the `max()` and `idxmax()` methods are a convenient option in this case.
 
 </details>
 

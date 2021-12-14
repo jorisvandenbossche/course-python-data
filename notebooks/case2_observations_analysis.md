@@ -7,7 +7,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -603,13 +603,13 @@ To evaluate the intensity or number of occurrences during different time spans, 
 **EXERCISE**
 
 - Create a table, called `heatmap_prep`, based on the `survey_data` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
-- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> make a heatmap starting from the `heatmap_prep` variable.
+- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a>, make a heatmap starting from the `heatmap_prep` variable.
 
 <details><summary>Hints</summary>
 
 - The `.dt` accessor can be used to get the `year`, `month`,... from a `datetime` column
 - Use `pivot_table` and provide the years to `index` and the months to `columns`. Do not forget to `count` the number for each combination (`aggfunc`).
-- seaborn has an `heatmap` function which requires a short-form DataFrame, comparable to giving each element in a table a color value.
+- Seaborn has an `heatmap` function which requires a short-form DataFrame, comparable to giving each element in a table a color value.
 
 </details>
 

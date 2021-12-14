@@ -7,7 +7,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -40,8 +40,7 @@ jupyter labextension install jupyterlab-plotly@4.14.3
 To run the large data set section, additional package installations are required:
 
 ```
-conda install -c conda-forge datashader holoviews
-conda install -c pyviz geoviews
+conda install -c conda-forge datashader holoviews geoviews
 ```
 
 To run the 'bokeh-pandas' backend:
