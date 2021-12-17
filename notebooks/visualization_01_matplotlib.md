@@ -177,9 +177,14 @@ ax.set_ylim(-0.1, 1.)
 ax.text(0.5, 0.2, 'Text centered at (0.5, 0.2)\nin data coordinates.',
         horizontalalignment='center', fontsize=14)
 
-ax.text(0.5, 0.5, 'Text centered at (0.5, 0.5)\nin Figure coordinates.',
+ax.text(0.5, 0.5, 'Text centered at (0.5, 0.5)\nin relative Axes coordinates.',
         horizontalalignment='center', fontsize=14, 
         transform=ax.transAxes, color='grey')
+
+ax.annotate('Text pointing at (0.0, 0.75)', xy=(0.0, 0.75), xycoords="data",
+            xytext=(20, 40), textcoords="offset points",
+            horizontalalignment='left', fontsize=14,
+            arrowprops=dict(facecolor='black', shrink=0.05, width=1))
 
 ax.legend(loc='lower right', frameon=True, ncol=2, fontsize=14)
 ```
@@ -548,7 +553,7 @@ Add a title to the Figure containing 'Minimal and maximal discharge from 2009-01
 - One can directly unpack the result of multiple axes, e.g. `fig, (ax0, ax1) = plt.subplots(1, 2,..` and link each of them to a Pands plot function.
 - Remember the remark about `constrained_layout=True` to overcome overlap with subplots?
 - A Figure title is called `suptitle` (which is different from an Axes title)
-- f-string ([_formatted string literals_](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)) is a powerful Python feature (since Python 3.6) to use variables inside a string, e.g. `f"some text with a {variable:HOWTOFORMAT}"`
+- f-strings ([_formatted string literals_](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)) is a powerful Python feature (since Python 3.6) to use variables inside a string, e.g. `f"some text with a {variable:HOWTOFORMAT}"` (with the format being optional).
 </details>
 
 </div>
