@@ -143,6 +143,34 @@ We can also pass a dictionary of objects instead of a list of objects. Now the k
 pd.concat({'europe': countries, 'africa': countries_africa})
 ```
 
+<div class="alert alert-info">
+
+**NOTE**:
+
+A typical use case of `concat` is when you create (or read) multiple DataFrame with a similar structure in a loop, and then want to combine this list of DataFrames into a single DataFrame.
+
+For example, assume you have a folder of similar CSV files (eg the data per day) you want to read and combine, this would look like:
+
+```python
+import pathlib
+
+data_files = pathlib.Path("data_directory").glob("*.csv")
+
+dfs = []
+
+for path in data_files:
+    temp = pd.read_csv(path)
+    dfs.append(temp)
+
+df = pd.concat(dfs)
+```
+<br>
+Important: append to a list (not DataFrame), and concat this list at the end after the loop!
+
+</div>
+
++++
+
 # Joining data with `pd.merge`
 
 +++
