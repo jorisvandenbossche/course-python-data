@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -328,7 +328,7 @@ df[df['Surname'].str.len() > 15]
 
 +++
 
-For the quick ones among you, here are some more exercises with some larger dataframe with film data. These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so all credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKajNMa1pfSzN6Q3M/view?usp=sharing&resourcekey=0-EC8vCWiiKisQIkhYLBvOpQ) and [`cast.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKal9UYTJSR2ZhSW8/view?usp=sharing&resourcekey=0-w_mAR11xVeXm84sRZtyAhg) and put them in the `/notebooks/data` folder.
+For the quick ones among you, here are some more exercises with some larger dataframe with film data. These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so all credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [`cast.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
 
 ```{code-cell} ipython3
 cast = pd.read_csv('data/cast.csv')

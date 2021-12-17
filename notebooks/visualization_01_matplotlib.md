@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -40,6 +40,7 @@ Matplotlib comes with a convenience sub-package called ``pyplot`` which, for con
 
 ```{code-cell} ipython3
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 ```
 
@@ -87,13 +88,13 @@ Observe the following difference:
 
 +++
 
-**1. pyplot style: plt...** (you will see this a lot for code online!)
+**1. pyplot style: plt.** (you will see this a lot for code online!)
 
 ```{code-cell} ipython3
 ax = plt.plot(x, y, '-')
 ```
 
-**2. creating objects**
+**2. object oriented**
 
 ```{code-cell} ipython3
 from matplotlib import ticker
@@ -121,6 +122,12 @@ ax2 = fig.add_axes([0.2, 0.5, 0.4, 0.3]) # inset axes
 ax2.set_xlabel('x')
 ax2.plot(x, y*2, 'r-')
 ```
+
+And also Matplotlib advices the object oriented style:
+
+![](../img/matplotlib_oo.png)
+
++++
 
 <div class="alert alert-info" style="font-size:18px">
 
@@ -152,8 +159,10 @@ ax.plot(x, x**2, color='0.4', label='power 2')
 ax.plot(x, x**3, color='0.8', linestyle='--', label='power 3')
 
 ax.vlines(x=-0.75, ymin=0., ymax=0.8, color='0.4', linestyle='-.') 
+ax.fill_between(x=x, y1=x**2, y2=1.1*x**2, color='0.85')
+
 ax.axhline(y=0.1, color='0.4', linestyle='-.')
-ax.fill_between(x=[-1, 1.1], y1=[0.65], y2=[0.75], color='0.85')
+ax.axhspan(ymin=0.65, ymax=0.75, color='0.95')
 
 fig.suptitle('Figure title', fontsize=18, 
              fontweight='bold')
@@ -168,9 +177,14 @@ ax.set_ylim(-0.1, 1.)
 ax.text(0.5, 0.2, 'Text centered at (0.5, 0.2)\nin data coordinates.',
         horizontalalignment='center', fontsize=14)
 
-ax.text(0.5, 0.5, 'Text centered at (0.5, 0.5)\nin Figure coordinates.',
+ax.text(0.5, 0.5, 'Text centered at (0.5, 0.5)\nin relative Axes coordinates.',
         horizontalalignment='center', fontsize=14, 
         transform=ax.transAxes, color='grey')
+
+ax.annotate('Text pointing at (0.0, 0.75)', xy=(0.0, 0.75), xycoords="data",
+            xytext=(20, 40), textcoords="offset points",
+            horizontalalignment='left', fontsize=14,
+            arrowprops=dict(facecolor='black', shrink=0.05, width=1))
 
 ax.legend(loc='lower right', frameon=True, ncol=2, fontsize=14)
 ```
@@ -184,6 +198,101 @@ Adjusting specific parts of a plot is a matter of accessing the correct element 
 For more information on legend positioning, check [this post](http://stackoverflow.com/questions/4700614/how-to-put-the-legend-out-of-the-plot) on stackoverflow!
 
 +++
+
+## Exercises
+
++++
+
+For these exercises we will use some random generated example data (as a Numpy array), representing daily measured values:
+
+```{code-cell} ipython3
+data = np.random.randint(-2, 3, 100).cumsum()
+data
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Make a line chart of the `data` using Matplotlib. The figure should be 12 (width) by 4 (height) in inches. Make the line color 'darkgrey' and provide an x-label ('days since start') and a y-label ('measured value').
+    
+Use the object oriented approach to create the chart.
+
+<details><summary>Hints</summary>
+
+- When Matplotlib only receives a single input variable, it will interpret this as the variable for the y-axis
+- Check the cheat sheet above for the functions.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, ax  = plt.subplots(figsize=(12, 4))
+
+ax.plot(data, color='darkgrey')
+ax.set_xlabel('days since start');
+ax.set_ylabel('measured value');
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+The data represents each a day starting from Jan 1st 2021. Create an array (variable name `dates`) of the same length as the original data (length 100) with the corresponding dates ('2021-01-01', '2021-01-02',...). Create the same chart as in the previous exercise, but use the `dates` values for the x-axis data.
+    
+Mark the region inside `[-5, 5]` with a green color to show that these values are within an acceptable range.
+
+<details><summary>Hints</summary>
+
+- As seen in notebook `pandas_04_time_series_data`, Pandas provides a useful function `pd.date_range` to create a set of datetime values. In this case 100 values with `freq="D"`.
+- Make sure to understand the difference between `axhspan` and `fill_between`, which one do you need?
+- When adding regions, adding an `alpha` level is mostly a good idea.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+dates = pd.date_range("2021-01-01", periods=100, freq="D")
+
+fig, ax  = plt.subplots(figsize=(12, 4))
+
+ax.plot(dates, data, color='darkgrey')
+ax.axhspan(ymin=-5, ymax=5, color='green', alpha=0.2)
+
+ax.set_xlabel('days since start');
+ax.set_ylabel('measured value');
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Compare the __last ten days__ ('2021-04-01' till '2021-04-10') in a bar chart using darkgrey color. For the data on '2021-04-01', use an orange bar to highlight the measurement on this day.
+
+<details><summary>Hints</summary>
+
+- Select the last 10 days from the `data` and `dates` variable, i.e. slice [-10:].
+- Similar to a `plot` method, Matplotlib provides a `bar` method.
+- By plotting a single orange bar on top of the grey bars with a second bar chart, that one is highlithed.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, ax  = plt.subplots(figsize=(12, 4))
+
+ax.bar(dates[-10:], data[-10:], color='darkgrey')
+ax.bar(dates[-6], data[-6], color='orange')
+```
 
 ## I do not like the style...
 
@@ -221,7 +330,7 @@ with plt.style.context('seaborn-whitegrid'):  # 'seaborn', ggplot', 'bmh', 'gray
 We should not start discussing about colors and styles, just pick **your favorite style**!
 
 ```{code-cell} ipython3
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn')
 ```
 
 or go all the way and define your own custom style, see the [official documentation](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html) or [this tutorial](https://colcarroll.github.io/yourplotlib/#/).
@@ -232,13 +341,40 @@ or go all the way and define your own custom style, see the [official documentat
 
 <b>REMEMBER</b>:
 
- <ul>
-  <li>If you just want <b>quickly a good-looking plot</b>, use one of the available styles (<code>plt.style.use('...')</code>)</li>
-  <li>Otherwise, creating `Figure` and `Axes` objects makes it possible to change everything!</li>
-</ul>
+* If you just want **quickly a good-looking plot**, use one of the available styles (`plt.style.use('...')`)
+* Otherwise, creating `Figure` and `Axes` objects makes it possible to change everything!
+
 </div>
 
 +++
+
+## Advanced subplot configuration
+
++++
+
+The function to setup a Matplotlib Figure we have seen up to now,  `fig, ax = plt.subplots()`, supports creating both a single plot and multiple subplots with a regular number of rows/columns:
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(2, 3, figsize=(5, 5))
+```
+
+A typical issue when plotting multiple elements in the same Figure is the overlap of the subplots. A straight-forward approach is using a larger Figure size, but this is not always possible and does not make the content independent from the Figure size. Matplotlib provides the usage of a [__constrained-layout__](https://matplotlib.org/stable/tutorials/intermediate/constrainedlayout_guide.html) to fit plots within your Figure cleanly.
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(2, 3, figsize=(5, 5), constrained_layout=True)
+```
+
+When more advanced layout configurations are required, the usage of the [gridspec](https://matplotlib.org/stable/api/gridspec_api.html#module-matplotlib.gridspec) module is a good reference. See [gridspec demo](https://matplotlib.org/stable/gallery/userdemo/demo_gridspec03.html#sphx-glr-gallery-userdemo-demo-gridspec03-py) for more information. A useful shortcut to know about is the [__string-shorthand__](https://matplotlib.org/stable/tutorials/provisional/mosaic.html#string-short-hand) to setup subplot layouts in a more intuitive way, e.g.
+
+```{code-cell} ipython3
+axd = plt.figure(constrained_layout=True).subplot_mosaic(
+    """
+    ABD
+    CCD
+    """
+)
+axd;
+```
 
 ## Interaction with Pandas
 
@@ -257,7 +393,7 @@ flowdata = pd.read_csv('data/vmm_flowdata.csv',
 ```
 
 ```{code-cell} ipython3
-flowdata.head()
+flowdata.plot.line()  # remark default plot() is a line plot
 ```
 
 Under the hood, it creates an Matplotlib Figure with an Axes object.
@@ -318,7 +454,7 @@ for ax, col, station in zip(axs, colors, flowdata.columns):
     ax.tick_params(labelsize=15)
 ```
 
-Is already a bit harder ;-)
+Is already a bit harder ;-). Pandas provides as set of default configurations on top of Matplotlib.
 
 +++
 
@@ -345,7 +481,7 @@ fig.suptitle('Flow station time series', fontsize=15)
 fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(16, 6)) #provide with matplotlib 2 axis
 
 flowdata[["L06_347", "LS06_347"]].plot(ax=ax0) # plot the two timeseries of the same location on the first plot
-flowdata["LS06_348"].plot(ax=ax1, color='0.2') # plot the other station on the second plot
+flowdata["LS06_348"].plot(ax=ax1, color='0.7') # plot the other station on the second plot
 
 # further adapt with matplotlib
 ax0.set_ylabel("L06_347")
@@ -361,78 +497,122 @@ ax1.legend()
 * The preformatting of Pandas provides mostly enough flexibility for quick analysis and draft reporting. It is not for paper-proof figures or customization
 
 If you take the time to make your perfect/spot-on/greatest-ever matplotlib-figure: Make it a <b>reusable function</b>!
+    
+`fig.savefig()` to save your Figure object!    
 
 </div>
 
 +++
 
-An example of such a reusable function to plot data:
+## Exercise
 
 ```{code-cell} ipython3
-%%file plotter.py  
-#this writes a file in your directory, check it(!)
-
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-
-from matplotlib import cm
-from matplotlib.ticker import MaxNLocator
-
-def vmm_station_plotter(flowdata, label="flow (m$^3$s$^{-1}$)"):
-    colors = [cm.viridis(x) for x in np.linspace(0.0, 1.0, len(flowdata.columns))] # list comprehension to set up the color sequence
-
-    fig, axs = plt.subplots(3, 1, figsize=(16, 8))
-
-    for ax, col, station in zip(axs, colors, flowdata.columns):
-        ax.plot(flowdata.index, flowdata[station], label=station, color=col) # this plots the data itself
-        
-        ax.legend(fontsize=15)
-        ax.set_ylabel(label, size=15)
-        ax.yaxis.set_major_locator(MaxNLocator(4)) # smaller set of y-ticks for clarity
-        
-        if not ax.get_subplotspec().is_last_row():  # hide the xticklabels from the none-lower row x-axis
-            ax.xaxis.set_ticklabels([])
-            ax.xaxis.set_major_locator(mdates.YearLocator())
-        else:                     # yearly xticklabels from the lower x-axis in the subplots
-            ax.xaxis.set_major_locator(mdates.YearLocator())
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-        ax.tick_params(axis='both', labelsize=15, pad=8) # enlarge the ticklabels and increase distance to axis (otherwise overlap)
-    return fig, axs
+flowdata = pd.read_csv('data/vmm_flowdata.csv', 
+                       index_col='Time', 
+                       parse_dates=True)
 ```
 
 ```{code-cell} ipython3
-from plotter import vmm_station_plotter
-# fig, axs = vmm_station_plotter(flowdata)
+flowdata.head()
 ```
 
-```{code-cell} ipython3
-fig, axs = vmm_station_plotter(flowdata, 
-                               label="NO$_3$ (mg/l)")
-fig.suptitle('Ammonium concentrations in the Maarkebeek', 
-             fontsize='17')
-fig.savefig('ammonium_concentration.png', dpi=150)
-```
+<div class="alert alert-success">
 
-<div class="alert alert-warning">
+**EXERCISE**
 
-**NOTE**
+Pandas supports different types of charts besides line plots, all available from `.plot.xxx`, e.g. `.plot.scatter`, `.plot.bar`,... Make a bar chart to compare the mean discharge in the three measurement stations L06_347, LS06_347, LS06_348. Add a y-label 'mean discharge'. To do so, prepare a Figure and Axes with Matplotlib and add the chart to the created Axes.
 
-- Let your hard work pay off, write your own custom functions!
+<details><summary>Hints</summary>
+
+* You can either use Pandas `ylabel` parameter to set the label or add it with Matploltib `ax.set_ylabel()`
+* To link an Axes object with Pandas output, pass the Axes created by `fig, ax = plt.subplots()` as parameter to the Pandas plot function.
+</details>
 
 </div>
 
-+++
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
 
-<div class="alert alert-info" style="font-size:18px">
+fig, ax = plt.subplots()
+flowdata.mean().plot.bar(ylabel="mean discharge", ax=ax)
+```
 
-**Remember** 
+<div class="alert alert-success">
 
-`fig.savefig()` to save your Figure object!
+**EXERCISE**
+
+To compare the stations data, make two subplots next to each other:
+    
+- In the left subplot, make a bar chart of the minimal measured value for each of the station.
+- In the right subplot, make a bar chart of the maximal measured value for each of the station.    
+
+Add a title to the Figure containing 'Minimal and maximal discharge from 2009-01-01 till 2013-01-02'. Extract these dates from the data itself instead of hardcoding it.
+
+<details><summary>Hints</summary>
+
+- One can directly unpack the result of multiple axes, e.g. `fig, (ax0, ax1) = plt.subplots(1, 2,..` and link each of them to a Pands plot function.
+- Remember the remark about `constrained_layout=True` to overcome overlap with subplots?
+- A Figure title is called `suptitle` (which is different from an Axes title)
+- f-strings ([_formatted string literals_](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)) is a powerful Python feature (since Python 3.6) to use variables inside a string, e.g. `f"some text with a {variable:HOWTOFORMAT}"` (with the format being optional).
+</details>
 
 </div>
 
-+++
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, (ax0, ax1) = plt.subplots(1, 2, constrained_layout=True)
+
+flowdata.min().plot.bar(ylabel="min discharge", ax=ax0)
+flowdata.max().plot.bar(ylabel="max discharge", ax=ax1)
+
+fig.suptitle(f"Minimal and maximal discharge from {flowdata.index[0]:%Y-%m-%d} till {flowdata.index[-1]:%Y-%m-%d}");
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Make a line plot of the discharge measurements in station `LS06_347`. 
+    
+The main event on November 13th caused a flood event. To support the reader in the interpretation of the graph, add the following elements:
+    
+- Add an horizontal red line at 20 m3/s to define the alarm level.
+- Add the text 'Alarm level' in red just above the alarm levl line.
+- Add an arrow pointing to the main peak in the data (event on November 13th) with the text 'Flood event on 2020-11-13'
+    
+Check the Matplotlib documentation on [annotations](https://matplotlib.org/stable/gallery/text_labels_and_annotations/annotation_demo.html#annotating-plots) for the text annotation
+
+<details><summary>Hints</summary>
+
+- The horizontal line is explained in the cheat sheet in this notebook.
+- Whereas `ax.text` would work as well for the 'alarm level' text, the `annotate` method provides easier options to shift the text slightly relative to a data point.
+- Extract the main peak event by filtering the data on the maximum value. Different approaches are possible, but the `max()` and `idxmax()` methods are a convenient option in this case.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+alarm_level = 20
+max_datetime, max_value = flowdata["LS06_347"].idxmax(), flowdata["LS06_347"].max()
+
+fig, ax = plt.subplots(figsize=(18, 4))
+flowdata["LS06_347"].plot(ax=ax)
+
+ax.axhline(y=alarm_level, color='red', linestyle='-', alpha=0.8)
+ax.annotate('Alarm level', xy=(flowdata.index[0], alarm_level), 
+            xycoords="data", xytext=(10, 10), textcoords="offset points",
+            color="red", fontsize=12)
+ax.annotate(f"Flood event on {max_datetime:%Y-%m-%d}",
+            xy=(max_datetime, max_value), xycoords='data',
+            xytext=(-30, -30), textcoords='offset points',
+            arrowprops=dict(facecolor='black', shrink=0.05),
+            horizontalalignment='right', verticalalignment='bottom',
+            fontsize=12)
+```
 
 # Need more matplotlib inspiration?
 

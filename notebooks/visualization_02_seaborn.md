@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -69,16 +69,16 @@ Let's consider following question:
 Hence, we should define the *mean* of the male and female groups of column `Survived` in combination with the groups of the `Pclass` column. In Pandas terminology:
 
 ```{code-cell} ipython3
-survived_stat = titanic.groupby(["Pclass", "Sex"])["Age"].mean().reset_index()
-survived_stat
+age_stat = titanic.groupby(["Pclass", "Sex"])["Age"].mean().reset_index()
+age_stat
 ```
 
 Providing this data in a bar chart with pure Pandas is still partly supported:
 
 ```{code-cell} ipython3
-survived_stat.plot(x='Pclass', y='Age', kind='bar')
+age_stat.plot(kind='bar')
 ## A possible other way of plotting this could be using groupby again:   
-#survived_stat.groupby('Pclass').plot(x='Sex', y='Age', kind='bar') # (try yourself by uncommenting)
+#age_stat.groupby('Pclass').plot(x='Sex', y='Age', kind='bar') # (try yourself by uncommenting)
 ```
 
 but with mixed results.
@@ -88,7 +88,7 @@ but with mixed results.
 __Seaborn__ provides another level of abstraction to visualize such *grouped* plots with different categories:
 
 ```{code-cell} ipython3
-sns.catplot(data=survived_stat, 
+sns.catplot(data=age_stat, 
             x="Sex", y="Age", 
             col="Pclass", kind="bar")
 ```

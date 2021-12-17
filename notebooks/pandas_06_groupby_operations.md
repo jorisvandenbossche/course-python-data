@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -200,8 +200,6 @@ df.groupby('Pclass')['Survived'].mean().plot(kind='bar') #and what if you would 
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 df['AgeClass'] = pd.cut(df['Age'], bins=np.arange(0,90,10))
 ```
 
@@ -264,7 +262,7 @@ df['Embarked'].value_counts()
 
 +++
 
-These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKajNMa1pfSzN6Q3M/view?usp=sharing&resourcekey=0-EC8vCWiiKisQIkhYLBvOpQ) and [`cast.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKal9UYTJSR2ZhSW8/view?usp=sharing&resourcekey=0-w_mAR11xVeXm84sRZtyAhg) and put them in the `/data` folder.
+These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [`cast.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
 
 +++
 
@@ -544,17 +542,23 @@ oz_roles[oz_roles > 1].sort_values()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
 
- <ul>
-  <li> Add a new column to the `cast` DataFrame that indicates the number of roles for each movie. [Hint](http://pandas.pydata.org/pandas-docs/stable/groupby.html#transformation)</li>
-</ul>
+Add a new column to the `cast` DataFrame that indicates the number of roles for each movie. 
+    
+<details><summary>Hints</summary>
+
+- [Transformation](https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#transformation) returns an object that is indexed the same (same size) as the one being grouped.
+
+</details>  
+    
+
 </div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-cast['n_total'] = cast.groupby(['title', 'year'])['n'].transform('max') # transform will return an element for each row, so the max value is given to the whole group
+cast['n_total'] = cast.groupby(['title', 'year'])['n'].transform('size') # transform will return an element for each row, so the size value is given to the whole group
 cast.head()
 ```
 

@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -23,6 +23,7 @@ kernelspec:
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 ```
 
 # Pivoting data
@@ -146,7 +147,7 @@ Well, they need to be combined, according to an `aggregation` functionality, whi
 
 +++
 
-# Pivot tables - aggregating while pivoting
+## Pivot tables - aggregating while pivoting
 
 ```{code-cell} ipython3
 df = pd.read_csv("data/titanic.csv")
@@ -186,6 +187,8 @@ df.pivot_table(index='Sex', columns='Pclass',
 ```{code-cell} ipython3
 pd.crosstab(index=df['Sex'], columns=df['Pclass'])
 ```
+
+## Exercises
 
 +++ {"clear_cell": false}
 
@@ -244,7 +247,7 @@ df.pivot_table(index='Underaged', columns='Sex',
 
 +++
 
-The `melt` function performs the inverse operation of a `pivot`. This can be used to make your frame longer, i.e. to make a *tidy* version of your data.
+The `melt` function performs the inverse operation of a `pivot`.
 
 ```{code-cell} ipython3
 pivoted = df.pivot_table(index='Sex', columns='Pclass', values='Fare').reset_index()
@@ -255,7 +258,7 @@ pivoted.columns.name = None
 pivoted
 ```
 
-Assume we have a DataFrame like the above. The observations (the average Fare people payed) are spread over different columns. In a tidy dataset, each observation is stored in one row. To obtain this, we can use the `melt` function:
+Assume we have a DataFrame like the above. The observations (the average Fare people payed) are spread over different columns. To make sure each value is in its own row, we can use the `melt` function:
 
 ```{code-cell} ipython3
 pd.melt(pivoted)
@@ -267,6 +270,55 @@ In this case, this is not fully what we want. We would like to keep the 'Sex' co
 
 ```{code-cell} ipython3
 pd.melt(pivoted, id_vars=['Sex']) #, var_name='Pclass', value_name='Fare')
+```
+
+## Tidy data
+
+`melt `can be used to make a dataframe longer, i.e. to make a *tidy* version of your data. In a [tidy dataset](https://vita.had.co.nz/papers/tidy-data.pdf) (also sometimes called 'long-form' data or 'denormalized' data) each observation is stored in its own row and each column contains a single variable:
+
+![](../img/tidy_data_scheme.png)
+
+Consider the following example with measurements in different Waste Water Treatment Plants (WWTP):
+
+```{code-cell} ipython3
+data = pd.DataFrame({
+   'WWTP': ['Destelbergen', 'Landegem', 'Dendermonde', 'Eeklo'],
+   'Treatment A': [8.0, 7.5, 8.3, 6.5],
+   'Treatment B': [6.3, 5.2, 6.2, 7.2]
+})
+data
+```
+
+This data representation is not "tidy":
+
+- Each row contains two observations of pH (each from a different treatment)
+- 'Treatment' (A or B) is a variable not in its own column, but used as column headers
+
++++
+
+We can `melt` the data set to tidy the data:
+
+```{code-cell} ipython3
+data_long = pd.melt(data, id_vars=["WWTP"], 
+                    value_name="pH", var_name="Treatment")
+data_long
+```
+
+The usage of the tidy data representation has some important benefits when working with `groupby` or data visualization libraries such as Seaborn:
+
+```{code-cell} ipython3
+data_long.groupby("Treatment")["pH"].mean()  # switch to `WWTP`
+```
+
+```{code-cell} ipython3
+sns.catplot(data=data, x="WWTP", y="...", hue="...", kind="bar")  # this doesn't work that easily
+```
+
+```{code-cell} ipython3
+:tags: []
+
+sns.catplot(data=data_long, x="WWTP", y="pH", 
+            hue="Treatment", kind="bar")  # switch `WWTP` and `Treatment`
 ```
 
 # Reshaping with `stack` and `unstack`
@@ -335,6 +387,8 @@ df = pd.read_csv("data/titanic.csv")
 df.head()
 ```
 
+## Exercises
+
 ```{code-cell} ipython3
 df.pivot_table(index='Pclass', columns='Sex', 
                values='Survived', aggfunc='mean')
@@ -361,7 +415,7 @@ df.groupby(['Pclass', 'Sex'])['Survived'].mean().unstack()
 
 +++
 
-These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKajNMa1pfSzN6Q3M/view?usp=sharing&resourcekey=0-EC8vCWiiKisQIkhYLBvOpQ) and [`cast.csv`](https://drive.google.com/file/d/0B3G70MlBnCgKal9UYTJSR2ZhSW8/view?usp=sharing&resourcekey=0-w_mAR11xVeXm84sRZtyAhg) and put them in the `/data` folder.
+These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [`cast.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
 
 ```{code-cell} ipython3
 cast = pd.read_csv('data/cast.csv')

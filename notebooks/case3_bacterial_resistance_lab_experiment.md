@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -114,9 +114,9 @@ main_experiment
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
-Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the values stored in a column `optical_density` and the time in the experiment as `experiment_time_h`. Save the variable as <code>tidy_experiment</code>
+Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the values stored in a column `optical_density` and the time in the experiment as `experiment_time_h`. Save the variable as `tidy_experiment`.
 
 <details><summary>Hints</summary>
 
@@ -145,11 +145,16 @@ tidy_experiment.head()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
 * Make a histogram using the [Seaborn package](https://seaborn.pydata.org/index.html) to visualize the distribution of the `optical_density`
 * Change the overall theme to any of the available Seaborn themes
 * Change the border color of the bars to `white` and the fill color of the bars to `grey`
+    
+Using Matplotlib, further adjust the histogram:
+    
+- Add a Figure title "Optical density distribution".
+- Overwrite the y-axis label to "Frequency".
 
 <details><summary>Hints</summary>
 
@@ -157,9 +162,9 @@ tidy_experiment.head()
 - There are five preset seaborn themes: `darkgrid`, `whitegrid`, `dark`, `white`, and `ticks`.
 - Make sure to set the theme before creating the graph.
 - Seaborn relies on Matplotlib to plot the individual bars, so the available parameters (`**kwargs`) to adjust the bars that can be passed (e.g. `color` and `edgecolor`) are enlisted in the [matplotlib.axes.Axes.bar](https://matplotlib.org/3.3.2/api/_as_gen/matplotlib.axes.Axes.bar.html) documentation.
+- The output of a Seaborn plot is an object from which the Matplotlib `Figure` and `Axes` can be accessed, respectively `snsplot.fig` and `snsplot.axes`. Note that the `axes` are always returned as a 2x2 array of Axes (also if it only contains a single element).
 
 </details>
-
 
 </div>
 
@@ -167,8 +172,11 @@ tidy_experiment.head()
 :tags: [nbtutor-solution]
 
 sns.set_style("white")
-sns.displot(data=tidy_experiment, x="optical_density",
-            color='grey', edgecolor='white')
+histplot = sns.displot(data=tidy_experiment, x="optical_density",
+                       color='grey', edgecolor='white')
+
+histplot.fig.suptitle("Optical density distribution")
+histplot.axes[0][0].set_ylabel("Frequency");
 ```
 
 <div class="alert alert-success">

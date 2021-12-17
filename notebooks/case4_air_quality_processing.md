@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -102,9 +102,11 @@ For the sake of this tutorial, we will disregard the 'flag' columns (indicating 
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
-<br><br>
+**EXERCISE**:
+
 Drop all 'flag' columns ('flag1', 'flag2', ...)
+
+</div>
 
 ```{code-cell} ipython3
 flag_columns = [col for col in data.columns if 'flag' in col]
@@ -381,8 +383,6 @@ station
 ```
 
 ```{code-cell} ipython3
-:clear_cell: false
-
 test = read_airbase_file(filename, station)
 test.head()
 ```
@@ -393,23 +393,28 @@ We now want to use this function to read in all the different data files from Ai
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
- <ul>
-  <li>Use the <code>glob.glob</code> function to list all 4 AirBase data files that are included in the 'data' directory, and call the result <code>data_files</code>.</li>
-</ul>
+Use the [pathlib module](https://docs.python.org/3/library/pathlib.html) `Path` class in combination with the `glob` method to list all 4 AirBase data files that are included in the 'data' directory, and call the result `data_files`.
+
+<details><summary>Hints</summary>
+
+- The pathlib module provides a object oriented way to handle file paths. First, create a `Path` object of the data folder, `pathlib.Path("./data")`. Next, apply the `glob` function to extract all the files containing `*0008001*` (use wildcard * to say "any characters"). The output is a Python generator, which you can collect as a `list()`.
+
+</details>    
+
+    
 </div>
 
 ```{code-cell} ipython3
-:clear_cell: false
-
-import glob
+from pathlib import Path
 ```
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-data_files = glob.glob("data/*0008001*")
+data_folder = Path("./data")
+data_files = list(data_folder.glob("*0008001*"))
 data_files
 ```
 

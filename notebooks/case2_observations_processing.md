@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -109,7 +109,7 @@ Adding this static value as a new column `datasetName`:
 
 **EXERCISE**
 
-- Add a new column, `datasetName`, to the survey data set with `datasetname` as value for all of the records (static value for the entire data set)
+Add a new column, `datasetName`, to the survey data set with `datasetname` as value for all of the records (static value for the entire data set)
 
 <details><summary>Hints</summary>
 
@@ -126,7 +126,7 @@ Adding this static value as a new column `datasetName`:
 survey_data["datasetName"] = datasetname
 ```
 
-### Cleaning the sex_char column into a DwC called [sex](http://rs.tdwg.org/dwc/terms/#sex) column
+### Cleaning the `sex_char` column into a DwC called [sex](http://rs.tdwg.org/dwc/terms/#sex) column
 
 +++
 
@@ -183,7 +183,7 @@ survey_data = survey_data.rename(columns={'sex_char': 'verbatimSex'})
 
 <details><summary>Hints</summary>
 
-- A dictionary is a Python standard library data structure - no Pandas magic involved when you need a key/value mapping.
+- A dictionary is a Python standard library data structure, see https://docs.python.org/3/tutorial/datastructures.html#dictionaries - no Pandas magic involved when you need a key/value mapping.
 - When you need to replace values, look for the Pandas method `replace`.
 
 </details>
@@ -587,7 +587,132 @@ For the remainder, let's remove the day/year/month columns.
 survey_data_decoupled = survey_data_decoupled.drop(columns=["day", "month", "year"])
 ```
 
-## 2. Add coordinates from the plot locations
+## 2. Add species names to dataset
+
++++
+
+The column `species` only provides a short identifier in the survey overview. The name information is stored in a separate file `species.csv`. We want our data set to include this information, read in the data and add it to our survey data set:
+
++++
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- Read in the 'species.csv' file and save the resulting `DataFrame` as variable `species_data`.
+
+<details><summary>Hints</summary>
+
+- Check the delimiter (`sep`) parameter of the `read_csv` function.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+species_data = pd.read_csv("data/species.csv", sep=";")
+```
+
+```{code-cell} ipython3
+species_data.head()
+```
+
+### Fix a wrong acronym naming
+
++++
+
+When reviewing the metadata, you see that in the data-file the acronym `NE` is used to describe `Neotoma albigula`, whereas in the [metadata description](http://esapubs.org/archive/ecol/E090/118/Portal_rodent_metadata.htm), the acronym `NA` is used.
+
++++
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- Convert the value of 'NE' to 'NA' by using Boolean indexing/Filtering for the `species_id` column.
+
+<details><summary>Hints</summary>
+
+- To assign a new value, use the `loc` operator.
+- With `loc`, specify both the selecting for the rows and for the columns (`df.loc[row_indexer, column_indexer] = ..`).
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+species_data.loc[species_data["species_id"] == "NE", "species_id"] = "NA"
+```
+
+### Merging surveys and species
+
++++
+
+As we now prepared the two series, we can combine the data, using again the `pd.merge` operation.
+
++++
+
+We want to add the data of the species to the survey data, in order to see the full species names in the combined data table.
+
++++
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Combine the DataFrames `survey_data_plots` and the `DataFrame` `species_data` by adding the corresponding species information (name, class, kingdom,..) to the individual observations. Assign the output to a new variable `survey_data_species`.
+
+<details><summary>Hints</summary>
+
+- This is an example of a database JOIN operation. Pandas provides the `pd.merge` function to join two data sets using a common identifier.
+- Take into account that our key-column is different for `species_data` and `survey_data_plots`, respectively `species` and `species_id`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right `DataFrame` to merge on.
+
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+survey_data_species = pd.merge(survey_data_decoupled, species_data, how="left",  # LEFT OR INNER?
+                                left_on="species", right_on="species_id")
+```
+
+```{code-cell} ipython3
+len(survey_data_species) # check length after join operation
+```
+
+The join is ok, but we are left with some redundant columns and wrong naming:
+
+```{code-cell} ipython3
+survey_data_species.head()
+```
+
+We do not need the columns `species_x` and `species_id` column anymore, as we will use the scientific names from now on:
+
+```{code-cell} ipython3
+survey_data_species = survey_data_species.drop(["species_x", "species_id"], axis=1)
+```
+
+The column `species_y` could just be named `species`:
+
+```{code-cell} ipython3
+survey_data_species = survey_data_species.rename(columns={"species_y": "species"})
+```
+
+```{code-cell} ipython3
+survey_data_species.head()
+```
+
+```{code-cell} ipython3
+:tags: []
+
+len(survey_data_species)
+```
+
+## 3. Add coordinates from the plot locations
 
 +++
 
@@ -782,7 +907,7 @@ Combine the `DataFrame` `plot_data_selection` and the `DataFrame` `survey_data_d
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-survey_data_plots = pd.merge(survey_data_decoupled, plot_data_selection,
+survey_data_plots = pd.merge(survey_data_species, plot_data_selection,
                              how="left", on="plot")
 ```
 
@@ -796,133 +921,10 @@ The plot locations need to be stored with the variable name `verbatimLocality` i
 survey_data_plots = survey_data_plots.rename(columns={'plot': 'verbatimLocality'})
 ```
 
-## 3. Add species names to dataset
-
-+++
-
-The column `species` only provides a short identifier in the survey overview. The name information is stored in a separate file `species.csv`. We want our data set to include this information, read in the data and add it to our survey data set:
-
-+++
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-- Read in the 'species.csv' file and save the resulting `DataFrame` as variable `species_data`.
-
-<details><summary>Hints</summary>
-
-- Check the delimiter (`sep`) parameter of the `read_csv` function.
-
-</details>
-
-</div>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-species_data = pd.read_csv("data/species.csv", sep=";")
-```
-
-```{code-cell} ipython3
-species_data.head()
-```
-
-### Fix a wrong acronym naming
-
-+++
-
-When reviewing the metadata, you see that in the data-file the acronym `NE` is used to describe `Neotoma albigula`, whereas in the [metadata description](http://esapubs.org/archive/ecol/E090/118/Portal_rodent_metadata.htm), the acronym `NA` is used.
-
-+++
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-- Convert the value of 'NE' to 'NA' by using Boolean indexing/Filtering for the `species_id` column.
-
-<details><summary>Hints</summary>
-
-- To assign a new value, use the `loc` operator.
-- With `loc`, specify both the selecting for the rows and for the columns (`df.loc[row_indexer, column_indexer] = ..`).
-
-</details>
-
-</div>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-species_data.loc[species_data["species_id"] == "NE", "species_id"] = "NA"
-```
-
-### Merging surveys and species
-
-+++
-
-As we now prepared the two series, we can combine the data, using again the `pd.merge` operation.
-
-+++
-
-We want to add the data of the species to the survey data, in order to see the full species names in the combined data table.
-
-+++
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-Combine the `DataFrame` `survey_data_plots` and the `DataFrame` `species_data` by adding the corresponding species information (name, class, kingdom,..) to the individual observations. Assign the output to a new variable `survey_data_species`.
-
-<details><summary>Hints</summary>
-
-- This is an example of a database JOIN operation. Pandas provides the `pd.merge` function to join two data sets using a common identifier.
-- Take into account that our key-column is different for `species_data` and `survey_data_plots`, respectively `species` and `species_id`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right `DataFrame` to merge on.
-
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-survey_data_species = pd.merge(survey_data_plots, species_data, how="left",  # LEFT OR INNER?
-                                left_on="species", right_on="species_id")
-```
-
-```{code-cell} ipython3
-len(survey_data_species) # check length after join operation
-```
-
-The join is ok, but we are left with some redundant columns and wrong naming:
-
-```{code-cell} ipython3
-survey_data_species.head()
-```
-
-We do not need the columns `species_x` and `species_id` column anymore, as we will use the scientific names from now on:
-
-```{code-cell} ipython3
-survey_data_species = survey_data_species.drop(["species_x", "species_id"], axis=1)
-```
-
-The column `species_y` could just be named `species`:
-
-```{code-cell} ipython3
-survey_data_species = survey_data_species.rename(columns={"species_y": "species"})
-```
-
-```{code-cell} ipython3
-survey_data_species.head()
-```
-
-```{code-cell} ipython3
-len(survey_data_species)
-```
-
 Let's now save our clean data to a `csv` file, so we can further analyze the data in a following notebook:
 
 ```{code-cell} ipython3
-survey_data_species.to_csv("interim_survey_data_species.csv", index=False)
+survey_data_plots.to_csv("interim_survey_data_species.csv", index=False)
 ```
 
 ## (OPTIONAL SECTION) 4. Using a API service to match the scientific names
@@ -1072,7 +1074,7 @@ Hence, in order to add this information to our survey DataFrame, we need to perf
 :tags: [nbtutor-solution]
 
 #%%timeit
-unique_species = survey_data_species[["genus", "species"]].drop_duplicates().dropna()
+unique_species = survey_data_plots[["genus", "species"]].drop_duplicates().dropna()
 ```
 
 ```{code-cell} ipython3
@@ -1099,7 +1101,7 @@ len(unique_species)
 
 #%%timeit
 unique_species = \
-    survey_data_species.groupby(["genus", "species"]).first().reset_index()[["genus", "species"]]
+    survey_data_plots.groupby(["genus", "species"]).first().reset_index()[["genus", "species"]]
 ```
 
 ```{code-cell} ipython3
@@ -1228,7 +1230,7 @@ unique_species_annotated.head()
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-survey_data_completed = pd.merge(survey_data_species, unique_species_annotated,
+survey_data_completed = pd.merge(survey_data_plots, unique_species_annotated,
                                  how='left', on= ["genus", "species"])
 ```
 
@@ -1243,7 +1245,7 @@ survey_data_completed.head()
 Congratulations! You did a great cleaning job, save your result:
 
 ```{code-cell} ipython3
-survey_data_completed.to_csv("survey_data_completed.csv", index=False)
+survey_data_completed.to_csv("survey_data_completed_.csv", index=False)
 ```
 
 ## Acknowledgements

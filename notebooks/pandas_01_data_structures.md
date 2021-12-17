@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -72,7 +72,7 @@ df.groupby('Sex')[['Survived']].aggregate(lambda x: x.sum() / len(x))
 </div>
 
 ```{code-cell} ipython3
-df.groupby('Pclass')['Survived'].aggregate(lambda x: x.sum() / len(x)).plot(kind='bar')
+df.groupby('Pclass')['Survived'].aggregate(lambda x: x.sum() / len(x)).plot.bar()
 ```
 
 <div class="alert alert-warning">
@@ -195,15 +195,17 @@ countries.plot()
 However, for this dataset, it does not say that much:
 
 ```{code-cell} ipython3
-countries['population'].plot(kind='barh')
+countries['population'].plot.barh()  # or .plot(kind='barh')
 ```
 
 <div class="alert alert-success">
 
 **EXERCISE**:
 
-* You can play with the `kind` keyword of the `plot` function in the figure above: 'line', 'bar', 'hist', 'density', 'area', 'pie', 'scatter', 'hexbin', 'box'
+* You can play with the `kind` keyword or accessor of the `plot` method in the figure above: 'line', 'bar', 'hist', 'density', 'area', 'pie', 'scatter', 'hexbin', 'box'
 
+Note: doing `df.plot(kind="bar", ...)` or `df.plot.bar(...)` is exactly equivalent. You will see both ways in the wild.
+    
 </div>
 
 +++
@@ -352,7 +354,7 @@ df['Age']
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df['Fare'].plot(kind='box')
+df['Fare'].plot(kind='box')  # or .plot.box()
 ```
 
 <div class="alert alert-success">

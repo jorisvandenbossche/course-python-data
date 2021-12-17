@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -117,7 +117,7 @@ survey_data_processed.duplicated().sum()
 
 **EXERCISE**
 
-- Select all duplicate data by filtering the `observations` data and assign the result to a new variable `duplicate_observations`. The `duplicated()` method provides an `keep` argument define which duplicates (if any) to mark.
+- Select all duplicate data by filtering the `observations` data and assign the result to a new variable `duplicate_observations`. The `duplicated()` method provides a `keep` argument define which duplicates (if any) to mark.
 - Sort the `duplicate_observations` data on both the columns `eventDate` and `verbatimLocality` and show the first 9 records.
 
 <details><summary>Hints</summary>
@@ -603,13 +603,13 @@ To evaluate the intensity or number of occurrences during different time spans, 
 **EXERCISE**
 
 - Create a table, called `heatmap_prep`, based on the `survey_data` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
-- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a> make a heatmap starting from the `heatmap_prep` variable.
+- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a>, make a heatmap starting from the `heatmap_prep` variable.
 
 <details><summary>Hints</summary>
 
 - The `.dt` accessor can be used to get the `year`, `month`,... from a `datetime` column
 - Use `pivot_table` and provide the years to `index` and the months to `columns`. Do not forget to `count` the number for each combination (`aggfunc`).
-- `resample` needs an aggregation function on how to combine the values within a single 'group' (in this case data within a year). In this example, we want to know the `size` of each group, i.e. the number of records within each year.
+- Seaborn has an `heatmap` function which requires a short-form DataFrame, comparable to giving each element in a table a color value.
 
 </details>
 
@@ -702,6 +702,14 @@ axs = species_evolution.plot(subplots=True, figsize=(14, 8), sharey=True)
 **EXERCISE**
 
 Recreate the same plot as in the previous exercise using Seaborn `relplot` functon with the `month_evolution` variable.
+    
+<details><summary>Hints</summary>
+
+- We want to have the `counts` as a function of `eventDate`, so link these columns to y and x respectively.
+- To create subplots in Seaborn, the usage of _facetting_ (splitting data sets to multiple facets) is used by linking a column name to the `row`/`col` parameter. 
+- Using `height` and `widht`, the figure size can be optimized.
+    
+</details>
 
 +++
 

@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -40,7 +40,7 @@ jupyter labextension install jupyterlab-plotly@4.14.3
 To run the large data set section, additional package installations are required:
 
 ```
-conda install -c conda-forge datashader holoviews
+conda install -c conda-forge datashader holoviews geoviews
 ```
 
 To run the 'bokeh-pandas' backend:
@@ -634,11 +634,11 @@ Consider saving your notebook with the outputs cleared (Menu > `Kernel` > `Resta
 
 +++
 
-## You're data sets are HUGE?
+## Your data sets are HUGE?
 
 +++
 
-When you're working with a lot of records, the visualization of the individual points does not always make sense as there are simply to many dots overlapping each other (check [this](https://bokeh.github.io/datashader-docs/user_guide/1_Plotting_Pitfalls.html) notebook for a more detailed explanation).
+When you are working with a lot of records, the visualization of the individual points does not always make sense as there are simply to many dots overlapping each other (check [this](https://datashader.org/user_guide/Plotting_Pitfalls.html) notebook for a more detailed explanation).
 
 +++
 
@@ -651,33 +651,37 @@ Working with such a data set on a local machine is not straightforward anymore, 
 
 +++
 
-The package [datashader](https://bokeh.github.io/datashader-docs/index.html) provides a solution for this size of data sets and works together with other packages such as `Bokeh` and `Holoviews`.
+The package [datashader](https://datashader.org/) provides a solution for this size of data sets and works together with other packages such as `Bokeh` and `Holoviews`.
 
 +++
 
-The data from [the gull data set](https://zenodo.org/record/3541812#.XfZYcNko-V6) is downloaded and stored it in the `data` folder and is not part of the Github repository. For example, downloading the [2018 data set](https://zenodo.org/record/3541812/files/HG_OOSTENDE-acceleration-2018.csv?download=1) from Zenodo:
+The data from [the gull data set](https://zenodo.org/record/3541812#.XfZYcNko-V6) is downloaded and stored it in the `data` folder and is not part of the Github repository. For example, after downloading the [2018 data set](https://zenodo.org/record/3541812/files/HG_OOSTENDE-gps-2018.csv?download=1) from Zenodo:
 
 ```{code-cell} ipython3
-import pandas as pd, holoviews as hv
+import pandas as pd
+import holoviews as hv
+import hvplot.pandas 
 from colorcet import fire
-from datashader.utils import lnglat_to_meters
-from holoviews.element.tiles import EsriImagery
-from holoviews.operation.datashader import rasterize, shade
 
-df = pd.read_csv('data/HG_OOSTENDE-gps-2018.csv', nrows=1_000_000, # for the live demo on my laptop, I just use 1_000_000 points
-                 usecols=['location-long', 'location-lat', 'individual-local-identifier'])
-df.loc[:,'location-long'], df.loc[:,'location-lat'] = lnglat_to_meters(df["location-long"], df["location-lat"])
+hv.extension('bokeh')
 ```
 
 ```{code-cell} ipython3
-hv.extension('bokeh')
+df = pd.read_csv('data/HG_OOSTENDE-gps-2018.csv', nrows=1_000_000, # for the live demo on my laptop, I just use 1_000_000 points
+                 usecols=['location-long', 'location-lat', 
+                          'individual-local-identifier'])
+df.head()
+```
 
-map_tiles  = EsriImagery().opts(alpha=1.0, width=600, height=600, bgcolor='black')
-points     = hv.Points(df, ['location-long', 'location-lat'])
-rasterized = shade(rasterize(points, x_sampling=1, y_sampling=1, 
-                             width=600, height=600), cmap=fire)
+```{code-cell} ipython3
+import warnings
+warnings.filterwarnings('ignore')
+```
 
-map_tiles * rasterized
+```{code-cell} ipython3
+df.hvplot.points('location-long', 'location-lat', geo=True, tiles='ESRI', 
+                 datashade=True, aggregator='count', cmap=fire, project=True,
+                 xlim=(-5, 5), ylim=(48, 53), frame_width=600)
 ```
 
 <div class="alert alert-info">
