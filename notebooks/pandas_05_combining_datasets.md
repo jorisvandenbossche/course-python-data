@@ -102,6 +102,15 @@ The ``pd.concat`` function does all of the heavy lifting of combining data in di
 Assume we have some similar data as in `countries`, but for a set of different countries:
 
 ```{code-cell} ipython3
+data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
+        'population': [11.3, 64.3, 81.3, 16.9, 64.9],
+        'area': [30510, 671308, 357050, 41526, 244820],
+        'capital': ['Brussels', 'Paris', 'Berlin', 'Amsterdam', 'London']}
+countries = pd.DataFrame(data)
+countries
+```
+
+```{code-cell} ipython3
 data = {'country': ['Nigeria', 'Rwanda', 'Egypt', 'Morocco', ],
         'population': [182.2, 11.3, 94.3, 34.4],
         'area': [923768, 26338 , 1010408, 710850],
@@ -134,7 +143,50 @@ We can also pass a dictionary of objects instead of a list of objects. Now the k
 pd.concat({'europe': countries, 'africa': countries_africa})
 ```
 
+# Joining data with `pd.merge`
+
++++
+
+Using `pd.concat` above, we combined datasets that had the same columns. But, another typical case is where you want to add information of a second dataframe to a first one based on one of the columns they have in common. That can be done with [`pd.merge`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.merge.html).
+
+Let's look again at the titanic passenger data, but taking a small subset of it to make the example easier to grasp:
+
+```{code-cell} ipython3
+df = pd.read_csv("data/titanic.csv")
+df = df.loc[:9, ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked']]
+```
+
+```{code-cell} ipython3
+df
+```
+
+Assume we have another dataframe with more information about the 'Embarked' locations:
+
+```{code-cell} ipython3
+locations = pd.DataFrame({'Embarked': ['S', 'C', 'N'],
+                          'City': ['Southampton', 'Cherbourg', 'New York City'],
+                          'Country': ['United Kindom', 'France', 'United States']})
+```
+
+```{code-cell} ipython3
+locations
+```
+
+We now want to add those columns to the titanic dataframe, for which we can use `pd.merge`, specifying the column on which we want to merge the two datasets:
+
+```{code-cell} ipython3
+pd.merge(df, locations, on='Embarked', how='left')
+```
+
+In this case we use `how='left` (a "left join") because we wanted to keep the original rows of `df` and only add matching values from `locations` to it. Other options are 'inner', 'outer' and 'right' (see the [docs](http://pandas.pydata.org/pandas-docs/stable/merging.html#brief-primer-on-merge-methods-relational-algebra) for more on this, or this visualization: https://joins.spathon.com/).
+
++++
+
 ## Combining columns  - ``pd.concat`` with ``axis=1``
+
++++
+
+We can use `pd.merge` to combine the columns of two DataFrame based on a common column. If our two DataFrames already have equivalent rows, we can also achieve this basic case using `pd.concat` with specifying `axis=1` (or `axis="columns"`).
 
 +++
 
@@ -143,6 +195,15 @@ pd.concat({'europe': countries, 'africa': countries_africa})
 +++
 
 Assume we have another DataFrame for the same countries, but with some additional statistics:
+
+```{code-cell} ipython3
+data = {'country': ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom'],
+        'population': [11.3, 64.3, 81.3, 16.9, 64.9],
+        'area': [30510, 671308, 357050, 41526, 244820],
+        'capital': ['Brussels', 'Paris', 'Berlin', 'Amsterdam', 'London']}
+countries = pd.DataFrame(data)
+countries
+```
 
 ```{code-cell} ipython3
 data = {'country': ['Belgium', 'France', 'Netherlands'],
@@ -167,42 +228,9 @@ countries2
 ```
 
 ```{code-cell} ipython3
-pd.concat([countries2, country_economics], axis=1)
-```
-
-# Joining data with `pd.merge`
-
-+++
-
-Using `pd.concat` above, we combined datasets that had the same columns or the same index values. But, another typical case if where you want to add information of second dataframe to a first one based on one of the columns. That can be done with [`pd.merge`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.merge.html).
-
-Let's look again at the titanic passenger data, but taking a small subset of it to make the example easier to grasp:
-
-```{code-cell} ipython3
-df = pd.read_csv("data/titanic.csv")
-df = df.loc[:9, ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked']]
+pd.concat([countries2, country_economics], axis="columns")
 ```
 
 ```{code-cell} ipython3
-df
+
 ```
-
-Assume we have another dataframe with more information about the 'Embarked' locations:
-
-```{code-cell} ipython3
-locations = pd.DataFrame({'Embarked': ['S', 'C', 'Q', 'N'],
-                          'City': ['Southampton', 'Cherbourg', 'Queenstown', 'New York City'],
-                          'Country': ['United Kindom', 'France', 'Ireland', 'United States']})
-```
-
-```{code-cell} ipython3
-locations
-```
-
-We now want to add those columns to the titanic dataframe, for which we can use `pd.merge`, specifying the column on which we want to merge the two datasets:
-
-```{code-cell} ipython3
-pd.merge(df, locations, on='Embarked', how='left')
-```
-
-In this case we use `how='left` (a "left join") because we wanted to keep the original rows of `df` and only add matching values from `locations` to it. Other options are 'inner', 'outer' and 'right' (see the [docs](http://pandas.pydata.org/pandas-docs/stable/merging.html#brief-primer-on-merge-methods-relational-algebra) for more on this).
