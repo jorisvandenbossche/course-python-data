@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -420,13 +420,19 @@ data_files
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
- <ul>
-  <li>Loop over the data files, read and process the file using our defined function, and append the dataframe to a list.</li>
-  <li>Combine the the different DataFrames in the list into a single DataFrame where the different columns are the different stations. Call the result <code>combined_data</code>.</li>
+* Loop over the data files, read and process the file using our defined function, and append the dataframe to a list.
+* Combine the the different DataFrames in the list into a single DataFrame where the different columns are the different stations. Call the result `combined_data`.
 
-</ul>
+<details><summary>Hints</summary>
+
+- The `data_files` list contains `Path` objects (from the pathlib module). To get the actual file name as a string, use the `.name` attribute.
+- The station name is always first 7 characters of the file name.
+
+</details>    
+
+
 </div>
 
 ```{code-cell} ipython3
@@ -435,7 +441,7 @@ data_files
 dfs = []
 
 for filename in data_files:
-    station = filename.split("/")[-1][:7]
+    station = filename.name[:7]
     df = read_airbase_file(filename, station)
     dfs.append(df)
 ```
@@ -459,4 +465,8 @@ combined_data.index.name = 'datetime'
 
 ```{code-cell} ipython3
 combined_data.to_csv("airbase_data_processed.csv")
+```
+
+```{code-cell} ipython3
+
 ```
