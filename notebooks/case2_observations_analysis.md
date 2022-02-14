@@ -506,6 +506,7 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 
 - Check the `kind` argument of the `catplot` function to figure out to specify you want a barplot with given x and y values.
 - To link a column to different colors, use the `hue` argument
+- Using `height` and `aspect`, the figure size can be optimized.
 
 
 </details>
