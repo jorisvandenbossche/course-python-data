@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -646,6 +646,9 @@ When reviewing the metadata, you see that in the data-file the acronym `NE` is u
 :tags: [nbtutor-solution]
 
 species_data.loc[species_data["species_id"] == "NE", "species_id"] = "NA"
+
+# note: for such a 1:1 replacement, we could also use the "replace()" method
+# species_data["species_id"] = species_data["species_id"].replace({"NE": "NA"})
 ```
 
 ### Merging surveys and species
@@ -664,12 +667,12 @@ We want to add the data of the species to the survey data, in order to see the f
 
 **EXERCISE**
 
-Combine the DataFrames `survey_data_plots` and the `DataFrame` `species_data` by adding the corresponding species information (name, class, kingdom,..) to the individual observations. Assign the output to a new variable `survey_data_species`.
+Combine the DataFrames `survey_data_decoupled` and `species_data` by adding the corresponding species information (name, class, kingdom,..) to the individual observations. Assign the output to a new variable `survey_data_species`.
 
 <details><summary>Hints</summary>
 
 - This is an example of a database JOIN operation. Pandas provides the `pd.merge` function to join two data sets using a common identifier.
-- Take into account that our key-column is different for `species_data` and `survey_data_plots`, respectively `species` and `species_id`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right `DataFrame` to merge on.
+- Take into account that our key-column is different for `species_data` and `survey_data_decoupled`, respectively `species` and `species_id`. The `pd.merge()` function has `left_on` and `right_on` keywords to specify the name of the column in the left and right `DataFrame` to merge on.
 
 </details>
 
@@ -867,7 +870,7 @@ Do not abuse the usage of the `apply` method, but always look for an existing Pa
 
 We can extend our survey data set with this coordinate information. Making the combination of two data sets based on a common identifier is completely similar to the usage of `JOIN` operations in databases. In Pandas, this functionality is provided by [`pd.merge`](http://pandas.pydata.org/pandas-docs/stable/merging.html#database-style-DataFrame-joining-merging).
 
-In practice, we have to add the columns `decimalLongitude`/`decimalLatitude` to the current data set `survey_data_decoupled`, by using the plot identification number as key to join.
+In practice, we have to add the columns `decimalLongitude`/`decimalLatitude` to the current data set `survey_data_species`, by using the plot identification number as key to join.
 
 +++
 
@@ -895,7 +898,7 @@ plot_data_selection = plot_data[["plot", "decimalLongitude", "decimalLatitude"]]
 
 **EXERCISE**
 
-Combine the `DataFrame` `plot_data_selection` and the `DataFrame` `survey_data_decoupled` by adding the corresponding coordinate information to the individual observations using the `pd.merge()` function. Assign the output to a new variable `survey_data_plots`.
+Combine the DataFrame `plot_data_selection` and the DataFrame `survey_data_species` by adding the corresponding coordinate information to the individual observations using the `pd.merge()` function. Assign the output to a new variable `survey_data_plots`.
 
 <details><summary>Hints</summary>
 
@@ -1058,7 +1061,7 @@ Hence, in order to add this information to our survey DataFrame, we need to perf
 3. process the returned message:
     * if a match is found, add the information of the columns 'class', 'kingdom', 'order', 'phylum', 'scientificName', 'status' and 'usageKey'
     * if no match was found: nan-values
-4. Join the DataFrame of unique genus/species information with the enriched GBIF info to the `survey_data_species` data set
+4. Join the DataFrame of unique genus/species information with the enriched GBIF info to the `survey_data_plots` data set
 
 +++
 
@@ -1066,7 +1069,7 @@ Hence, in order to add this information to our survey DataFrame, we need to perf
 
 **EXERCISE**
 
-- Extract the unique combinations of genus and species in the `survey_data_species` using the function `drop_duplicates()`. Save the result as the variable `unique_species` and remove the `NaN` values using `.dropna()`.
+- Extract the unique combinations of genus and species in the `survey_data_plots` using the function `drop_duplicates()`. Save the result as the variable `unique_species` and remove the `NaN` values using `.dropna()`.
 
 </div>
 
@@ -1085,7 +1088,7 @@ len(unique_species)
 
 **EXERCISE**
 
-- Extract the unique combinations of genus and species in the `survey_data_species` using `groupby`. Save the result as the variable `unique_species`.
+- Extract the unique combinations of genus and species in the `survey_data_plots` using `groupby`. Save the result as the variable `unique_species`.
 
 <details><summary>Hints</summary>
 
@@ -1223,7 +1226,7 @@ unique_species_annotated.head()
 
 **EXERCISE**
 
-- Join the `unique_species_annotated` data to the `survey_data_species` data set, using both the genus and species column as keys. Save the result as the variable `survey_data_completed`.
+- Join the `unique_species_annotated` data to the `survey_data_plots` data set, using both the genus and species column as keys. Save the result as the variable `survey_data_completed`.
 
 </div>
 
