@@ -1,5 +1,6 @@
 # intermediate data files
 *.csv
+*.sqlite
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
