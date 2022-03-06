@@ -300,8 +300,8 @@ sns.displot(data=titanic, x="Age", row="Sex", aspect=3, height=2)
 
 Make a violin plot showing the `Age` distribution in each of the `Pclass` categories comparing for `Sex`:
     
+- Use the `Pclass` column to create a violin plot for each of the classes. To do so, link the `Pclass` column to the `x-axis`.
 - Use a different color for the `Sex`.
-- Use the `Pclass` to make a plot for each of the classes along the `x-axis`
 - Check the behavior of the `split` argument and apply it to compare male/female.
 - Use the `sns.despine` function to remove the boundaries around the plot.    
     
