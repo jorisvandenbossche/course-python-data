@@ -564,6 +564,56 @@ sns.catplot(data=fl_motowar_20s,
 
 **EXERCISE**
     
+Compare the relative number of deaths within 30 days (in relation to the total number of victims) in between the following "road_user_type"s: "Bicycle", "Passenger car", "Pedestrian", "Motorbike" for the year 2019 and 2020:
+    
+- Filter the data for the years 2019 and 2020.
+- Filter the data on the road user types "Bicycle", "Passenger car", "Pedestrian" and "Motorbike". Call the new variable `compare_dead_30`.
+- Count for each combination of year and road_user_type the total victims and the total deaths within 30 days victims.
+- Calculate the percentage deaths within 30 days (add a new column "dead_prop").
+- Use a horizontal bar chart to plot the results with the "road_user_type"s on the y-axis and a separate color for each year.
+    
+<details><summary>Hints</summary>
+
+- By defining `datetime` as the index, slicing time series can be done using strings to filter data on the years 2019 and 2020. 
+- Use `isin()` to filter road_user_type categories used in the exercise.
+- Count _for each_... Indee, use `groupby` with 2 inputs, "road_user_type" and the year of `datetime`.
+- Deriving the year from the datetime: When an index, use `compare_dead_30.index.year`, otherwise `compare_dead_30.dt.year`.
+- Dividing columns works element wise in Pandas.
+- A horizontal bar chart in seaborn is a matter of defining `x` and `y` inputs correctly. 
+
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+# filter the data
+compare_dead_30 = casualties.set_index("datetime")["2019": "2021"]
+compare_dead_30 = compare_dead_30[compare_dead_30["road_user_type"].isin(
+    ["Bicycle", "Passenger car", "Pedestrian", "Motorbike"])]
+
+# Sum the victims and dead within 30 days victims for each year/road-user type combination
+compare_dead_30 = compare_dead_30.groupby(
+    ["road_user_type", compare_dead_30.index.year])[["n_dead_30days", "n_victims"]].sum().reset_index()
+
+# create a new colum with the percentage deads
+compare_dead_30["dead_prop"] = compare_dead_30["n_dead_30days"]/compare_dead_30["n_victims"] * 100
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+sns.catplot(data=compare_dead_30,
+            x="dead_prop",
+            y="road_user_type",
+            kind="bar",
+            hue="datetime"
+           )
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+    
 Create a line plot of the __monthly__ number for each of the categories of victims ('n_victims_ok', 'n_dead_30days', 'n_slightly_injured' and 'n_seriously_injured') as a function of time:
     
 - Create a new variable `monthly_victim_counts` that contains the daily sum of n_victims_ok, n_dead_30days, n_slightly_injured and n_seriously_injured.
