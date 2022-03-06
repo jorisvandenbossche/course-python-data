@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -268,7 +268,7 @@ sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar",
             estimator=np.mean)
 ```
 
-## (OPTIONAL) exercises
+## Exercises
 
 +++
 
@@ -298,7 +298,7 @@ sns.displot(data=titanic, x="Age", row="Sex", aspect=3, height=2)
 
 **EXERCISE**
 
-Make a violin plot showing the `Age` distribution for each `Sex` in each of the `Pclass` categories:
+Make a violin plot showing the `Age` distribution in each of the `Pclass` categories comparing for `Sex`:
     
 - Use a different color for the `Sex`.
 - Use the `Pclass` to make a plot for each of the classes along the `x-axis`
@@ -380,6 +380,18 @@ g = sns.lmplot(
     data=titanic, x="Age", y="Fare", 
     hue="Survived", col="Survived",  # hue="Pclass"
 )
+```
+
+```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+%run ./data/load_casualties.py 2005 2020
+```
+
+```{code-cell} ipython3
+
 ```
 
 # Need more Seaborn inspiration?
