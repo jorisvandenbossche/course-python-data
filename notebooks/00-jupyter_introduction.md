@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -88,12 +88,12 @@ or tables with Latex..
 
  Symbool | verklaring
  --- | --- 
- $BZV_{(t=0)}$      | initiële biochemische zuurstofvraag (7.33 mg.l-1)
- $OZ_{(t=0)}$	    | initiële opgeloste zuurstof (8.5 mg.l-1)
- $BZV_{in}$		  | input BZV(1 mg.l-1.min-1)
- $OZ_{sat}$		  | saturatieconcentratie opgeloste zuurstof (11 mg.l-1)
- $k_1$		      | bacteriële degradatiesnelheid (0.3 min-1)
- $k_2$		      | reäeratieconstante (0.4 min-1)
+ $$BZV_{(t=0)}$$	      | initiële biochemische zuurstofvraag (7.33 mg.l-1)
+ $$OZ_{(t=0)}$$	    | initiële opgeloste zuurstof (8.5 mg.l-1)
+ $$BZV_{in}$$		  | input BZV(1 mg.l-1.min-1)
+ $$OZ_{sat}$$		  | saturatieconcentratie opgeloste zuurstof (11 mg.l-1)
+ $$k_1$$		      | bacteriële degradatiesnelheid (0.3 min-1)
+ $$k_2$$		      | reäeratieconstante (0.4 min-1)
 
 +++
 
