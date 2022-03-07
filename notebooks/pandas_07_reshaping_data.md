@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -325,7 +325,7 @@ sns.catplot(data=data_long, x="WWTP", y="pH",
 
 ## Exercise with energy consumption data
 
-For an exercise on the "melt" operation, we are going to use a dataset from Fluvius (who operates and manages the gas and elektricity networks in Flanders) about the monthly consumption of elektricity and gas for the last year (https://www.fluvius.be/sites/fluvius/files/2021-10/verbruiksgegevens-per-maand.xlsx).
+To practice the "melt" operation, we are going to use a dataset from Fluvius (who operates and manages the gas and elektricity networks in Flanders) about the monthly consumption of elektricity and gas in 2021 (https://www.fluvius.be/sites/fluvius/files/2021-10/verbruiksgegevens-per-maand.xlsx).
 
 This data is available as an Excel file.
 
@@ -365,15 +365,16 @@ df
 
 **EXERCISE**:
 
-The actual data (consumption numbers) is spread over multiple columns: one column per month. Let's make a tidy version of this dataset with a single "consumption" column, and an additional "time" column.  
-The "SLP" column contains additional categories about the type of elektricity or gas consumption (eg household vs non-household consumption).
+The actual data (consumption numbers) is spread over multiple columns: one column per month. Make a tidy version of this dataset with a single "consumption" column, and an additional "time" column. 
+    
+Make sure to keep the "Hoofdgemeente", "Energie" and "SLP"  columns in the data set. The "SLP" column contains additional categories about the type of elektricity or gas consumption (eg household vs non-household consumption).
 
-* Use the `pd.melt()` to create a long or tidy version of the dataset, and call the result `df_tidy`.
+Use `pd.melt()` to create a long or tidy version of the dataset, and call the result `df_tidy`.
 
 <details><summary>Hints</summary>
 
 - If there are columns in the original dataset that you want to keep (with repeated values), pass those names to the `id_vars` keyword of `pd.melt()`.
-- You can use the `var_name` and `value_name` keywords to directly specify the column names to use for the variable and value columns.
+- You can use the `var_name` and `value_name` keywords to directly specify the column names to use for the new variable and value columns.
 
 </details>
 </div>
@@ -391,11 +392,11 @@ df_tidy
 
 **EXERCISE**:
 
-* Convert the "time" column to a column with a datetime data type using `pd.to_datetime`
+Convert the "time" column to a column with a datetime data type using `pd.to_datetime`.
 
 <details><summary>Hints</summary>
 
-* When using `pd.to_datetime`, remember to specify a `format`! 
+* When using `pd.to_datetime`, remember to specify a `format`.
 
 </details>
 </div>
@@ -419,7 +420,7 @@ df_tidy["time"] = pd.to_datetime(df_tidy["time"], format="%Y%m")
 
 <details><summary>Hints</summary>
 
-* If we want to sum the consumption over all municipalities, that means we should _not_ include this variable in the groupby keys. On the other hand, we want to calculate the sum *for each* month ("time") and *for each* category of elektricity/gas ("Energie").
+* If we want to sum the consumption over all municipalities that means we should _not_ include this variable in the groupby keys. On the other hand, we want to calculate the sum *for each* month ("time") and *for each* category of elektricity/gas ("Energie").
 * Creating a line plot with seaborn can be done with `sns.relplot(..., kind="line")`.
 * If you want to split the plot into multiple subplots based on a variable, check the `row` or `col` keyword.
 * The `sns.relplot` returns a "facet grid" object, and you can change an element of each of the subplots of this object using the `set()` method of this object. To set the y-limits, you can use the `ylim` keyword.
@@ -431,7 +432,7 @@ df_tidy["time"] = pd.to_datetime(df_tidy["time"], format="%Y%m")
 :tags: [nbtutor-solution]
 
 df_overall = df_tidy.groupby(["time", "Energie"]).sum() # or with .reset_index()
-df_overall
+df_overall.head()
 ```
 
 ```{code-cell} ipython3
