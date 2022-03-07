@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -242,7 +242,7 @@ df['Fare'].quantile(0.75)
 
 **EXERCISE**
 
-Calculate the normalized Fares (normalized relative to its mean), and add this as a new column ('Fare_normalized') to the DataFrame.
+Calculate the scaled Fares (scaled relative to its mean), and add this as a new column ('Fare_scaled') to the DataFrame.
 
 </div>
 
@@ -255,7 +255,7 @@ df['Fare'] / df['Fare'].mean()
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df['Fare_normalized'] = df['Fare'] / df['Fare'].mean()
+df['Fare_scaled'] = df['Fare'] / df['Fare'].mean()
 df.head()
 ```
 
@@ -272,6 +272,10 @@ df.head()
 </details>  
 
 </div>
+
+```{code-cell} ipython3
+import numpy as np
+```
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]

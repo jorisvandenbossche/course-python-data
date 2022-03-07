@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -60,7 +60,7 @@ df['Age'].hist()
 </div>
 
 ```{code-cell} ipython3
-df.groupby('Sex')[['Survived']].aggregate(lambda x: x.sum() / len(x))
+df.groupby('Sex')[['Survived']].mean()
 ```
 
 <div class="alert alert-warning">
@@ -72,7 +72,7 @@ df.groupby('Sex')[['Survived']].aggregate(lambda x: x.sum() / len(x))
 </div>
 
 ```{code-cell} ipython3
-df.groupby('Pclass')['Survived'].aggregate(lambda x: x.sum() / len(x)).plot.bar()
+df.groupby('Pclass')['Survived'].mean().plot.bar()
 ```
 
 <div class="alert alert-warning">
@@ -84,12 +84,12 @@ df.groupby('Pclass')['Survived'].aggregate(lambda x: x.sum() / len(x)).plot.bar(
 </div>
 
 ```{code-cell} ipython3
-df['Survived'].sum() / df['Survived'].count()
+df['Survived'].mean()
 ```
 
 ```{code-cell} ipython3
 df25 = df[df['Age'] <= 25]
-df25['Survived'].sum() / len(df25['Survived'])
+df25['Survived'].mean()
 ```
 
 All the needed functionality for the above examples will be explained throughout the course, but as a start: the data types to work with.
@@ -288,7 +288,7 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 
 **EXERCISE**:
 
-* Read the CVS file (available at `data/titanic.csv`) into a pandas DataFrame. Call the result `df`.
+* Read the CSV file (available at `data/titanic.csv`) into a pandas DataFrame. Call the result `df`.
 
 </div>
 
