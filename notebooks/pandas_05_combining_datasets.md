@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -208,7 +208,193 @@ pd.merge(df, locations, on='Embarked', how='left')
 
 In this case we use `how='left` (a "left join") because we wanted to keep the original rows of `df` and only add matching values from `locations` to it. Other options are 'inner', 'outer' and 'right' (see the [docs](http://pandas.pydata.org/pandas-docs/stable/merging.html#brief-primer-on-merge-methods-relational-algebra) for more on this, or this visualization: https://joins.spathon.com/).
 
++++ {"tags": []}
+
+## Exercise with VAT numbers
+
+For this exercise, we start from an open dataset on *"Enterprises subject to VAT"* (VAT = Value Added Tax), from https://statbel.fgov.be/en/open-data/enterprises-subject-vat-according-legal-form-11. For different regions and different enterprise types, it contains the number of enterprises subset to VAT ("MS_NUM_VAT"), and the number of such enterprises that started ("MS_NUM_VAT_START") or stopped ("MS_NUM_VAT_STOP") in 2019.
+
+This file is provided as a zipped archive of a SQLite database file. Let's first unzip it:
+
+```{code-cell} ipython3
+import zipfile
+
+with zipfile.ZipFile("data/TF_VAT_NACE_SQ_2019.zip", "r") as zip_ref:
+    zip_ref.extractall()
+```
+
+SQLite (https://www.sqlite.org/index.html) is a light-weight database engine, and a database can be stored as a single file. With the `sqlite3` module of the Python standard library, we can open such a database and inspect it:
+
+```{code-cell} ipython3
+import sqlite3
+
+# connect with the database file
+con = sqlite3.connect("TF_VAT_NACE_2019.sqlite")
+# list the tables that are present in the database
+con.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+```
+
+Pandas provides functionality to query data from a database. Let's fetch the main dataset contained in this file:
+
+```{code-cell} ipython3
+df = pd.read_sql("SELECT * FROM TF_VAT_NACE_2019", con)
+df
+```
+
+More information about the identifyer variables (the first three columns) can be found in the other tables. For example, the "CD_LGL_PSN_VAT" column contains information about the legal form of the enterprise. What the values in this column mean, can be found in a different table:
+
+```{code-cell} ipython3
+df_legal_forms = pd.read_sql("SELECT * FROM TD_LGL_PSN_VAT", con)
+df_legal_forms
+```
+
+This type of data organization is called a **"star schema"** (https://en.wikipedia.org/wiki/Star_schema), and if we want to get the a "denormalized" version of the main dataset (all the data combined), we need to join the different tables.
+
 +++
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Add the full name the legal form (in the DataFrame `df_legal_forms`) to the main dataset (`df`). For this, join both datasets based on the "CD_LGL_PSN_VAT" column.
+    
+<details><summary>Hints</summary>
+
+- `pd.merge` requires a left and a right DataFrame, the specification `on` to define the common index and the merge type `how`. 
+- Decide which type of merge is most appropriate: left, right, inner,...
+
+</details>      
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+joined = pd.merge(df, df_legal_forms, on="CD_LGL_PSN_VAT", how="left")
+joined
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+How many registered enterprises are there for each legal form? Sort the result from most to least occurring form.
+
+<details><summary>Hints</summary>
+
+- To count the number of registered enterprises, take the `sum` _for each_ (`groupby`) legal form.
+- Check the `ascending` parameter of the `sort_values` function.
+
+</details>    
+    
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+joined.groupby("TX_LGL_PSN_VAT_EN_LVL1")["MS_NUM_VAT"].sum().sort_values(ascending=False)
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+How many enterprises are registered per province?
+
+* Read in the "TD_MUNTY_REFNIS" table from the database file into a `df_muni` dataframe, which contains more information about the municipality (and the province in which the municipality is located).
+* Merge the information about the province into the main `df` dataset.
+* Using the joined dataframe, calculate the total number of registered companies per province.
+
+<details><summary>Hints</summary>
+
+- Data loading in Pandas requires `pd.read_...`, in this case `read_sql`. Do not forget the connection object as a second input.
+- `df_muni` contains a lot of columns, whereas we are only interested in the province information. Only use the relevant columns "TX_PROV_DESCR_EN" and "CD_REFNIS" (you need this to join the data).
+- Calculate the `sum` _for each_ (`groupby`) province.    
+    
+
+</details>    
+    
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df_muni = pd.read_sql("SELECT * FROM TD_MUNTY_REFNIS", con)
+df_muni
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+joined = pd.merge(df, df_muni[["CD_REFNIS", "TX_PROV_DESCR_EN"]], on="CD_REFNIS", how="left")
+joined
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+joined.groupby("TX_PROV_DESCR_EN")["MS_NUM_VAT"].sum()
+```
+
+## Joining with spatial data to make a map
+
+The course materials contains a simplified version of the "statistical sectors" dataset (https://statbel.fgov.be/nl/open-data/statistische-sectoren-2019), with the borders of the municipalities. This dataset is provided as a zipped ESRI Shapefile, one of the often used file formats used in GIS for vector data.
+
+The [GeoPandas](https://geopandas.org) package extends pandas with geospatial functionality.
+
+```{code-cell} ipython3
+import geopandas
+import fiona
+```
+
+```{code-cell} ipython3
+stat = geopandas.read_file("data/statbel_statistical_sectors_2019.shp.zip")
+```
+
+```{code-cell} ipython3
+stat.head()
+```
+
+```{code-cell} ipython3
+stat.plot()
+```
+
+The resulting dataframe (a `GeoDataFrame`) has a "geometry" column (in this case with polygons representing the borders of the municipalities), and a couple of new methods with geospatial functionality (for example, the `plot()` method by default makes a map). It is still a DataFrame, and everything we have learned about pandas can be used here as well.
+
+Let's visualize the change in number of registered enterprises on a map at the municipality-level. 
+
+We first calculate the total number of (existing/starting/stopping) enterprises per municipality:
+
+```{code-cell} ipython3
+df_by_muni = df.groupby("CD_REFNIS").sum()
+```
+
+And add a new column with the relative change in the number of registered enterprises:
+
+```{code-cell} ipython3
+df_by_muni["NUM_VAT_CHANGE"] = (df_by_muni["MS_NUM_VAT_START"] - df_by_muni["MS_NUM_VAT_STOP"]) / df_by_muni["MS_NUM_VAT"] * 100
+```
+
+```{code-cell} ipython3
+df_by_muni
+```
+
+We can now merge the dataframe with the geospatial information of the municipalities with the dataframe with the enterprise numbers:
+
+```{code-cell} ipython3
+joined = pd.merge(stat, df_by_muni, left_on="CNIS5_2019", right_on="CD_REFNIS")
+joined
+```
+
+With this joined dataframe, we can make a new map, now visualizing the change in number of registered enterprises ("NUM_VAT_CHANGE"):
+
+```{code-cell} ipython3
+joined["NUM_VAT_CHANGE_CAT"] = pd.cut(joined["NUM_VAT_CHANGE"], [-15, -6, -4, -2, 2, 4, 6, 15])
+```
+
+```{code-cell} ipython3
+joined.plot(column="NUM_VAT_CHANGE_CAT", figsize=(10, 10), cmap="coolwarm", legend=True)#k=7, scheme="equal_interval")
+```
 
 ## Combining columns  - ``pd.concat`` with ``axis=1``
 
