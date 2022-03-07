@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -70,13 +70,14 @@ data.plot(figsize=(12,6))
 ```
 
 <div class="alert alert-warning">
-<b>ATTENTION!</b>: <br><br>
+
+**ATTENTION!**:
 
 When just using `.plot()` without further notice (selection, aggregation,...)
- <ul>
-  <li>Risk of running into troubles by overloading your computer processing (certainly with looooong time series)</li>
-  <li>Not always the most informative/interpretable visualisation</li>
-</ul>
+
+* Risk of running into troubles by overloading your computer processing (certainly with looooong time series).
+* Not always the most informative/interpretable visualisation.
+
 </div>
 
 +++
@@ -306,42 +307,43 @@ ax.set_ylabel("NO$_2$ concentration (µg/m³)");
 
 <div class="alert alert-info">
 
-<b>REMEMBER</b>: <br><br>
+**REMEMBER**:
 
-`resample` is a special version of a`groupby` operation. For example, taking annual means with `data.resample('A').mean()` is equivalent to `data.groupby(data.index.year).mean()` (but the result of `resample` still has a DatetimeIndex).<br><br>
+`resample` is a special version of a`groupby` operation. For example, taking annual means with `data.resample('A').mean()` is equivalent to `data.groupby(data.index.year).mean()` (but the result of `resample` still has a DatetimeIndex).
 
 Checking the index of the resulting DataFrame when using **groupby** instead of resample: You'll notice that the Index lost the DateTime capabilities:
 
-<code>
-> data.groupby(data.index.year).mean().index
-</code>
+```python
+>>> data.groupby(data.index.year).mean().index
+```
+<br>
 
 Results in:
 
-<code>
+```
 Int64Index([1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
             2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011,
             2012],
            dtype='int64')$
-</code>
-
+```
 <br>
 
 When using **resample**, we keep the DateTime capabilities:
 
-<code>
-> data.resample('A').mean().index
-</code>
+```python
+>>> data.resample('A').mean().index
+```
+<br>
 
 Results in:
 
-<code>
+```
 DatetimeIndex(['1999-12-31', '2000-12-31', '2001-12-31', '2002-12-31',
                '2003-12-31', '2004-12-31', '2005-12-31', '2006-12-31',
                '2007-12-31', '2008-12-31', '2009-12-31', '2010-12-31',
                '2011-12-31', '2012-12-31'],
               dtype='datetime64[ns]', freq='A-DEC')
-</code>
+```
 <br>
 
 But, `groupby` is more flexible and can also do resamples that do not result in a new continuous time series, e.g. by grouping by the hour of the day to get the diurnal cycle.
@@ -395,17 +397,17 @@ Note: Technically, we could reshape the result of the groupby operation to a tid
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-# Groupby wise
-df2011 = data['2011']
-df2011.groupby(df2011.index.week)[['BETN029', 'BETR801']].quantile(0.95).plot()
+# Resample wise
+df2011 = data.loc['2011']
+df2011[['BETN029', 'BETR801']].resample('W').quantile(0.95).plot()
 ```
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-# Resample wise
+# Groupby wise
 # Note the different x-axis labels
-df2011[['BETN029', 'BETR801']].resample('W').quantile(0.75).plot()
+df2011.groupby(df2011.index.isocalendar().week)[['BETN029', 'BETR801']].quantile(0.95).plot()
 ```
 
 <div class="alert alert-success">
@@ -656,7 +658,7 @@ ax2.set_title('BETR801')
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-subset = data['2009-01'].copy()
+subset = data.loc['2009-01'].copy()
 subset["dayofweek"] = subset.index.dayofweek
 subset = subset[subset['dayofweek'].isin([0, 6])]
 ```
@@ -751,7 +753,7 @@ Plotting with seaborn:
 :tags: [nbtutor-solution]
 
 # seaborn
-sns.boxplot(data=data_daily["2012":], x='dayofweek', y='BETR801', color="grey")
+sns.boxplot(data=data_daily, x='dayofweek', y='BETR801', color="grey")
 ```
 
 Reshaping and plotting with pandas:
@@ -762,8 +764,8 @@ Reshaping and plotting with pandas:
 # when using pandas to plot, the different boxplots should be different columns
 # therefore, pivot table so that the weekdays are the different columns
 data_daily['week'] = data_daily.index.isocalendar().week
-data_pivoted = data_daily['2012':].pivot_table(columns='dayofweek', index='week',
-                                              values='BETR801')
+data_pivoted = data_daily.pivot_table(columns='dayofweek', index='week',
+                                      values='BETR801')
 data_pivoted.head()
 data_pivoted.boxplot();
 ```
@@ -772,5 +774,9 @@ data_pivoted.boxplot();
 :tags: [nbtutor-solution]
 
 # An alternative method using `groupby` and `unstack`
-data_daily['2012':].groupby(['dayofweek', 'week'])['BETR801'].mean().unstack(level=0).boxplot();
+data_daily.groupby(['dayofweek', 'week'])['BETR801'].mean().unstack(level=0).boxplot();
+```
+
+```{code-cell} ipython3
+
 ```
