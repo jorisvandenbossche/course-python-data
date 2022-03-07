@@ -226,9 +226,7 @@ Whereas the data is already well organised and structured, some adjustments are 
 
 Let's apply the cleaning methods to clean up the data in the next set of exercises.
 
-```{code-cell} ipython3
-casualties_raw.columns.str.endswith("_FR")
-```
++++
 
 <div class="alert alert-success">
 
