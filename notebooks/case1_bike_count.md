@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -283,13 +283,13 @@ df = pd.read_csv("bike_count_interim.csv", index_col=0, parse_dates=True)
 The number of bikers are counted for intervals of approximately 15 minutes. But let's check if this is indeed the case. Calculate the difference between each of the consecutive values of the index. We can use the `Series.diff()` method:
 
 ```{code-cell} ipython3
-pd.Series(df.index).diff()
+df.index.to_series().diff()
 ```
 
 The count of the possible intervals is of interest:
 
 ```{code-cell} ipython3
-pd.Series(df.index).diff().value_counts()
+df.index.to_series().diff().value_counts()
 ```
 
 There are a few records that are not exactly 15min. But given it are only a few ones, we will ignore this for the current case study and just keep them for this explorative study.
@@ -368,7 +368,7 @@ df[(df['direction_centre'] < 3) | (df['direction_mariakerke'] < 3)]
 
 **EXERCISE**
 
-What is the average number of bikers passing each 15 min?
+What is the average number of bikers passing every 15 min in each direction?
 
 <details><summary>Hints</summary>
 
@@ -592,6 +592,10 @@ df_daily.groupby(df_daily.index.dayofweek).mean().plot(kind='bar')
 ```
 
 **Daily pattern:**
+
+```{code-cell} ipython3
+df_hourly = df.resample('H').sum()
+```
 
 ```{code-cell} ipython3
 df_hourly.groupby(df_hourly.index.hour).mean().plot()
