@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -382,7 +382,7 @@ g = sns.lmplot(
 )
 ```
 
-## Exercises data set road casualties
+# Exercises data set road casualties
 
 +++
 
@@ -390,7 +390,7 @@ The [Belgian road casualties data set](https://statbel.fgov.be/en/themes/mobilit
 
 The script `load_casualties.py` in the `data` folder contains the routine to download the individual years of data, clean up the data and concatenate the individual years. 
 
-The `%run` is an ['Ipython magic' ](https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-run) function to run a Python file as if you would run it from the command line. Run `%run ./data/load_casualties.py --help` to check the input arguments required to run the script. As data is available since 2005, we download 2005 till 2020.
+The `%run` is an ['IPython magic' ](https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-run) function to run a Python file as if you would run it from the command line. Run `%run ./data/load_casualties.py --help` to check the input arguments required to run the script. As data is available since 2005, we download 2005 till 2020.
 
 __Note__ As the scripts downloads the individual files, it can take a while to run the script the first time.
 
@@ -418,9 +418,9 @@ The data contains the following columns:
 - victim_type: Type of victim (pedestrian, driver, passenger,...)
 - gender
 - age
-- road_type: Regional road', Motorway or Municipal road
+- road_type: Regional road, Motorway or Municipal road
 - build_up_area: Outside  or inside built-up area
-- light_conditions: Day or night (with or without road lights), during dask.
+- light_conditions: Day or night (with or without road lights), or dawn
 - refnis_municipality: Postal reference ID number of municipality
 - municipality: Municipality name
 - refnis_region: Postal reference ID number of region
@@ -438,9 +438,9 @@ Use the `height` and `aspect` to adjust the figure width/height.
     
 <details><summary>Hints</summary>
 
-- The sum of victims _for each_ hour of the day requires `groupby`. One can create a new column with the hour of the day or pass the hour directly to `groupby`. 
-- `rename` requires a dictionary with a mapping of the old vs new names.
+- The sum of victims _for each_ hour of the day requires `groupby`. One can create a new column with the hour of the day or pass the hour directly to `groupby`.
 - The `.dt` accessor provides access to all kinds of datetime information.
+- `rename` requires a dictionary with a mapping of the old vs new names.
 - A bar plot is in seaborn one of the `catplot` options. 
     
 </details>
@@ -474,7 +474,7 @@ Create a barplot with the number of victims ("n_victims") for each hour of the d
 
 Create a separate subplot for each gender category in a separate row and apply the `rocket` color palette.  
     
-Make sure to include the `Nan` values of the "gender" column as a separate subplot, called _"unknown"_ without changing the `casualties` DataFrame data.
+Make sure to include the `NaN` values of the "gender" column as a separate subplot, called _"unknown"_ without changing the `casualties` DataFrame data.
     
 <details><summary>Hints</summary>
 
@@ -491,6 +491,7 @@ Make sure to include the `Nan` values of the "gender" column as a separate subpl
 
 victims_gender_hour_of_day = casualties.groupby([casualties["datetime"].dt.hour, "gender"], 
                                                 dropna=False)["n_victims"].sum().reset_index()
+victims_gender_hour_of_day.head()
 ```
 
 ```{code-cell} ipython3
@@ -502,7 +503,6 @@ sns.catplot(data=victims_gender_hour_of_day.fillna("unknown"),
             row="gender",
             palette="rocket",
             kind="bar", 
-            sharey=False,
             aspect=4,
             height=3)
 ```
@@ -554,6 +554,7 @@ sns.catplot(data=fl_motowar_20s,
             x="week_day",
             y="n_victims",
             estimator=np.sum,
+            ci=None,
             kind="bar",
             color="#900C3F",
             height=3, 
@@ -570,15 +571,15 @@ Compare the relative number of deaths within 30 days (in relation to the total n
 - Filter the data on the road user types "Bicycle", "Passenger car", "Pedestrian" and "Motorbike". Call the new variable `compare_dead_30`.
 - Count for each combination of year and road_user_type the total victims and the total deaths within 30 days victims.
 - Calculate the percentage deaths within 30 days (add a new column "dead_prop").
-- Use a horizontal bar chart to plot the results with the "road_user_type"s on the y-axis and a separate color for each year.
+- Use a horizontal bar chart to plot the results with the "road_user_type" on the y-axis and a separate color for each year.
     
 <details><summary>Hints</summary>
 
-- By defining `datetime` as the index, slicing time series can be done using strings to filter data on the years 2019 and 2020. 
-- Use `isin()` to filter road_user_type categories used in the exercise.
-- Count _for each_... Indee, use `groupby` with 2 inputs, "road_user_type" and the year of `datetime`.
-- Deriving the year from the datetime: When an index, use `compare_dead_30.index.year`, otherwise `compare_dead_30.dt.year`.
-- Dividing columns works element wise in Pandas.
+- By setting `datetime` as the index, slicing time series can be done using strings to filter data on the years 2019 and 2020. 
+- Use `isin()` to filter "road_user_type" categories used in the exercise.
+- Count _for each_... Indeed, use `groupby` with 2 inputs, "road_user_type" and the year of `datetime`.
+- Deriving the year from the datetime: When having an index, use `compare_dead_30.index.year`, otherwise `compare_dead_30["datetime"].dt.year`.
+- Dividing columns works element-wise in Pandas.
 - A horizontal bar chart in seaborn is a matter of defining `x` and `y` inputs correctly. 
 
 </details>
@@ -587,7 +588,7 @@ Compare the relative number of deaths within 30 days (in relation to the total n
 :tags: [nbtutor-solution]
 
 # filter the data
-compare_dead_30 = casualties.set_index("datetime")["2019": "2021"]
+compare_dead_30 = casualties.set_index("datetime")["2019":"2021"]
 compare_dead_30 = compare_dead_30[compare_dead_30["road_user_type"].isin(
     ["Bicycle", "Passenger car", "Pedestrian", "Motorbike"])]
 
@@ -616,7 +617,7 @@ sns.catplot(data=compare_dead_30,
     
 Create a line plot of the __monthly__ number for each of the categories of victims ('n_victims_ok', 'n_dead_30days', 'n_slightly_injured' and 'n_seriously_injured') as a function of time:
     
-- Create a new variable `monthly_victim_counts` that contains the daily sum of n_victims_ok, n_dead_30days, n_slightly_injured and n_seriously_injured.
+- Create a new variable `monthly_victim_counts` that contains the monthly sum of 'n_victims_ok', 'n_dead_30days', 'n_slightly_injured' and 'n_seriously_injured'.
 - Create a line plot of the `monthly_victim_counts` using Seaborn. Choose any [color palette](https://seaborn.pydata.org/tutorial/color_palettes.html).
 - Create an `area` plot (line plot with the individual categories stacked on each other) using Pandas.
 
@@ -624,7 +625,7 @@ What happens with the data registration since 2012?
     
 <details><summary>Hints</summary>
 
-- Monthly statistics from a time series requires `resample` (with - in this case - `sum`), which also takes the `on` parameter to define the datetime column.
+- Monthly statistics from a time series requires `resample` (with - in this case - `sum`), which also takes the `on` parameter to specify the datetime column (instead of using the index of the DataFrame).
 - Apply the resampling on the `["n_victims_ok", "n_slightly_injured", "n_seriously_injured", "n_dead_30days"]` columns only.
 - Seaborn line plots works without tidy data when NOT providing `x` and `y` argument. It also works using tidy data. To 'tidy' the data set, `.melt()` can be used, see [pandas_07_reshaping.ipynb](pandas_07_reshaping.ipynb).
 - Pandas plot method works on the non-tidy data set with `plot.area()` .
@@ -697,7 +698,7 @@ Make a line plot of the daily victims (column "n_victims") in 2020. Can you expl
 :tags: [nbtutor-solution]
 
 # Using Pandas
-daily_total_counts_2020 = casualties.set_index("datetime")["2020": "2021"].resample("D")["n_victims"].sum()
+daily_total_counts_2020 = casualties.set_index("datetime")["2020":"2021"].resample("D")["n_victims"].sum()
 daily_total_counts_2020.plot.line(figsize=(12, 3))
 ```
 
@@ -716,16 +717,16 @@ sns.relplot(data=daily_total_counts_2020,
     
 Combine the following two plots in a single Matplotlib figure:
     
-- (left) The empirical cumulative distribution of the __daily__ victims (`n_victims`) with a separate color for each "light_conditions".
-- (right) The empirical cumulative distribution of the __daily__ victims (`n_victims`) with a separate color for each "road_type".
+- (left) The empirical cumulative distribution of the _weekly_ proportion of victims that died (`n_dead_30days` / `n_victims`) with a separate color for each "light_conditions".
+- (right) The empirical cumulative distribution of the _weekly_ proportion of victims that died (`n_dead_30days` / `n_victims`) with a separate color for each "road_type".
     
-Prepare the data for the plots with Pandasa and use the variable `daily_victim_lc_rt`. 
+Prepare the data for both plots separately with Pandas and use the variable `weekly_victim_dead_lc` and `weekly_victim_dead_rt`. 
     
 <details><summary>Hints</summary>
 
 - The plot can not be made by a single Seaborn Figure-level plot. Create a Matplotlib figure first and use the __axes__ based functions of Seaborn to plot the left and right Axes.
-- The data for both subplots can be prepared together, by `groupby` on both "light_conditions" and "road_type".
-- Daily sums (`resample`) _for each_ (`groupby`) "light_conditions" and "road_type"?! yes! you need to combine both here.
+- The data for both subplots need to be prepared separately, by `groupby` once on "light_conditions" and once on "road_type".
+- Weekly sums (`resample`) _for each_ (`groupby`) "light_conditions" or "road_type"?! yes! you need to combine both here.
 - [`sns.ecdfplot`](https://seaborn.pydata.org/generated/seaborn.ecdfplot.html#seaborn.ecdfplot) creates empirical cumulative distribution plots.    
 
 </details>
@@ -733,12 +734,25 @@ Prepare the data for the plots with Pandasa and use the variable `daily_victim_l
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-daily_victim_lc_rt = (casualties
-                      .groupby(["light_conditions", "road_type"])
-                      .resample("D", on="datetime")[["datetime", "n_victims"]]
-                      .sum()
-                      .reset_index()
-                     )
+# weekly proportion of deadly victims for each light condition
+weekly_victim_dead_lc = (
+    casualties
+    .groupby("light_conditions")
+    .resample("W", on="datetime")[["datetime", "n_victims", "n_dead_30days"]]
+    .sum()
+    .reset_index()
+ )
+weekly_victim_dead_lc["dead_prop"] = weekly_victim_dead_lc["n_dead_30days"] / weekly_victim_dead_lc["n_victims"] * 100
+
+# .. and the same for each road type
+weekly_victim_dead_rt = (
+    casualties
+    .groupby("road_type")
+    .resample("W", on="datetime")[["datetime", "n_victims", "n_dead_30days"]]
+    .sum()
+    .reset_index()
+)
+weekly_victim_dead_rt["dead_prop"] = weekly_victim_dead_rt["n_dead_30days"] / weekly_victim_dead_rt["n_victims"] * 100
 ```
 
 ```{code-cell} ipython3
@@ -746,8 +760,8 @@ daily_victim_lc_rt = (casualties
 
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(15, 5))
 
-sns.ecdfplot(data=daily_victim_lc_rt, x="n_victims", hue="light_conditions", ax=ax0)
-sns.ecdfplot(data=daily_victim_lc_rt, x="n_victims", hue="road_type", ax=ax1)
+sns.ecdfplot(data=weekly_victim_dead_lc, x="dead_prop", hue="light_conditions", ax=ax0)
+sns.ecdfplot(data=weekly_victim_dead_rt, x="dead_prop", hue="road_type", ax=ax1)
 ```
 
 <div class="alert alert-success">
@@ -766,7 +780,7 @@ Does it make sense to present the data as a regression plot?
 
 - `pd.read_csv` has a `parse_dates` parameter to load the `datetime` column as a Timestamp data type.
 - `pd.merge` need a (common) key to link the data.
-- `sns.lmplot` is the seaborn function to create scatter plots with a regression.
+- `sns.lmplot` or `sns.jointplot` are both seaborn functions to create scatter plots with a regression. Joint plot adds the marginal distributions.
 
 </details>
 
@@ -786,9 +800,13 @@ daily_min_temp_2020 = pd.read_csv("./data/daily_min_temperature_2020.csv",
 :tags: [nbtutor-solution]
 
 daily_with_temp = daily_total_counts_2020.reset_index().merge(daily_min_temp_2020, on="datetime")
+```
 
-g = sns.lmplot(
-    data=daily_with_temp, x="air_temperature", y="n_victims"
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+g = sns.jointplot(
+    data=daily_with_temp, x="air_temperature", y="n_victims", kind="reg"
 )
 ```
 
