@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -28,6 +28,7 @@ import matplotlib.pyplot as plt
 
 A number of Pandas functions are useful when cleaning up raw data and converting it to a data set ready for analysis and visualisation. In this notebook a selection of methods are introduced:
 
+- `drop`
 - `rename`
 - `replace`
 - `explode`
@@ -52,6 +53,16 @@ countries = pd.DataFrame({'county name': ['Belgium', 'Flance', 'Germany', 'Nethe
 countries
 ```
 
+## `drop`
+
++++
+
+Drop columns (or rows) by name (this can also be achieved by selecting the columns you want to keep, but if you only want to drop a few columns, `drop()` is easier). Specify a list of column names to drop:
+
+```{code-cell} ipython3
+countries.drop(columns=["area", "capital"])
+```
+
 ## `rename`
 
 +++
@@ -66,7 +77,7 @@ countries = countries.rename(columns={"county name": "country"})
 
 +++
 
-Replace values. Different inputs can be used. The most basic one is providing a value `to_replace` and a new `value`:
+Replace values in a column. Different inputs can be used. The most basic one is providing a value `to_replace` and a new `value`:
 
 ```{code-cell} ipython3
 countries["capital"].replace("Barlin", "Berlin")
@@ -109,21 +120,25 @@ countries_exploded
 
 +++
 
-Pandas read functions might not always use the mose appropriate data type for each of the columns. Converting them can also improve the memory usage of the DataFrame (e.g. `int16` versus `float64`). The [`astype` ](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html) method supports data type conversion to both [Numpy data types](https://numpy.org/doc/stable/user/basics.types.html) as well as [Pandas specific data types](https://pandas.pydata.org/docs/user_guide/basics.html#dtypes).
+Pandas read functions might not always use the most appropriate data type for each of the columns. Converting them to a different data type can also improve the memory usage of the DataFrame (e.g. `int16` versus `float64`). The [`astype` ](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html) method supports data type conversion to both [Numpy data types](https://numpy.org/doc/stable/user/basics.types.html) as well as [Pandas specific data types](https://pandas.pydata.org/docs/user_guide/basics.html#dtypes).
+
+```{code-cell} ipython3
+countries_exploded.dtypes
+```
 
 ```{code-cell} ipython3
 countries_exploded["area"] = countries_exploded["area"].astype(int)
 ```
 
 ```{code-cell} ipython3
-countries_exploded
+countries_exploded.dtypes
 ```
 
 ## `unique`
 
 +++
 
-Working with larger data sets, knowing which values are in a columns:
+Working with larger data sets, knowing which values are in a column:
 
 ```{code-cell} ipython3
 countries_exploded["capital"].unique()
@@ -170,7 +185,7 @@ For these exercises, we will use data of road casualties in Belgium in 2020 [mad
 - `MS_SERLY_INJ`: Number of severely injured
 - `MS_MORY_INJ`: Number of mortally injured
 - `MS_DEAD`: Number of dead
-- `MS_DEAD_30_DAYS`: Number of dead 30 days
+- `MS_DEAD_30_DAYS`: Number of dead after 30 days
 
 Together with metadata about date and time, the victim and road type, light conditions, location,...
 
@@ -188,7 +203,7 @@ casualties_raw.head()
     
 __INTERMEZZO - display options__
 
-Pandas provides a number of configurable settings to display data, for example `display.max_rows`, `display.precision` and `display.max_columns`. WHen exploring a new data set, adjusting the `display.max_columns` setting is of particular interest to be able to scroll the full data set.
+Pandas provides a number of configurable settings to display data, for example `display.max_rows`, `display.precision` and `display.max_columns`. When exploring a new data set, adjusting the `display.max_columns` setting is of particular interest to be able to scroll the full data set.
     
 See https://pandas.pydata.org/docs/user_guide/options.html#options-and-settings for the documentation and an [overview of the available settings](https://pandas.pydata.org/docs/user_guide/options.html#available-options)
 
@@ -211,7 +226,9 @@ Whereas the data is already well organised and structured, some adjustments are 
 
 Let's apply the cleaning methods to clean up the data in the next set of exercises.
 
-+++
+```{code-cell} ipython3
+casualties_raw.columns.str.endswith("_FR")
+```
 
 <div class="alert alert-success">
 
@@ -223,8 +240,8 @@ Remove all the `_FR` metadata columns  from the `casualties_raw` data set and as
     
 - Instead of enlisting the column names manually, a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) - a _feature of standard Python_ - can be used to select the columns names ending on `_FR`.
 - Within the list comprehension, the [`endswith()`](https://docs.python.org/3/library/stdtypes.html#str.endswith) standard method can be used to check if a column name ends on `_FR`. 
-- ! Also Pandas provides the `.str.endswith()` method, but this is for the data values inside a DataFrame. In this exercise we want to adjust the column names itself.
-- Remove columns with `drop`.
+- ! Pandas also provides the `.str.endswith()` method, but this is for the data values inside a DataFrame. In this exercise we want to adjust the column names itself.
+- Remove columns with the `drop()` method.
 
 </details>
 
@@ -247,13 +264,13 @@ casualties_nl
 
 **EXERCISE**
 
-A number of the remaining metadata columns names have the `TX_` and the `_DESCR_NL` in the column name. Clean up these column names by removing the `TX_` at the start and the `_DESCR_NL` at the end of the column names. Update the `casualties` variable.
+A number of the remaining metadata columns names have the `TX_` and the `_DESCR_NL` in the column name. Clean up these column names by removing the `TX_` at the start and the `_DESCR_NL` at the end of the column names. Update the `casualties_nl` variable, and assign the result to `casualties`.
 
 <details><summary>Hints</summary>
     
 - Use the `rename` method and apply the mapping on the `columns`.
 - Manually writing a mapping dictionary, e.g. `{"TX_DAY_OF_WEEK_DESCR_NL": "WEEK_DAY"}`, is fine. However, [dict comprehensions](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) can be used as well to setup the mapping between old and new values.
-- `removeprefix()` and `removesuffix()` are Python string methods to remove start/trailing characters if present.
+- `removeprefix()` and `removesuffix()` are [Python string methods](https://docs.python.org/3/library/stdtypes.html#string-methods) to remove start/trailing characters if present.
 
 </details>
 
@@ -278,7 +295,7 @@ Based on the the values, create a mapping to replace the values with the english
 <details><summary>Hints</summary>
     
 - Create the mapping by hand and define a `dict`.
-- Use the `replace` method to update the values of the `SEX` column.
+- Use the `replace()` method to update the values of the `SEX` column.
 
 </details>
 
@@ -343,9 +360,9 @@ Use the string methods as much as possible. The `Onbekend`, `  ` (empty string) 
 
 <details><summary>Hints</summary>
     
-- Use the `.str.replace` (note the difference with the Pandas `replace` method) and the `str.removesuffix()` methods to convert the data format.
+- Use the `.str.replace()` (note the difference with the Pandas `replace()` method) and the `str.removesuffix()` methods to convert the data format.
 - Add an additional `str.strip` to get rid of the spaces and the 'unknown' number of spaces in the empty string case.
-- Apply the `replace` method using a dictionary just works for the remaingin two values:  `{"Onbekend": None, "75 jaar en meer": ">75"}`.
+- Using the `replace()` method with a dictionary just works for the remaining two values:  `{"Onbekend": None, "75 jaar en meer": ">75"}`. It will leave other values (not specified in the dictionary) as is.
 
 </details>
 
@@ -405,7 +422,7 @@ casualties["datetime"]
 
 **EXERCISE**
 
-For columns consistiong of a limited number of categories with (_ordinal data_) or without a logical order, Pandas has a specific data type, `Categorical`. An example in the data set is the `DAY_OF_WEEK` (from `Monday` -> `Sunday`). 
+For columns consistiong of a limited number of categories with (_ordinal data_) or without a logical order, Pandas has a specific data type: `Categorical`. An example in the data set is the `DAY_OF_WEEK` (from `Monday` -> `Sunday`). 
     
 For this conversion, the `astype` is not sufficient. Use the `pd.Categorical` function (check the documentation) to create a new column `week_day` with the week days defined as a Categorical variable. Use Monday as the first day of the week and make sure the categories are ordered.
 
@@ -456,6 +473,15 @@ We can expect that records with the same day, hour, municipality , light conditi
 </div>
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 unique_combinations = ["DT_DAY", "DT_HOUR",  "CD_MUNTY_REFNIS", "BUILD_UP_AREA","LIGHT_COND", "ROAD_TYPE"]
 casualties.drop_duplicates(subset=unique_combinations).shape
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+# alternative using `duplicated`
+(~casualties.duplicated(subset=unique_combinations)).sum()
 ```
