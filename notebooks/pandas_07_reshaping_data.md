@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -319,6 +319,128 @@ sns.catplot(data=data, x="WWTP", y="...", hue="...", kind="bar")  # this doesn't
 
 sns.catplot(data=data_long, x="WWTP", y="pH", 
             hue="Treatment", kind="bar")  # switch `WWTP` and `Treatment`
+```
+
++++ {"tags": []}
+
+## Exercise with energy consumption data
+
+To practice the "melt" operation, we are going to use a dataset from Fluvius (who operates and manages the gas and elektricity networks in Flanders) about the monthly consumption of elektricity and gas in 2021 (https://www.fluvius.be/sites/fluvius/files/2021-10/verbruiksgegevens-per-maand.xlsx).
+
+This data is available as an Excel file.
+
++++ {"clear_cell": false}
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+* Read the "verbruiksgegevens-per-maand.xlsx" file (in the "data/" directory) into a DataFrame `df`.
+* Drop the "Regio" column (this column has a constant value "Regio 1" and thus is not that interesting).
+
+<details><summary>Hints</summary>
+
+- Reading Excel files can be done with the `pd.read_excel()` function, passing the path to the file as first argument.
+- To drop a column, use the `columns` keyword in the `drop()` method.
+
+</details>
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df = pd.read_excel("data/verbruiksgegevens-per-maand.xlsx")
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df = df.drop(columns=["Regio"])
+df
+```
+
++++ {"clear_cell": false}
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+The actual data (consumption numbers) is spread over multiple columns: one column per month. Make a tidy version of this dataset with a single "consumption" column, and an additional "time" column. 
+    
+Make sure to keep the "Hoofdgemeente", "Energie" and "SLP"  columns in the data set. The "SLP" column contains additional categories about the type of elektricity or gas consumption (eg household vs non-household consumption).
+
+Use `pd.melt()` to create a long or tidy version of the dataset, and call the result `df_tidy`.
+
+<details><summary>Hints</summary>
+
+- If there are columns in the original dataset that you want to keep (with repeated values), pass those names to the `id_vars` keyword of `pd.melt()`.
+- You can use the `var_name` and `value_name` keywords to directly specify the column names to use for the new variable and value columns.
+
+</details>
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df_tidy = pd.melt(df, id_vars=["Hoofdgemeente", "Energie", "SLP"], var_name="time", value_name="consumption")
+df_tidy
+```
+
++++ {"clear_cell": false}
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Convert the "time" column to a column with a datetime data type using `pd.to_datetime`.
+
+<details><summary>Hints</summary>
+
+* When using `pd.to_datetime`, remember to specify a `format`.
+
+</details>
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df_tidy["time"] = pd.to_datetime(df_tidy["time"], format="%Y%m")
+```
+
++++ {"clear_cell": false}
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+* Calculate the total consumption of elektricity and gas over all municipalities ("Hoofdgemeente") for each month. Assign the result to a dataframe called `df_overall`.
+* Using `df_overall`, make a line plot of the consumption of elektricity vs gas over time. 
+  * Create a separate subplot for elektricity and for gas, putting them next to each other. 
+  * Ensure that the y-limit starts at 0 for both subplots.
+
+<details><summary>Hints</summary>
+
+* If we want to sum the consumption over all municipalities that means we should _not_ include this variable in the groupby keys. On the other hand, we want to calculate the sum *for each* month ("time") and *for each* category of elektricity/gas ("Energie").
+* Creating a line plot with seaborn can be done with `sns.relplot(..., kind="line")`.
+* If you want to split the plot into multiple subplots based on a variable, check the `row` or `col` keyword.
+* The `sns.relplot` returns a "facet grid" object, and you can change an element of each of the subplots of this object using the `set()` method of this object. To set the y-limits, you can use the `ylim` keyword.
+    
+</details>
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+df_overall = df_tidy.groupby(["time", "Energie"]).sum() # or with .reset_index()
+df_overall.head()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+facet = sns.relplot(x="time", y="consumption", col="Energie",
+                    data=df_overall, kind="line")
+facet.set(ylim=(0, None))
 ```
 
 # Reshaping with `stack` and `unstack`
