@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -167,7 +167,7 @@ len(survey_data_unique)
 Use the `dropna()` method to find out:
 
 - For how many observations (rows) we have all the information available (i.e. no NaN values in any of the columns)?
-- For how many observations (rows) we do have the `species_ID` data available ?
+- For how many observations (rows) we do have the `species` data available ?
 
 <details><summary>Hints</summary>
 
@@ -408,7 +408,7 @@ survey_data['name'].value_counts()[:8]
 
 **EXERCISE**
 
-- What is the number of different species in each of the `verbatimLocality` plots? Use the `nunique` method. Assign the output to a new variable `n_species_per_plot`.
+- What is the number of different species (`name`) in each of the `verbatimLocality` plots? Use the `nunique` method. Assign the output to a new variable `n_species_per_plot`.
 - Define a Matplotlib `Figure` (`fig`) and `Axes` (`ax`) to prepare a plot. Make an horizontal bar chart using Pandas `plot` function linked to the just created Matplotlib `ax`. Each bar represents the `species per plot/verbatimLocality`. Change the y-label to 'Plot number'.
 
 <details><summary>Hints</summary>
@@ -438,7 +438,7 @@ ax.set_ylabel("plot number")
 
 **EXERCISE**
 
-- What is the number of plots (`verbatimLocality`) each of the species have been observed in? Assign the output to a new variable `n_plots_per_species`. Sort the counts from low to high.
+- What is the number of plots (`verbatimLocality`) each of the species (`name`) have been observed in? Assign the output to a new variable `n_plots_per_species`. Sort the counts from low to high.
 - Make an horizontal bar chart using Pandas `plot` function to show the number of plots each of the species was found (using the `n_plots_per_species` variable).
 
 <details><summary>Hints</summary>
@@ -506,6 +506,7 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 
 - Check the `kind` argument of the `catplot` function to figure out to specify you want a barplot with given x and y values.
 - To link a column to different colors, use the `hue` argument
+- Using `height` and `aspect`, the figure size can be optimized.
 
 
 </details>
@@ -707,7 +708,7 @@ Recreate the same plot as in the previous exercise using Seaborn `relplot` funct
 
 - We want to have the `counts` as a function of `eventDate`, so link these columns to y and x respectively.
 - To create subplots in Seaborn, the usage of _facetting_ (splitting data sets to multiple facets) is used by linking a column name to the `row`/`col` parameter. 
-- Using `height` and `widht`, the figure size can be optimized.
+- Using `height` and `aspect`, the figure size can be optimized.
     
 </details>
 
