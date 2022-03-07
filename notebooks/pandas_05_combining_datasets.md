@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -212,7 +212,7 @@ In this case we use `how='left` (a "left join") because we wanted to keep the or
 
 ## Exercise with VAT numbers
 
-We downloaded an open dataset on *"Enterprises subject to VAT"* (VAT = Value Added Tax), from https://statbel.fgov.be/en/open-data/enterprises-subject-vat-according-legal-form-11. For different regions and different enterprise types, it contains the number of enterprises subset to VAT ("MS_NUM_VAT"), and the number of such enterprises that started ("MS_NUM_VAT_START") or stopped ("MS_NUM_VAT_STOP") in 2019.
+For this exercise, we start from an open dataset on *"Enterprises subject to VAT"* (VAT = Value Added Tax), from https://statbel.fgov.be/en/open-data/enterprises-subject-vat-according-legal-form-11. For different regions and different enterprise types, it contains the number of enterprises subset to VAT ("MS_NUM_VAT"), and the number of such enterprises that started ("MS_NUM_VAT_START") or stopped ("MS_NUM_VAT_STOP") in 2019.
 
 This file is provided as a zipped archive of a SQLite database file. Let's first unzip it:
 
@@ -256,7 +256,14 @@ This type of data organization is called a **"star schema"** (https://en.wikiped
 
 **EXERCISE**:
 
-* Add the full name the legal form to the main dataset (`df`). For this, join both datasets based on the "CD_LGL_PSN_VAT" column.
+Add the full name the legal form (in the DataFrame `df_legal_forms`) to the main dataset (`df`). For this, join both datasets based on the "CD_LGL_PSN_VAT" column.
+    
+<details><summary>Hints</summary>
+
+- `pd.merge` requires a left and a right DataFrame, the specification `on` to define the common index and the merge type `how`. 
+- Decide which type of merge is most appropriate: left, right, inner,...
+
+</details>      
 
 </div>
 
@@ -271,8 +278,15 @@ joined
 
 **EXERCISE**:
 
-* How many registered enterprises are there for each legal form? Sort the result from most to least occurring form.
+How many registered enterprises are there for each legal form? Sort the result from most to least occurring form.
 
+<details><summary>Hints</summary>
+
+- To count the number of registered enterprises, take the `sum` _for each_ (`groupby`) legal form.
+- Check the `ascending` parameter of the `sort_values` function.
+
+</details>    
+    
 </div>
 
 ```{code-cell} ipython3
@@ -291,6 +305,15 @@ How many enterprises are registered per province?
 * Merge the information about the province into the main `df` dataset.
 * Using the joined dataframe, calculate the total number of registered companies per province.
 
+<details><summary>Hints</summary>
+
+- Data loading in Pandas requires `pd.read_...`, in this case `read_sql`. Do not forget the connection object as a second input.
+- `df_muni` contains a lot of columns, whereas we are only interested in the province information. Only use the relevant columns "TX_PROV_DESCR_EN" and "CD_REFNIS" (you need this to join the data).
+- Calculate the `sum` _for each_ (`groupby`) province.    
+    
+
+</details>    
+    
 </div>
 
 ```{code-cell} ipython3
@@ -317,10 +340,11 @@ joined.groupby("TX_PROV_DESCR_EN")["MS_NUM_VAT"].sum()
 
 The course materials contains a simplified version of the "statistical sectors" dataset (https://statbel.fgov.be/nl/open-data/statistische-sectoren-2019), with the borders of the municipalities. This dataset is provided as a zipped ESRI Shapefile, one of the often used file formats used in GIS for vector data.
 
-The [GeoPandas](https://geopandas.org) package extends pandas with geospatial functionality. 
+The [GeoPandas](https://geopandas.org) package extends pandas with geospatial functionality.
 
 ```{code-cell} ipython3
 import geopandas
+import fiona
 ```
 
 ```{code-cell} ipython3
@@ -335,7 +359,7 @@ stat.head()
 stat.plot()
 ```
 
-The resulting dataframe (a `GeoDataFrame`) has a "geometry" column (in this case with polygons representing the borders of the municipalities), and a couple of new methods with geospatial functionality (for example, the `plot()` method by default makes a map). But for the rest it is also still a DataFrame, and everything we have learned about pandas can be used here as well.
+The resulting dataframe (a `GeoDataFrame`) has a "geometry" column (in this case with polygons representing the borders of the municipalities), and a couple of new methods with geospatial functionality (for example, the `plot()` method by default makes a map). It is still a DataFrame, and everything we have learned about pandas can be used here as well.
 
 Let's visualize the change in number of registered enterprises on a map at the municipality-level. 
 
