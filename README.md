@@ -53,5 +53,39 @@ jupyter nbconvert --clear-output _solved/*.ipynb
 ```
 
 
+
+
+```
+export COURSE_DIR="ICES-2022"
+git clone --depth 1 https://github.com/jorisvandenbossche/ICES-python-data.git $COURSE_DIR
+git clone --depth 1 https://github.com/jorisvandenbossche/course-python-data.git course-python-data-clean
+mkdir $COURSE_DIR/_solved/
+cp course-python-data-clean/notebooks/*.ipynb $COURSE_DIR/_solved/
+cp course-python-data-clean/notebooks/data/ $COURSE_DIR/notebooks/ -r
+cp course-python-data-clean/img/ $COURSE_DIR/ -r
+#cp course-python-data-clean/environment.yml $COURSE_DIR/
+cp course-python-data-clean/check_environment.py $COURSE_DIR/
+cd $COURSE_DIR/
+jupyter nbconvert --clear-output _solved/*.ipynb
+./convert_notebooks.sh
+```
+
+
+
+	modified:   check_environment.py
+	modified:   img/JakeVdP-ecosystem2.svg
+	modified:   img/JakeVdP-ecosystem3.svg
+	modified:   img/JakeVdP-ecosystem4.svg
+	modified:   img/JakeVdP-ecosystem5.svg
+	modified:   img/issuetracker.png
+	modified:   img/navigator_notebook.png
+	modified:   img/startup.png
+	modified:   img/work_joris_1.png
+	modified:   img/work_stijn_1.png
+
+
+
+
+
 ## Meta 
 Authors: Joris Van den Bossche, Stijn Van Hoey
