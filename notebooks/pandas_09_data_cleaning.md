@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -232,23 +232,27 @@ Let's apply the cleaning methods to clean up the data in the next set of exercis
 
 **EXERCISE**
 
-Remove all the `_FR` metadata columns  from the `casualties_raw` data set and assign the result to a new variable `casualties_nl`. Access the column names  using the `df.columns` attribute and use your standard Python [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) skills.
+Remove all the `_FR` metadata columns  from the `casualties_raw` data set and assign the result to a new variable `casualties_nl`. Use the `column_names_with_fr` variable derive in the next cell to remove the columns.
 
 <details><summary>Hints</summary>
     
-- Instead of enlisting the column names manually, a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) - a _feature of standard Python_ - can be used to select the columns names ending on `_FR`.
-- Within the list comprehension, the [`endswith()`](https://docs.python.org/3/library/stdtypes.html#str.endswith) standard method can be used to check if a column name ends on `_FR`. 
-- ! Pandas also provides the `.str.endswith()` method, but this is for the data values inside a DataFrame. In this exercise we want to adjust the column names itself.
-- Remove columns with the `drop()` method.
+- Remove columns with the `drop()` method. The method works with one or more column names.
+- Make sure to explicitly set the `columns=` parameter.
 
+__NOTE__ The `column_names_with_fr` variable is created using the `df.columns` attribute of the DataFrame:
+- Instead of enlisting the column names manually, a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) - a _feature of standard Python_ - is used to select the columns names ending on `_FR`.
+- Within the list comprehension, the [`endswith()`](https://docs.python.org/3/library/stdtypes.html#str.endswith) standard string method is used to check if a column name ends on `_FR`. 
+- ! Pandas also provides the `.str.endswith()` method, but this is for the data values inside a DataFrame. In this exercise we want to adjust the column names itself.    
+    
 </details>
 
 </div>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
+:tags: []
 
 column_names_with_fr = [col for col in casualties_raw.columns if col.endswith("_FR")]
+column_names_with_fr
 ```
 
 ```{code-cell} ipython3
@@ -262,12 +266,17 @@ casualties_nl
 
 **EXERCISE**
 
-A number of the remaining metadata columns names have the `TX_` and the `_DESCR_NL` in the column name. Clean up these column names by removing the `TX_` at the start and the `_DESCR_NL` at the end of the column names. Update the `casualties_nl` variable, and assign the result to `casualties`.
+A number of the remaining metadata columns names have the `TX_` and the `_DESCR_NL` in the column name. Clean up these column names by removing the `TX_` at the start and the `_DESCR_NL` at the end of the column names using the helper function `clean_column_name` defined in the next cell. Update the `casualties_nl` variable, assign the result to the variable `casualties`.
 
 <details><summary>Hints</summary>
     
 - Use the `rename` method and apply the mapping on the `columns`.
-- Manually writing a mapping dictionary, e.g. `{"TX_DAY_OF_WEEK_DESCR_NL": "WEEK_DAY"}`, is fine. However, [dict comprehensions](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) can be used as well to setup the mapping between old and new values.
+- The input of the `rename` method van be a dictionary or a function. Use the `clean_column_name` as the function to rename the columns. 
+- Make sure to explicitly set the columns= parameter.    
+    
+__NOTE__ The function `clean_column_name` takes as input a string and returns the string after removing the prefix and suffix. 
+
+- The pandas method `rename` applies this function to each column name individually.    
 - `removeprefix()` and `removesuffix()` are [Python string methods](https://docs.python.org/3/library/stdtypes.html#string-methods) to remove start/trailing characters if present.
 
 </details>
@@ -275,10 +284,14 @@ A number of the remaining metadata columns names have the `TX_` and the `_DESCR_
 </div>
 
 ```{code-cell} ipython3
+def clean_column_name(name):
+    return name.removeprefix("TX_").removesuffix("_DESCR_NL")
+```
+
+```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-col_mapping = {name: name.removeprefix("TX_").removesuffix("_DESCR_NL") for name in casualties_nl.columns}
-casualties = casualties_nl.rename(columns=col_mapping)
+casualties = casualties_nl.rename(columns=clean_column_name)
 casualties.head()
 ```
 
@@ -288,7 +301,7 @@ casualties.head()
 
 Check the unique values of the `SEX` column.
 
-Based on the the values, create a mapping to replace the values with the english version (`"male", "female"`). Use `None` for the unknown values (`Onbekend` in Dutch). Apply the mapping to overwrite the values in the `SEX` column with the new value.
+Based on the the values, create a mapping dictionary to replace the values with the english version (`"male", "female"`). Use `None` for the unknown values (`Onbekend` in Dutch). Apply the mapping to overwrite the values in the `SEX` column with the new value.
 
 <details><summary>Hints</summary>
     
@@ -345,37 +358,7 @@ casualties["DT_HOUR"].unique()
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-casualties["DT_HOUR"] = casualties["DT_HOUR"].replace(99, 6)
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-In the `AGE_CLS` column, the age is formatted as `X tot Y jaar` (i.e. _x till y year_). Remove the Dutch description and convert the data into a format `Y - Y` to define the age classes. 
-    
-Use the string methods as much as possible. The `Onbekend`, `  ` (empty string) and `75 jaar en meer` data values can be done by direct replacement into `None`, `None` and `> 75` respectively.
-
-<details><summary>Hints</summary>
-    
-- Use the `.str.replace()` (note the difference with the Pandas `replace()` method) and the `str.removesuffix()` methods to convert the data format.
-- Add an additional `str.strip` to get rid of the spaces and the 'unknown' number of spaces in the empty string case.
-- Using the `replace()` method with a dictionary just works for the remaining two values:  `{"Onbekend": None, "75 jaar en meer": ">75"}`. It will leave other values (not specified in the dictionary) as is.
-
-</details>
-
-</div>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-casualties["AGE_CLS"] = casualties["AGE_CLS"].str.replace(" tot ", " - ").str.removesuffix(" jaar").str.strip()
-casualties["AGE_CLS"] = casualties["AGE_CLS"].replace({"Onbekend": None, "75 jaar en meer": ">75", "": None})
-```
-
-```{code-cell} ipython3
-# verify outcome
-casualties["AGE_CLS"].unique()
+casualties["DT_HOUR"] = casualties["DT_HOUR"].replace(99, 9)
 ```
 
 <div class="alert alert-success">
@@ -434,8 +417,13 @@ For this conversion, the `astype` is not sufficient. Use the `pd.Categorical` fu
 </div>
 
 ```{code-cell} ipython3
-casualties["DAY_OF_WEEK"] = casualties["DAY_OF_WEEK"].replace({"maandag": "Monday", "dinsdag": "Tuesday", "woensdag": "Wednesday", 
-                                                               "donderdag": "Thursday", "vrijdag": "Friday", "zaterdag": "Saturday", 
+# Conversion to english weekday names
+casualties["DAY_OF_WEEK"] = casualties["DAY_OF_WEEK"].replace({"maandag": "Monday", 
+                                                               "dinsdag": "Tuesday", 
+                                                               "woensdag": "Wednesday", 
+                                                               "donderdag": "Thursday", 
+                                                               "vrijdag": "Friday", 
+                                                               "zaterdag": "Saturday", 
                                                                "zondag": "Sunday"})
 ```
 
@@ -443,14 +431,45 @@ casualties["DAY_OF_WEEK"] = casualties["DAY_OF_WEEK"].replace({"maandag": "Monda
 :tags: [nbtutor-solution]
 
 casualties["week_day"] = pd.Categorical(casualties["DAY_OF_WEEK"], 
-                                           categories=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], 
-                                           ordered=True)
+                                        categories=["Monday", "Tuesday", "Wednesday", "Thursday", 
+                                                    "Friday", "Saturday", "Sunday"], 
+                                        ordered=True)
 ```
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
 casualties["week_day"].dtype
+```
+
+<div class="alert alert-success">
+
+**(OPTIONAL) EXERCISE**
+
+In the `AGE_CLS` column, the age is formatted as `X tot Y jaar` (i.e. _x till y year_). Remove the Dutch description and convert the data into a format `Y - Y` to define the age classes. 
+    
+Use the string methods as much as possible. The `Onbekend`, `  ` (empty string) and `75 jaar en meer` data values can be done by direct replacement into `None`, `None` and `> 75` respectively.
+
+<details><summary>Hints</summary>
+    
+- Use the `.str.replace()` (note the difference with the Pandas `replace()` method) and the `str.removesuffix()` methods to convert the data format.
+- Add an additional `str.strip` to get rid of the spaces and the 'unknown' number of spaces in the empty string case.
+- Using the `replace()` method with a dictionary just works for the remaining two values:  `{"Onbekend": None, "75 jaar en meer": ">75"}`. It will leave other values (not specified in the dictionary) as is.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+casualties["AGE_CLS"] = casualties["AGE_CLS"].str.replace(" tot ", " - ").str.removesuffix(" jaar").str.strip()
+casualties["AGE_CLS"] = casualties["AGE_CLS"].replace({"Onbekend": None, "75 jaar en meer": ">75", "": None})
+```
+
+```{code-cell} ipython3
+# verify outcome
+casualties["AGE_CLS"].unique()
 ```
 
 <div class="alert alert-success">
