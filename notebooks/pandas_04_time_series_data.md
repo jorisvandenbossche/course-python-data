@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -277,6 +277,14 @@ Or all data of January up to March 2012:
 
 ```{code-cell} ipython3
 data['2012-01':'2012-03']
+```
+
+## Exercises
+
+Let's practice this yourself using the same dataset:
+
+```{code-cell} ipython3
+data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 ```
 
 <div class="alert alert-success">

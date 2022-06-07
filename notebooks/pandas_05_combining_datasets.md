@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -256,7 +256,7 @@ This type of data organization is called a **"star schema"** (https://en.wikiped
 
 **EXERCISE**:
 
-Add the full name the legal form (in the DataFrame `df_legal_forms`) to the main dataset (`df`). For this, join both datasets based on the "CD_LGL_PSN_VAT" column.
+Add the full name of the legal form (in the DataFrame `df_legal_forms`) to the main dataset (`df`). For this, join both datasets based on the "CD_LGL_PSN_VAT" column.
     
 <details><summary>Hints</summary>
 
