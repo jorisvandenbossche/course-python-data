@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -33,20 +33,14 @@ conda install -c conda-forge bokeh plotly altair hvplot holoviews
 
 To have support of plotly inside the Jupyter Lab environment
 ```
-conda install -c conda-forge nodejs
-jupyter labextension install jupyterlab-plotly@4.14.3
+conda install "ipywidgets>=7.6" 
+conda install -c conda-forge -c plotly jupyter-dash 
 ```
 
 To run the large data set section, additional package installations are required:
 
 ```
 conda install -c conda-forge datashader holoviews geoviews
-```
-
-To run the 'bokeh-pandas' backend:
-
-```
-conda install -c patrikhlobil pandas-bokeh
 ```
 ---
 
@@ -606,17 +600,11 @@ pd.options.plotting.backend = 'plotly'
 flow_data.plot()
 ```
 
-```{code-cell} ipython3
-# https://github.com/PatrikHlobil/Pandas-Bokeh
-pd.options.plotting.backend = 'pandas_bokeh'
-flow_data.plot()
-```
-
 <div class="alert alert-info">
 
 **Remember**
 
-To get an interactive version of a plot created with Pandas, switch the `pd.options.plotting.backend` to `'holoviews'`, `'plotly'` or `pandas_bokeh` and keep using the `.plot` function as before.
+To get an interactive version of a plot created with Pandas, switch the `pd.options.plotting.backend` to `'holoviews'` or `'plotly'` and keep using the `.plot` function as before.
 
 </div>
 
