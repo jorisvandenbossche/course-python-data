@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -103,10 +103,6 @@ pd.to_datetime("2016-12-09")
 
 ```{code-cell} ipython3
 pd.to_datetime("09/12/2016")
-```
-
-```{code-cell} ipython3
-pd.to_datetime("09/12/2016", dayfirst=True)
 ```
 
 ```{code-cell} ipython3
@@ -446,4 +442,8 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
 :tags: [nbtutor-solution]
 
 data['2013':'2013'].mean().plot(kind='barh')
+```
+
+```{code-cell} ipython3
+
 ```
