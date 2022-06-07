@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -72,7 +72,7 @@ survey_data_processed.info()
 
 +++
 
-See [pandas_08_missing_values.ipynb](pandas_08_missing_values.ipynb) for an overview of functionality to work with missing values.
+See [pandas_07_missing_values.ipynb](pandas_07_missing_values.ipynb) for an overview of functionality to work with missing values.
 
 +++
 

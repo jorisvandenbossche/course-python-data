@@ -624,7 +624,7 @@ What happens with the data registration since 2012?
 
 - Monthly statistics from a time series requires `resample` (with - in this case - `sum`), which also takes the `on` parameter to specify the datetime column (instead of using the index of the DataFrame).
 - Apply the resampling on the `["n_victims_ok", "n_slightly_injured", "n_seriously_injured", "n_dead_30days"]` columns only.
-- Seaborn line plots works without tidy data when NOT providing `x` and `y` argument. It also works using tidy data. To 'tidy' the data set, `.melt()` can be used, see [pandas_07_reshaping.ipynb](pandas_07_reshaping.ipynb).
+- Seaborn line plots works without tidy data when NOT providing `x` and `y` argument. It also works using tidy data. To 'tidy' the data set, `.melt()` can be used, see [pandas_08_reshaping.ipynb](pandas_08_reshaping.ipynb).
 - Pandas plot method works on the non-tidy data set with `plot.area()` .
 
 __Note__ Seaborn does not have an area plot.
