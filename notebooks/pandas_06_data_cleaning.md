@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -37,7 +37,7 @@ A number of Pandas functions are useful when cleaning up raw data and converting
 - `unique`
 - `.str.`-methods
 
-__Note:__ Working with _missing values_ is tackled in a dedicated notebook [pandas_08_missing_values](./pandas_08_missing_values.ipynb).
+__Note:__ Working with _missing values_ is tackled in a dedicated notebook [pandas_07_missing_values](./pandas_07_missing_values.ipynb).
 
 +++
 

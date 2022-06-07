@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -132,7 +132,7 @@ Now, we want to reshape it: our goal is to have the different hours as row indic
 <b>REMEMBER</b>: 
 
 
-Recap: reshaping your data with [`stack` / `melt` and `unstack` / `pivot`](./pandas_07_reshaping_data.ipynb)</li>
+Recap: reshaping your data with [`stack` / `melt` and `unstack` / `pivot`](./pandas_08_reshaping_data.ipynb)</li>
 
 
 
