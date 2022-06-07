@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.6
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -255,6 +255,7 @@ For a single string `name = 'Braund, Mr. Owen Harris'`, split this string (check
 <details><summary>Hints</summary>
 
 - No Pandas in this exercise, just standard Python.
+- The `split()` method of a string returns a python list. Accessing elements of a python list can be done using the square brackets indexing (`a_list[i]`).
     
 </details> 
 
@@ -278,7 +279,7 @@ Convert the solution of the previous exercise to all strings of the `Name` colum
     
 <details><summary>Hints</summary>
 
-- Pandas uses the `str` accessor to use the string methods such as `split`, e.g. `.str.split(...)`
+- Pandas uses the `str` accessor to use the string methods such as `split`, e.g. `.str.split(...)` as the equivalent of the `split()` method of a single string (note: there is a small difference in the naming of the first keyword argument: `sep` vs `pat`).
 - The [`.str.get()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.get.html#pandas.Series.str.get) can be used to get the n-th element of a list, which is what the `str.split()` returns. This is the equivalent of selecting an element of a single list (`a_list[i]`) but then for all values of the Series.
 - One can chain multiple `.str` methods, e.g. `str.SOMEMETHOD(...).str.SOMEOTHERMETHOD(...)`.
     
