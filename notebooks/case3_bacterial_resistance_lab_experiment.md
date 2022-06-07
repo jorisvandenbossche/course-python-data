@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -97,7 +97,7 @@ falcor.head()
 
 +++
 
-*(If you're wondering what `tidy` data representations are, check again the `pandas_07_reshaping_data.ipynb` notebook)*
+*(If you're wondering what `tidy` data representations are, check again the `pandas_08_reshaping_data.ipynb` notebook)*
 
 +++
 
@@ -120,7 +120,7 @@ Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the val
 
 <details><summary>Hints</summary>
 
-- Have a look at `pandas_07_reshaping_data.ipynb` to find out the required function.
+- Have a look at `pandas_08_reshaping_data.ipynb` to find out the required function.
 - Remember to check the documentation of a function using the `SHIFT` + `TAB` keystroke combination when the cursor is on the function of interest.
 
 </details>
