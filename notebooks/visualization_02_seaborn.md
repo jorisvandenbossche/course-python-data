@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -405,26 +405,29 @@ When succesfull, the `casualties.csv` data is available in the `data` folder:
 casualties = pd.read_csv("./data/casualties.csv", parse_dates=["datetime"])
 ```
 
-The data contains the following columns:
+The data contains the following columns (in bold the main columns used in the exercises):
 
-- datetime: Date and time of the casualty.               
-- week_day: Weekday of the datetime.
-- n_victims: Number of victims 
-- n_victims_ok: Number of victims without
-- n_slightly_injured: Number of slightly injured
-- n_seriously_injured: Number of severely injured
-- n_dead_30days: Number of dead within 30 days
-- road_user_type: Road user, vehicle
-- victim_type: Type of victim (pedestrian, driver, passenger,...)
-- gender
+- **datetime**: Date and time of the casualty.
+- **week_day**: Weekday of the datetime.
+- **n_victims**: Number of victims
+- n_victims_ok: Number of victims without injuries
+- n_slightly_injured: Number of slightly injured victims
+- n_seriously_injured: Number of severely injured victims
+- **n_dead_30days**: Number of victims that died within 30 days
+- **road_user_type**: Road user type (passenger car, motorbike, bicycle, pedestrian, ...)
+- victim_type: Type of victim (driver, passenger, ...)
+- **gender**
 - age
-- road_type: Regional road, Motorway or Municipal road
+- **road_type**: Regional road, Motorway or Municipal road
 - build_up_area: Outside  or inside built-up area
-- light_conditions: Day or night (with or without road lights), or dawn
+- **light_conditions**: Day or night (with or without road lights), or dawn
 - refnis_municipality: Postal reference ID number of municipality
 - municipality: Municipality name
 - refnis_region: Postal reference ID number of region
 - region: Flemish Region, Walloon Region or Brussels-Capital Region
+
+Each row of the dataset does not represent a single accident, but a number of victims for a set of characteristics (for example, how many victims for accidents that happened between 8-9am at a certain day and at a certain road type in a certain municipality with the given age class and gender, ...). Thus, in practice, the victims of one accidents might be split over multiple rows (and one row might in theory also come from multiple accidents).  
+Therefore, to get meaningful numbers in the exercises, we will each time _sum_ the number of victims for a certain aggregation level (a subset of those characteristics).
 
 +++
 
@@ -432,7 +435,7 @@ The data contains the following columns:
 
 **EXERCISE**
 
-Create a barplot with the number of victims ("n_victims") for each hour of the day. Before plotting, calculate the victims for each hour of the day with Pandas and assign it to the variable `victims_hour_of_day`. Update the column names to respectively "Hour of the day" and "Number of victims".
+Create a barplot with the number of victims ("n_victims") for each hour of the day. Before plotting, calculate the total number of victims for each hour of the day with pandas and assign it to the variable `victims_hour_of_day`. Update the column names to respectively "Hour of the day" and "Number of victims".
     
 Use the `height` and `aspect` to adjust the figure width/height.
     
@@ -462,7 +465,7 @@ sns.catplot(data=victims_hour_of_day,
             y="Number of victims", 
             kind="bar", 
             aspect=4,
-            height=3
+            height=3,
 )
 ```
 
@@ -470,7 +473,7 @@ sns.catplot(data=victims_hour_of_day,
 
 **EXERCISE**
 
-Create a barplot with the number of victims ("n_victims") for each hour of the day for each category in the gender column. Before plotting, calculate the victims for each hour of the day and each gender with Pandas and assign it to the variable `victims_gender_hour_of_day`. 
+Create a barplot with the number of victims ("n_victims") for each hour of the day for each category in the gender column. Before plotting, calculate the total number of victims for each hour of the day and each gender with Pandas and assign it to the variable `victims_gender_hour_of_day`. 
 
 Create a separate subplot for each gender category in a separate row and apply the `rocket` color palette.  
     
@@ -511,7 +514,7 @@ sns.catplot(data=victims_gender_hour_of_day.fillna("unknown"),
 
 **EXERCISE**
     
-Compare the number of victims for each day of the week for casualties that happened in "Flemish Region" on a "Motorway" with a "Passenger car" with the victim the "Driver" and of age 30 till 39.
+Compare the number of victims for each day of the week for casualties that happened on a "Motorway" (`road_type` column) for trucks ("Truck" and "Light truck" in the `road_user_type` column).
 
 Use a bar plot to compare the victims for each day of the week with Seaborn directly (do not use the `groupby`).
     
@@ -519,10 +522,10 @@ __Note__ The `week_day` is converted to an __ordered__ categorical variable. Thi
     
 <details><summary>Hints</summary>
 
-- The first part of the exercise is filtering the data. Combine the statements with `&` and do not forget to provide the necessary brackets. The `.isin()`to create a boolean condition might be useful for the age selection. 
+- The first part of the exercise is filtering the data. Combine the statements with `&` and do not forget to provide the necessary brackets. The `.isin()`to create a boolean condition might be useful for the road user type selection. 
 - Whereas using `groupby` to get to the counts is perfectly correct, using the `estimator` in Seaborn gives the same result.
 
-__Note__ The `estimator=np.sum` is less performant than using Pandas `groupby`. After filtering the data set, the summation with Seaborn is a feasible option.
+__Note__ The `estimator=np.sum` is less performant than using pandas `groupby`. After filtering the data set, the summation with Seaborn is a feasible option.
 
 </details>
 
@@ -537,20 +540,14 @@ casualties["week_day"] = pd.Categorical(
 ```
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-fl_motowar_20s = casualties[(casualties["region"]=="Flemish Region") & 
-                            (casualties["road_type"] == "Motorway") &
-                            (casualties["road_user_type"] =="Passenger car") &
-                            (casualties["victim_type"] =="Driver") &
-                            (casualties["age"].isin(["30 - 34", "35 - 39"]))
-                           ]
+casualties_motorway_trucks = casualties[
+    (casualties["road_type"] == "Motorway")
+    & casualties["road_user_type"].isin(["Light truck", "Truck"])
+]
 ```
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-sns.catplot(data=fl_motowar_20s,
+sns.catplot(data=casualties_motorway_trucks,
             x="week_day",
             y="n_victims",
             estimator=np.sum,
@@ -597,7 +594,7 @@ compare_dead_30 = compare_dead_30.groupby(
     ["road_user_type", compare_dead_30.index.year])[["n_dead_30days", "n_victims"]].sum().reset_index()
 
 # create a new colum with the percentage deads
-compare_dead_30["dead_prop"] = compare_dead_30["n_dead_30days"]/compare_dead_30["n_victims"] * 100
+compare_dead_30["dead_prop"] = compare_dead_30["n_dead_30days"] / compare_dead_30["n_victims"] * 100
 ```
 
 ```{code-cell} ipython3
@@ -615,7 +612,7 @@ sns.catplot(data=compare_dead_30,
 
 **EXERCISE**
     
-Create a line plot of the __monthly__ number for each of the categories of victims ('n_victims_ok', 'n_dead_30days', 'n_slightly_injured' and 'n_seriously_injured') as a function of time:
+Create a line plot of the __monthly__ number of victims for each of the categories of victims ('n_victims_ok', 'n_dead_30days', 'n_slightly_injured' and 'n_seriously_injured') as a function of time:
     
 - Create a new variable `monthly_victim_counts` that contains the monthly sum of 'n_victims_ok', 'n_dead_30days', 'n_slightly_injured' and 'n_seriously_injured'.
 - Create a line plot of the `monthly_victim_counts` using Seaborn. Choose any [color palette](https://seaborn.pydata.org/tutorial/color_palettes.html).
