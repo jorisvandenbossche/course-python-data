@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -100,10 +100,10 @@ The minimum area:
 countries['area'].min()
 ```
 
-For dataframes, often only the numeric columns are included in the result:
+For dataframes, we get a Series with one value for each column (in this case of mixed data types, we need to specify to only calculate the median of the numeric column, as trying to calculate the median of a string column would raise an error):
 
 ```{code-cell} ipython3
-countries.median()
+countries.median(numeric_only=True)
 ```
 
 # Application on a real dataset
