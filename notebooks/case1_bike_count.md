@@ -7,9 +7,9 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Python [conda env:DS-python]
+  display_name: Python 3 (ipykernel)
   language: python
-  name: conda-env-DS-python-py
+  name: python3
 ---
 
 <p><font size="6"><b> CASE - Bike count data</b></font></p>
@@ -75,38 +75,26 @@ df = pd.read_csv("data/fietstellingencoupure.csv", sep=';')
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df.tail()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 len(df)
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df.dtypes
 ```
 
@@ -140,11 +128,8 @@ Pre-process the data:
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 combined = df['datum'] + ' ' + df['tijd']
 combined.head()
 ```
@@ -169,20 +154,12 @@ df2 = df2.rename(columns={'ri Centrum': 'direction_centre',
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df2.head()
 ```
 
 Having the data available with an interpreted `datetime`, provides us the possibility of having time aware plotting:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 fig, ax = plt.subplots(figsize=(10, 6))
 df.plot(colormap='coolwarm', ax=ax)
 ```
@@ -202,20 +179,12 @@ combined = df['datum'] + ' ' + df['tijd']
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 %timeit -n 1 -r 1 pd.to_datetime(combined, dayfirst=True)
 ```
 
 However, when we already know the format of the dates (and if this is consistent throughout the full dataset), we can use this information to interpret the dates:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 %timeit pd.to_datetime(combined, format="%d/%m/%Y %H:%M")
 ```
 
@@ -274,10 +243,6 @@ def process_bike_count_data(df):
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df_raw = pd.read_csv("data/fietstellingencoupure.csv", sep=';')
 df_preprocessed = process_bike_count_data(df_raw)
 df_preprocessed.head()
@@ -318,20 +283,12 @@ df = pd.read_csv("bike_count_interim.csv", index_col=0, parse_dates=True)
 The number of bikers are counted for intervals of approximately 15 minutes. But let's check if this is indeed the case. Calculate the difference between each of the consecutive values of the index. We can use the `Series.diff()` method:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df.index.to_series().diff()
 ```
 
 The count of the possible intervals is of interest:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df.index.to_series().diff().value_counts()
 ```
 
@@ -340,10 +297,6 @@ There are a few records that are not exactly 15min. But given it are only a few 
 Bonus question: do you know where the values of `-1 days +23:15:01` and `01:15:00` are coming from?
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df.describe()
 ```
 
@@ -364,11 +317,8 @@ Create a new Pandas Series `df_both` which contains the sum of the counts of bot
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df_both = df.sum(axis=1)
 df_both
 ```
@@ -405,11 +355,8 @@ Using the original data `df`, select only the intervals for which less than 3 cy
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df[(df['direction_centre'] < 3) | (df['direction_mariakerke'] < 3)]
 ```
 
@@ -430,11 +377,8 @@ What is the average number of bikers passing every 15 min in each direction?
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df.mean()
 ```
 
@@ -452,11 +396,8 @@ What is the average number of bikers passing each hour?
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df.resample('H').sum().mean()
 ```
 
@@ -473,11 +414,8 @@ What are the 10 highest peak values observed during any of the intervals for the
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df['direction_centre'].nlargest(10)
 # alternative:
 # df['direction_centre'].sort_values(ascending=False).head(10)
@@ -510,11 +448,8 @@ df_daily = df_both.resample('D').sum()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df_daily.max()
 ```
 
@@ -546,11 +481,8 @@ How does the long-term trend look like? Calculate monthly sums and plot the resu
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df_monthly = df.resample('M').sum()
 df_monthly.plot()
 ```
@@ -574,20 +506,14 @@ df_hourly = df.resample('H').sum()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df_hourly.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 df_hourly['2014-01-01':'2014-01-20'].plot()
 ```
 
@@ -616,31 +542,22 @@ newyear = df["2013-12-31 12:00:00": "2014-01-01 12:00:00"]
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 newyear.plot()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 newyear.rolling(10, center=True).mean().plot(linewidth=2)
 ```
 
 A more advanced usage of Matplotlib to create a combined plot:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 # A more in-detail plotting version of the graph.
 fig, ax = plt.subplots()
 newyear.plot(ax=ax, color=['LightGreen', 'LightBlue'], legend=False, rot=0)
@@ -671,10 +588,6 @@ df_daily = df.resample('D').sum()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df_daily.groupby(df_daily.index.dayofweek).mean().plot(kind='bar')
 ```
 
@@ -685,10 +598,6 @@ df_hourly = df.resample('H').sum()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 df_hourly.groupby(df_hourly.index.hour).mean().plot()
 ```
 
@@ -707,10 +616,6 @@ from calendar import month_abbr
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 ax = df_monthly.groupby(df_monthly.index.month).mean().plot()
 ax.set_ylim(0)
 xlabels = ax.set_xticklabels(list(month_abbr)[0::2]) #too lazy to write the month values yourself...

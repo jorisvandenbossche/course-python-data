@@ -58,10 +58,6 @@ titanic = pd.read_csv('data/titanic.csv')
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 titanic.head()
 ```
 
@@ -73,10 +69,6 @@ Let's consider following question:
 Hence, we should define the *mean* of the male and female groups of column `Survived` in combination with the groups of the `Pclass` column. In Pandas terminology:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 age_stat = titanic.groupby(["Pclass", "Sex"])["Age"].mean().reset_index()
 age_stat
 ```
@@ -84,10 +76,6 @@ age_stat
 Providing this data in a bar chart with pure Pandas is still partly supported:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 age_stat.plot(kind='bar')
 ## A possible other way of plotting this could be using groupby again:   
 #age_stat.groupby('Pclass').plot(x='Sex', y='Age', kind='bar') # (try yourself by uncommenting)
@@ -100,10 +88,6 @@ but with mixed results.
 __Seaborn__ provides another level of abstraction to visualize such *grouped* plots with different categories:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 sns.catplot(data=age_stat, 
             x="Sex", y="Age", 
             col="Pclass", kind="bar")
@@ -156,10 +140,6 @@ We first check out the top commands of each of the types of plots: `relplot`, `d
 Let's start from: _What is the relation between Age and Fare?_
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 # A relation between variables in a Pandas DataFrame -> `relplot`
 sns.relplot(data=titanic, x="Age", y="Fare")
 ```
@@ -167,10 +147,6 @@ sns.relplot(data=titanic, x="Age", y="Fare")
 Extend to: _Is the relation between Age and Fare different for people how survived?_
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 sns.relplot(data=titanic, x="Age", y="Fare",
             hue="Survived")
 ```
@@ -178,10 +154,6 @@ sns.relplot(data=titanic, x="Age", y="Fare",
 Extend to: _Is the relation between Age and Fare different for people how survived and/or the gender of the passengers?_
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 age_fare = sns.relplot(data=titanic, x="Age", y="Fare",
                        hue="Survived",
                        col="Sex")
@@ -190,20 +162,12 @@ age_fare = sns.relplot(data=titanic, x="Age", y="Fare",
 The function returns a Seaborn `FacetGrid`, which is related to a Matplotlib `Figure`:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 type(age_fare), type(age_fare.fig)
 ```
 
 As we are dealing here with 2 subplots, the `FacetGrid` consists of two Matplotlib `Axes`:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 age_fare.axes, type(age_fare.axes.flatten()[0])
 ```
 
@@ -242,18 +206,10 @@ Each plot module has a single `Figure`-level function (top command in the scheme
 We can ask the same question: _Is the relation between Age and Fare different for people how survived?_
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 scatter_out = sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived")
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 type(scatter_out)
 ```
 
@@ -268,10 +224,6 @@ But we can't use the `col`/`row` options for facetting:
 We can use these functions to create custom combinations of plots:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 6))
 sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived", ax=ax0)
 sns.violinplot(data=titanic, x="Survived", y="Fare", ax=ax1)  # boxplot, stripplot,.. as alternative to represent distribution per category
@@ -319,11 +271,8 @@ The `Axes` level Seaborn functions:
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 sns.displot(data=titanic, x="Age", row="Sex", aspect=3, height=2)
 ```
 
@@ -345,11 +294,8 @@ Make a violin plot showing the `Age` distribution in each of the `Pclass` catego
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 # Figure based
 sns.catplot(data=titanic, x="Pclass", y="Age", 
             hue="Sex", split=True,
@@ -358,11 +304,8 @@ sns.despine(left=True)
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 # Axes based
 sns.violinplot(data=titanic, x="Pclass", y="Age", 
                hue="Sex", split=True,
@@ -377,10 +320,6 @@ sns.despine(left=True)
 Aggregations such as `count`, `mean` are embedded in Seaborn (similar to other 'Grammar of Graphics' packages such as ggplot in R and plotnine/altair in Python). We can do these operations directly on the original `titanic` data set in a single coding step:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 sns.catplot(data=titanic, x="Survived", col="Pclass", 
             kind="count")
 ```
@@ -407,20 +346,12 @@ __jointplot()__ and __pairplot()__
 `jointplot()` and `pairplot()` are Figure-level functions and create figures with specific subplots by default:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 # joined distribution plot
 sns.jointplot(data=titanic, x="Fare", y="Age", 
               hue="Sex", kind="scatter") # kde
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 sns.pairplot(data=titanic[["Age", "Fare", "Sex"]], hue="Sex")  # Also called scattermatrix plot
 ```
 
@@ -431,20 +362,12 @@ __heatmap()__
 Plot rectangular data as a color-encoded matrix.
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 titanic_age_summary = titanic.pivot_table(columns="Pclass", index="Sex", 
                                           values="Age", aggfunc="mean")
 titanic_age_summary
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 sns.heatmap(data=titanic_age_summary, cmap="Reds")
 ```
 
@@ -455,10 +378,6 @@ __lmplot() regressions__
 `Figure` level function to generate a regression model fit across a FacetGrid:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 g = sns.lmplot(
     data=titanic, x="Age", y="Fare", 
     hue="Survived", col="Survived",  # hue="Pclass"

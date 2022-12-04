@@ -73,20 +73,14 @@ observations = pd.read_csv("data/observations.csv", index_col="occurrenceID")
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations.info()
 ```
 
@@ -104,11 +98,8 @@ Create a new column with the name `eventDate` which contains datetime-aware info
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations["eventDate"] =  pd.to_datetime(observations[["year", "month", "day"]])
 observations
 ```
@@ -135,10 +126,6 @@ observations["datasetName"] = "Ecological Archives E090-118-D1."
 ## Cleaning the `verbatimSex` column
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 observations["verbatimSex"].unique()
 ```
 
@@ -183,11 +170,8 @@ observations['sex'] = observations['verbatimSex'].replace(sex_dict)
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations["sex"].unique()
 ```
 
@@ -213,11 +197,8 @@ How many records in the data set have no information about the `species_ID`? Use
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations['species_ID'].isna().sum()
 ```
 
@@ -234,11 +215,8 @@ How many duplicate records are present in the dataset? Use the method `duplicate
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations.duplicated().sum()
 ```
 
@@ -257,11 +235,8 @@ observations.duplicated().sum()
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 duplicate_observations = observations[observations.duplicated(keep=False)]
 duplicate_observations.sort_values(["eventDate", "verbatimLocality"]).head(9)
 ```
@@ -287,11 +262,8 @@ observations_unique = observations.drop_duplicates()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 len(observations_unique)
 ```
 
@@ -313,29 +285,20 @@ Use the `dropna()` method to find out:
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 len(observations_unique.dropna())
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 len(observations_unique.dropna(subset=['species_ID']))
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 observations_with_ID = observations_unique.dropna(subset=['species_ID'])
 observations_with_ID.head()
 ```
@@ -361,11 +324,8 @@ not_identified = observations[mask]
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 not_identified.head()
 ```
 
@@ -380,10 +340,6 @@ observations_data = observations_unique_.dropna(subset=['species_ID'])
 In the data set `observations`, the column `specied_ID` provides only an identifier instead of the full name. The name information is provided in a separate file `species_names.csv`:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 species_names = pd.read_csv("data/species_names.csv")
 species_names.head()
 ```
@@ -391,10 +347,6 @@ species_names.head()
 The species names contains for each identifier in the `ID` column the scientific name of a species. The `species_names` data set contains in total 38 different scientific names:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 species_names.shape
 ```
 
@@ -416,11 +368,8 @@ Combine the DataFrames `observations_data` and `species_names` by adding the cor
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 survey_data = pd.merge(observations_data, species_names, how="left",
                        left_on="species_ID", right_on="ID")
 survey_data
@@ -429,10 +378,6 @@ survey_data
 ## Select subsets according to taxa of species
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 survey_data['taxa'].value_counts()
 #survey_data.groupby('taxa').size()
 ```
@@ -456,11 +401,8 @@ non_rodent_species = survey_data[survey_data['taxa'].isin(['Rabbit', 'Bird', 'Re
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 len(non_rodent_species)
 ```
 
@@ -484,19 +426,12 @@ r_species = survey_data[survey_data['name'].str.lower().str.startswith('r')]
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 len(r_species)
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 r_species["name"].value_counts()
 ```
 
@@ -519,10 +454,6 @@ non_bird_species = survey_data[survey_data['taxa'] != 'Bird']
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 len(non_bird_species)
 ```
 
@@ -539,11 +470,8 @@ Select the __Bird__ (taxa is Bird) observations from 1985-01 till 1989-12 usint 
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 birds_85_89 = survey_data[(survey_data["eventDate"] >= "1985-01-01")
                           & (survey_data["eventDate"] <= "1989-12-31 23:59")
                           & (survey_data['taxa'] == 'Bird')]
@@ -551,11 +479,8 @@ birds_85_89.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 # alternative solution
 birds_85_89 = survey_data[(survey_data["eventDate"].dt.year >= 1985)
                           & (survey_data["eventDate"].dt.year <= 1989) 
@@ -580,11 +505,8 @@ __Note__ You can do this all in a single line statement, but don't have to do it
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 # Multiple lines
 obs_with_weight = survey_data.dropna(subset=["weight"])
 median_weight = obs_with_weight.groupby(['name'])["weight"].median()
@@ -592,11 +514,8 @@ median_weight.sort_values(ascending=False)
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 # Single line statement
 survey_data.dropna(subset=["weight"]).groupby(['name'])["weight"].median().sort_values(ascending=False)
 ```
@@ -618,20 +537,14 @@ Which 8 species (use the `name` column to identify the different species) have b
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 survey_data.groupby("name").size().nlargest(8)
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 survey_data['name'].value_counts()[:8]
 ```
 
@@ -656,11 +569,8 @@ n_species_per_plot = survey_data.groupby(["verbatimLocality"])["name"].nunique()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 fig, ax = plt.subplots(figsize=(6, 6))
 n_species_per_plot.plot(kind="barh", ax=ax)
 ax.set_ylabel("Plot number");
@@ -690,11 +600,8 @@ ax.set_ylabel("Plot number");
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 n_plots_per_species = survey_data.groupby(["name"])["verbatimLocality"].nunique().sort_values()
 
 fig, ax = plt.subplots(figsize=(10, 8))
@@ -719,21 +626,15 @@ ax.set_ylabel("");
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 n_plot_sex = survey_data.groupby(["sex", "verbatimLocality"]).size().rename("count").reset_index()
 n_plot_sex.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 pivoted = n_plot_sex.pivot_table(columns="sex", index="verbatimLocality", values="count")
 pivoted.head()
 ```
@@ -741,10 +642,6 @@ pivoted.head()
 As such, we can use the variable `pivoted` to plot the result:
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
----
 pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
 ```
 
@@ -764,11 +661,8 @@ Recreate the previous plot with the `catplot` function from the Seaborn library 
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 sns.catplot(data=survey_data, x="verbatimLocality", 
             hue="sex", kind="count", height=3, aspect=3)
 ```
@@ -789,11 +683,8 @@ sns.catplot(data=survey_data, x="verbatimLocality",
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 heatmap_prep = survey_data.pivot_table(index='year', columns='month', 
                                        values="ID", aggfunc='count')
 fig, ax = plt.subplots(figsize=(10, 8))
@@ -818,11 +709,8 @@ Remark that we started from a `tidy` data format (also called *long* format) and
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 species_per_plot = survey_data.reset_index().pivot_table(index="name", 
                                                          columns="verbatimLocality", 
                                                          values="ID", 
@@ -831,11 +719,8 @@ species_per_plot.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 fig, ax = plt.subplots(figsize=(8,8))
 sns.heatmap(species_per_plot, ax=ax, cmap='Greens')
 ```
@@ -854,11 +739,8 @@ Make a plot visualizing the evolution of the number of observations for each of 
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 survey_data.resample('A', on='eventDate').size().plot()
 ```
 
@@ -890,11 +772,8 @@ merriami = survey_data[survey_data["name"] == "Dipodomys merriami"]
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 fig, ax = plt.subplots()
 merriami.groupby(merriami['eventDate'].dt.month).size().plot(kind="barh", ax=ax)
 ax.set_xlabel("number of occurrences")
@@ -929,11 +808,8 @@ month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').si
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 species_evolution = month_evolution.unstack(level=0)
 axs = species_evolution.plot(subplots=True, figsize=(14, 8), sharey=True)
 ```
@@ -961,11 +837,8 @@ month_evolution = month_evolution.reset_index()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 sns.relplot(data=month_evolution, x='eventDate', y="counts", 
             row="name", kind="line", hue="name", height=2, aspect=5)
 ```
@@ -993,20 +866,14 @@ year_evolution = year_evolution.reset_index()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 year_evolution.head()
 ```
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 sns.relplot(data=year_evolution, x='eventDate', y="counts", 
             col="taxa", col_wrap=2, kind="line", height=2, aspect=5, 
             facet_kws={"sharey": False})
@@ -1025,11 +892,8 @@ The observations where taken by volunteers. You wonder on which day of the week 
 </details>
 
 ```{code-cell} ipython3
----
-jupyter:
-  outputs_hidden: false
-tags: [nbtutor-solution]
----
+:tags: [nbtutor-solution]
+
 fig, ax = plt.subplots()
 survey_data.groupby(survey_data["eventDate"].dt.weekday).size().plot(kind='barh', color='#66b266', ax=ax)
 

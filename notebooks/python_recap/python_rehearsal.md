@@ -1,6 +1,7 @@
 ---
 jupyter:
   jupytext:
+    cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow
     formats: ipynb,md
     text_representation:
       extension: .md
@@ -8,9 +9,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.14.1
   kernelspec:
-    display_name: Python [conda env:DS-python]
+    display_name: Python 3 (ipykernel)
     language: python
-    name: conda-env-DS-python-py
+    name: python3
 ---
 
 <!-- #region -->

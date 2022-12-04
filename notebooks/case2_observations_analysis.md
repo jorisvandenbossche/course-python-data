@@ -7,9 +7,9 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Python [conda env:DS-python]
+  display_name: Python 3 (ipykernel)
   language: python
-  name: conda-env-DS-python-py
+  name: python3
 ---
 
 <p><font size="6"><b> CASE - Observation data - analysis</b></font></p>
