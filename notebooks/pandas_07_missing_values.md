@@ -5,17 +5,17 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-<p><font size="6"><b>08 - Pandas: Working with missing data </b></font></p>
+<p><font size="6"><b>07 - Pandas: Working with missing data </b></font></p>
 
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -139,7 +139,7 @@ Further, more advanced filling techniques are available in the ``interpolate()``
 
 **REMEMBER**: <br>
 
-* missing value indicator: `np.nan` (`NaN`)
+* Missing value indicator: `np.nan` (`NaN`)
 * Reductions: skipped by default
 * Mathematical operations (eg `+`): propagate by default
 * Specific functions:

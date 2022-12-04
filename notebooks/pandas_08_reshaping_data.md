@@ -5,17 +5,17 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-<p><font size="6"><b>07 - Pandas: Tidy data and reshaping</b></font></p>
+<p><font size="6"><b>08 - Pandas: Tidy data and reshaping</b></font></p>
 
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -193,7 +193,7 @@ df_tidy["time"] = pd.to_datetime(df_tidy["time"], format="%Y%m")
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df_overall = df_tidy.groupby(["time", "Energie"]).sum() # or with .reset_index()
+df_overall = df_tidy.groupby(["time", "Energie"])[["consumption"]].sum() # or with .reset_index()
 df_overall.head()
 ```
 
@@ -391,10 +391,10 @@ df.pivot_table(index='Pclass', columns='Sex',
 :tags: [nbtutor-solution]
 
 fig, ax1 = plt.subplots()
-df.pivot_table(index='Pclass', columns='Sex', 
-               values='Survived', aggfunc='mean').plot(kind='bar', 
-                                                       rot=0, 
-                                                       ax=ax1)
+(df.pivot_table(index='Pclass', columns='Sex', 
+               values='Survived', aggfunc='mean')
+   .plot.bar(rot=0, ax=ax1)
+)
 ax1.set_ylabel('Survival ratio')
 ```
 
@@ -539,7 +539,7 @@ df.groupby(['Pclass', 'Sex'])['Survived'].mean().unstack()
 
 +++
 
-These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [`cast.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
+These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [titles.csv](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [cast.csv](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
 
 ```{code-cell} ipython3
 cast = pd.read_csv('data/cast.csv')
@@ -572,7 +572,8 @@ table.plot()
 :tags: [nbtutor-solution]
 
 cast.pivot_table(index='year', columns='type', values="character", aggfunc='count').plot() 
-# for values in using the , take a column with no Nan values in order to count effectively all values -> at this stage: aha-erlebnis about crosstab function(!)
+# for the values column to use in the aggfunc, take a column with no NaN values in order to count effectively all values
+# -> at this stage: aha-erlebnis about crosstab function(!)
 ```
 
 ```{code-cell} ipython3
@@ -593,7 +594,7 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot()
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-pd.crosstab(index=cast['year'], columns=cast['type']).plot(kind='area')
+pd.crosstab(index=cast['year'], columns=cast['type']).plot.area()
 ```
 
 <div class="alert alert-success">
