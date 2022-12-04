@@ -5,17 +5,17 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-<p><font size="6"><b>06 - Pandas: "Group by" operations</b></font></p>
+<p><font size="6"><b>05 - Pandas: "Group by" operations</b></font></p>
 
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -188,14 +188,14 @@ df.groupby('Sex')['Survived'].mean()
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df.groupby('Pclass')['Survived'].mean().plot(kind='bar') #and what if you would compare the total number of survivors?
+df.groupby('Pclass')['Survived'].mean().plot.bar() #and what if you would compare the total number of survivors?
 ```
 
 <div class="alert alert-success">
 
 **EXERCISE**:
 
-* Make a bar plot to visualize the average Fare payed by people depending on their age. The age column is divided is separate classes using the `pd.cut()` function as provided below.
+* Make a bar plot to visualize the average Fare payed by people depending on their age. The age column is divided in separate classes using the `pd.cut()` function as provided below.
 
 </div>
 
@@ -206,7 +206,7 @@ df['AgeClass'] = pd.cut(df['Age'], bins=np.arange(0,90,10))
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df.groupby('AgeClass')['Fare'].mean().plot(kind='bar', rot=0)
+df.groupby('AgeClass')['Fare'].mean().plot.bar(rot=0)
 ```
 
 If you are ready, more groupby exercises can be found below.
@@ -252,7 +252,7 @@ df.groupby('Pclass').size()
 df.groupby('Embarked').size()
 ```
 
-Another way to obtain such counts, is to use the Series `value_counts` method:
+Another way to obtain such counts, is to use the Series `value_counts` method (which additionally sorts from most to least occurring group):
 
 ```{code-cell} ipython3
 df['Embarked'].value_counts()
@@ -262,7 +262,7 @@ df['Embarked'].value_counts()
 
 +++
 
-These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [`titles.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [`cast.csv`](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
+These exercises are based on the [PyCon tutorial of Brandon Rhodes](https://github.com/brandon-rhodes/pycon-pandas-tutorial/) (so credit to him!) and the datasets he prepared for that. You can download these data from here: [titles.csv](https://course-python-data.s3.eu-central-1.amazonaws.com/titles.csv) and [cast.csv](https://course-python-data.s3.eu-central-1.amazonaws.com/cast.csv) and put them in the `/notebooks/data` folder.
 
 +++
 
@@ -291,11 +291,11 @@ titles.head()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
- <ul>
-  <li>Using `groupby()`, plot the number of films that have been released each decade in the history of cinema.</li>
-</ul>
+
+* Using `groupby()`, plot the number of films that have been released each decade in the history of cinema.
+
 </div>
 
 ```{code-cell} ipython3
@@ -307,7 +307,7 @@ titles['decade'] = titles['year'] // 10 * 10
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-titles.groupby('decade').size().plot(kind='bar', color='green')
+titles.groupby('decade').size().plot.bar(color='green')
 ```
 
 <div class="alert alert-success">
@@ -324,7 +324,7 @@ titles.groupby('decade').size().plot(kind='bar', color='green')
 
 titles['decade'] = titles['year'] // 10 * 10
 hamlet = titles[titles['title'] == 'Hamlet']
-hamlet.groupby('decade').size().plot(kind='bar', color="orange")
+hamlet.groupby('decade').size().plot.bar(color="orange")
 ```
 
 <div class="alert alert-success">
@@ -341,7 +341,7 @@ hamlet.groupby('decade').size().plot(kind='bar', color="orange")
 
 titles['decade'] = titles['year'] // 10 * 10
 hamlet = titles[titles['title'].str.contains('Hamlet')]
-hamlet.groupby('decade').size().plot(kind='bar', color="lightblue")
+hamlet.groupby('decade').size().plot.bar(color="lightblue")
 ```
 
 <div class="alert alert-success">

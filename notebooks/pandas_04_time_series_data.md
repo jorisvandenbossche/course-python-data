@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>04 - Pandas: Working with time series data</b></font></p>
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -285,11 +285,10 @@ data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE:
 
- <ul>
-  <li>select all data starting from 2012</li>
-</ul>
+* select all data starting from 2012
+
 </div>
 
 ```{code-cell} ipython3
@@ -300,11 +299,16 @@ data['2012':]
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
- <ul>
-  <li>select all data in January for all different years</li>
-</ul>
+* select all data in January for all different years
+
+<details><summary>Hints</summary>
+
+* Remember you can get information about the month of each timestamp using the `month` attribute of the DatetimeIndex.
+
+</details>
+
 </div>
 
 ```{code-cell} ipython3
@@ -315,11 +319,16 @@ data[data.index.month == 1]
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**:
 
- <ul>
-  <li>select all data in April, May and June for all different years</li>
-</ul>
+* select all data in April, May and June for all different years
+
+<details><summary>Hints</summary>
+
+* If you want to check for equality with multiple possible values (equal to x OR equal to y OR ...), the `isin()` method can be easier to use.
+
+</details>
+
 </div>
 
 ```{code-cell} ipython3
@@ -442,8 +451,4 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
 :tags: [nbtutor-solution]
 
 data['2013':'2013'].mean().plot(kind='barh')
-```
-
-```{code-cell} ipython3
-
 ```

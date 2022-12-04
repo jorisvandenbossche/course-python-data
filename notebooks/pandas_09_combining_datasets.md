@@ -5,17 +5,17 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-<p><font size="6"><b>Pandas: Combining datasets Part I - concat</b></font></p>
+<p><font size="6"><b>09 - Pandas: Combining datasets</b></font></p>
 
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -366,7 +366,7 @@ Let's visualize the change in number of registered enterprises on a map at the m
 We first calculate the total number of (existing/starting/stopping) enterprises per municipality:
 
 ```{code-cell} ipython3
-df_by_muni = df.groupby("CD_REFNIS").sum()
+df_by_muni = df.groupby("CD_REFNIS")[['MS_NUM_VAT', 'MS_NUM_VAT_START', 'MS_NUM_VAT_STOP']].sum()
 ```
 
 And add a new column with the relative change in the number of registered enterprises:
@@ -443,8 +443,4 @@ countries2
 
 ```{code-cell} ipython3
 pd.concat([countries2, country_economics], axis="columns")
-```
-
-```{code-cell} ipython3
-
 ```
