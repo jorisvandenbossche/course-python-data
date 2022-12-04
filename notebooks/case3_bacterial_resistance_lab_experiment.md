@@ -5,11 +5,11 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python [conda env:DS-python]
   language: python
-  name: python3
+  name: conda-env-DS-python-py
 ---
 
 <p><font size="6"><b>CASE - Bacterial resistance experiment</b></font></p>
@@ -79,6 +79,10 @@ For the exercises, two sheets of the excel file will be used:
 Reading the `main experiment` data set from the corresponding sheet:
 
 ```{code-cell} ipython3
+---
+jupyter:
+  outputs_hidden: false
+---
 main_experiment = pd.read_excel("data/Dryad_Arias_Hall_v3.xlsx",
                                 sheet_name="Main experiment")
 main_experiment = main_experiment.drop(columns=["AB_r", "Survival_72h", "PhageR_72h"])  # focus on specific subset for this use case)
@@ -87,6 +91,10 @@ main_experiment = main_experiment.drop(columns=["AB_r", "Survival_72h", "PhageR_
 Read the `Falcor` data and subset the columns of interest:
 
 ```{code-cell} ipython3
+---
+jupyter:
+  outputs_hidden: false
+---
 falcor = pd.read_excel("data/Dryad_Arias_Hall_v3.xlsx", sheet_name="Falcor",
                        skiprows=1)
 falcor = falcor[["Phage", "Bacterial_genotype", "log10 Mc", "log10 UBc", "log10 LBc"]]
@@ -108,6 +116,10 @@ Actually, the columns `OD_0h`, `OD_20h` and `OD_72h` are representing the same v
 Before making any changes to the data, we will add an identifier column for each of the current rows to make sure we keep the connection in between the entries of a row when converting from wide to long format.
 
 ```{code-cell} ipython3
+---
+jupyter:
+  outputs_hidden: false
+---
 main_experiment["experiment_ID"] = ["ID_" + str(idx) for idx in range(len(main_experiment))]
 main_experiment
 ```
@@ -128,8 +140,11 @@ Convert the columns `OD_0h`, `OD_20h` and `OD_72h` to a long format with the val
 </div>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 tidy_experiment = main_experiment.melt(id_vars=['Bacterial_genotype', 'Phage_t', 'experiment_ID'],
                                        value_vars=['OD_0h', 'OD_20h', 'OD_72h'],
                                        var_name='experiment_time_h',
@@ -140,6 +155,10 @@ tidy_experiment
 ## Visual data exploration
 
 ```{code-cell} ipython3
+---
+jupyter:
+  outputs_hidden: false
+---
 tidy_experiment.head()
 ```
 
@@ -169,8 +188,11 @@ Using Matplotlib, further adjust the histogram:
 </div>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 sns.set_style("white")
 histplot = sns.displot(data=tidy_experiment, x="optical_density",
                        color='grey', edgecolor='white')
@@ -193,8 +215,11 @@ Use a Seaborn `violin plot` to check the distribution of the `optical_density` i
 </details>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 sns.catplot(data=tidy_experiment, x="experiment_time_h",
             y="optical_density", kind="violin")
 ```
@@ -213,8 +238,11 @@ For each `Phage_t` in an individual subplot, use a `violin plot` to check the di
 </details>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 sns.catplot(data=tidy_experiment, x="experiment_time_h", y="optical_density",
             col="Phage_t", col_wrap=2, kind="violin")
 ```
@@ -232,8 +260,11 @@ Create a summary table of the __average__ `optical_density` with the `Bacterial_
 </details>
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 pd.pivot_table(tidy_experiment, values='optical_density',
                index='Bacterial_genotype',
                columns='experiment_time_h',
@@ -243,8 +274,11 @@ pd.pivot_table(tidy_experiment, values='optical_density',
 Advanced/optional solution:
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 # advanced/optional solution
 tidy_experiment.groupby(['Bacterial_genotype', 'experiment_time_h'])['optical_density'].mean().unstack()
 ```
@@ -278,8 +312,11 @@ density_mean = (tidy_experiment
 ```
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 sns.catplot(data=density_mean, kind="bar",
             x='Bacterial_genotype',
             y='optical_density',
@@ -299,6 +336,10 @@ Check Figure 2 of the original journal paper in the 'correction' part of the <a 
 <img src="https://royalsocietypublishing.org/cms/attachment/eb511c57-4167-4575-b8b3-93fbcf728572/rsbl20160064f02.jpg" width="500">
 
 ```{code-cell} ipython3
+---
+jupyter:
+  outputs_hidden: false
+---
 falcor.head()
 ```
 
@@ -311,14 +352,13 @@ We will first reproduce 'Figure 2' without the error bars:
 - Make sure the `WT(2)` and `MUT(2)` categories are used as respectively `WT` and `MUT` by adjusting them with Pandas first.
 - Use the __falcor__ data and the Seaborn package. The 'log10 mutation rate' on the figure corresponds to the `log10 Mc` column.
 
-
 <details><summary>Hints</summary>
 
 - To replace values using a mapping (dictionary with the keys the current values and the values the new values), use the Pandas `replace` method.
 - This is another example of a `catplot`, using `point`s to represent the data.
 - The `join` argument defines if individual points need to be connected or not.
-- One combination appears multiple times, so make sure to not yet use confidence intervals by setting `ci` to `Null`.
-
+- Seaborn provides the `row_order` and `order` options to provide a custom order of respectively the subplots and categories.
+- One combination appears multiple times, so make sure to not yet use confidence intervals by setting `errorbar` to `None`.
 </details>
 
 ```{code-cell} ipython3
@@ -330,13 +370,19 @@ falcor.head()
 ```
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 sns.catplot(data=falcor, kind="point",
             x='Bacterial_genotype',
             y='log10 Mc',
             row="Phage",
-            join=False, ci=None,
+            join=False, 
+            errorbar=None,
+            row_order=["Lambda", "T4", "T7"],
+            order=['WT', 'MUT', 'D87G', 'S83L', 'D516G', 'S512F', 'K43N', 'K88R', 'RSF1010', 'RP4'],
             aspect=3, height=3,
             color="black")
 ```
@@ -378,8 +424,11 @@ def errorbar(x, y, low, high, **kws):
 ```
 
 ```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
+---
+jupyter:
+  outputs_hidden: false
+tags: [nbtutor-solution]
+---
 sns.set_style("ticks")
 g = sns.FacetGrid(data=falcor, row="Phage", aspect=3, height=3)
 g.map(errorbar,
