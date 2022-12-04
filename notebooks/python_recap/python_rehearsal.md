@@ -6,11 +6,11 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.0
+      jupytext_version: 1.14.1
   kernelspec:
-    display_name: Python 3 (ipykernel)
+    display_name: Python [conda env:DS-python]
     language: python
-    name: python3
+    name: conda-env-DS-python-py
 ---
 
 <!-- #region -->
@@ -376,7 +376,7 @@ AR
 ```
 
 <div class="alert alert-success">
-    <b>EXERCISE</b>: Change all even positions of matrix AR into the value 30
+    <b>EXERCISE</b>: Change all even positions assuming position index starts at 1 (positions 1, 2, 3...) of matrix AR into the value 30
 </div>
 
 ```python clear_cell=true
@@ -385,9 +385,17 @@ AR
 ```
 
 <div class="alert alert-success">
-    <b>EXERCISE</b>: Select all values above the 75th percentile of the following array AR2 ad take the square root of these values
+
+**EXERCISE**
     
-_Tip_: numpy provides a function `percentile` to calculate a given percentile
+Select all values above the 75th percentile of the following array AR2 ad take the square root of these values
+
+<details><summary>Hints</summary>
+
+- Numpy provides a function `percentile` to calculate a given percentile
+
+</details>
+
 </div>
 
 ```python clear_cell=false
@@ -400,9 +408,17 @@ np.sqrt(AR2[AR2 > np.percentile(AR2, 75)])
 ```
 
 <div class="alert alert-success">
-    <b>EXERCISE</b>: Convert all values -99 of the array AR3 into Nan-values 
 
-_Tip_: that Nan values can be provided in float arrays as `np.nan` and that numpy provides a specialized function to compare float values, i.e. `np.isclose()`
+**EXERCISE**
+    
+Convert all values -99 of the array AR3 into Nan-values 
+
+<details><summary>Hints</summary>
+
+- Nan values can be provided in float arrays as `np.nan` and that numpy provides a specialized function to compare float values, i.e. `np.isclose()`
+
+</details>
+
 </div>
 
 ```python
