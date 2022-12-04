@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>Visualization - Python's Visualization Landscape</b></font></p>
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -29,6 +29,7 @@ To make some of the more general plotting packages available:
 
 ```
 conda install -c conda-forge bokeh plotly altair hvplot holoviews
+conda update -c conda-forge panel
 ``` 
 
 To have support of plotly inside the Jupyter Lab environment
@@ -98,7 +99,7 @@ with sns.axes_style("whitegrid"):    # context manager for styling the figure
     g = sns.catplot(data=titanic, 
                     x="Pclass", y="Survived", 
                     kind="bar", estimator=np.mean,
-                    ci=None, color="grey")
+                    errorbar=None, color="grey")
     
     g.set_axis_labels("Cabin class", "Survival rate")
 ```
@@ -457,7 +458,7 @@ _Actually, hvplot is built on top of Holoviews, which is built on top of Bokeh_
 ```{code-cell} ipython3
 import hvplot.pandas
 
-flow_data.hvplot()
+flow_data.plot()
 ```
 
 The link in between hvplot/holoviews and Bokeh (for further adjustments) can be made using the `render` function:

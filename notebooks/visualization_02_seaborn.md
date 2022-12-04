@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -15,7 +15,7 @@ kernelspec:
 <p><font size="6"><b>Visualisation: Seaborn </b></font></p>
 
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -250,24 +250,6 @@ The `Axes` level Seaborn functions:
 
 +++
 
-### Summary statistics
-
-+++
-
-Aggregations such as `count`, `mean` are embedded in Seaborn (similar to other 'Grammar of Graphics' packages such as ggplot in R and plotnine/altair in Python). We can do these operations directly on the original `titanic` data set in a single coding step:
-
-```{code-cell} ipython3
-sns.catplot(data=titanic, x="Survived", col="Pclass", 
-            kind="count")
-```
-
-To use another statistical function to apply on each of the groups, use the `estimator`:
-
-```{code-cell} ipython3
-sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar", 
-            estimator=np.mean)
-```
-
 ## Exercises
 
 +++
@@ -329,6 +311,26 @@ sns.violinplot(data=titanic, x="Pclass", y="Age",
                hue="Sex", split=True,
                palette="Set2")
 sns.despine(left=True)
+```
+
+### Summary statistics
+
++++
+
+Aggregations such as `count`, `mean` are embedded in Seaborn (similar to other 'Grammar of Graphics' packages such as ggplot in R and plotnine/altair in Python). We can do these operations directly on the original `titanic` data set in a single coding step:
+
+```{code-cell} ipython3
+sns.catplot(data=titanic, x="Survived", col="Pclass", 
+            kind="count")
+```
+
+To use another statistical function to apply on each of the groups, use the `estimator`:
+
+```{code-cell} ipython3
+:tags: []
+
+sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar", 
+            estimator=np.mean)
 ```
 
 ## Some more Seaborn functionalities to remember
@@ -540,6 +542,8 @@ casualties["week_day"] = pd.Categorical(
 ```
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 casualties_motorway_trucks = casualties[
     (casualties["road_type"] == "Motorway")
     & casualties["road_user_type"].isin(["Light truck", "Truck"])
@@ -547,6 +551,8 @@ casualties_motorway_trucks = casualties[
 ```
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 sns.catplot(data=casualties_motorway_trucks,
             x="week_day",
             y="n_victims",

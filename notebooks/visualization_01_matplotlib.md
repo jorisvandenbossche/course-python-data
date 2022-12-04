@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.3
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>Visualization - Matplotlib</b></font></p>
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey. Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey. Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -546,7 +546,7 @@ To compare the stations data, make two subplots next to each other:
 - In the left subplot, make a bar chart of the minimal measured value for each of the station.
 - In the right subplot, make a bar chart of the maximal measured value for each of the station.    
 
-Add a title to the Figure containing 'Minimal and maximal discharge from 2009-01-01 till 2013-01-02'. Extract these dates from the data itself instead of hardcoding it.
+Add a title to the Figure containing 'Minimal and maximal discharge from 2009-01-01 till 2013-01-02'. Extract these dates from the data itself instead of hardcoding it by using Python f-strings ([_formatted string literals_](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)).
 
 <details><summary>Hints</summary>
 
@@ -557,6 +557,17 @@ Add a title to the Figure containing 'Minimal and maximal discharge from 2009-01
 </details>
 
 </div>
+
++++
+
+Example of the usage of formatting f-strings [_formatted string literals_](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals):
+
+```{code-cell} ipython3
+my_float_variable = 3.14159
+my_datetime_variable = pd.Timestamp("2022-12-06")
+print(f"Adjust the rounding of a float, {my_float_variable} vs {my_float_variable:.2f}")
+print(f"Adjust the rounding of a timestamp, {my_datetime_variable} vs {my_datetime_variable:%Y-%m-%d}.")
+```
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
