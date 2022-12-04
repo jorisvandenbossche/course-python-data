@@ -623,6 +623,8 @@ casualties["week_day"] = pd.Categorical(
 ```
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 casualties_motorway_trucks = casualties[
     (casualties["road_type"] == "Motorway")
     & casualties["road_user_type"].isin(["Light truck", "Truck"])
@@ -630,6 +632,8 @@ casualties_motorway_trucks = casualties[
 ```
 
 ```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
 sns.catplot(data=casualties_motorway_trucks,
             x="week_day",
             y="n_victims",
