@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>CASE - Bacterial resistance experiment</b></font></p>
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -311,14 +311,13 @@ We will first reproduce 'Figure 2' without the error bars:
 - Make sure the `WT(2)` and `MUT(2)` categories are used as respectively `WT` and `MUT` by adjusting them with Pandas first.
 - Use the __falcor__ data and the Seaborn package. The 'log10 mutation rate' on the figure corresponds to the `log10 Mc` column.
 
-
 <details><summary>Hints</summary>
 
 - To replace values using a mapping (dictionary with the keys the current values and the values the new values), use the Pandas `replace` method.
 - This is another example of a `catplot`, using `point`s to represent the data.
 - The `join` argument defines if individual points need to be connected or not.
-- One combination appears multiple times, so make sure to not yet use confidence intervals by setting `ci` to `Null`.
-
+- Seaborn provides the `row_order` and `order` options to provide a custom order of respectively the subplots and categories.
+- One combination appears multiple times, so make sure to not yet use confidence intervals by setting `errorbar` to `None`.
 </details>
 
 ```{code-cell} ipython3
@@ -336,7 +335,10 @@ sns.catplot(data=falcor, kind="point",
             x='Bacterial_genotype',
             y='log10 Mc',
             row="Phage",
-            join=False, ci=None,
+            join=False, 
+            errorbar=None,
+            row_order=["Lambda", "T4", "T7"],
+            order=['WT', 'MUT', 'D87G', 'S83L', 'D516G', 'S512F', 'K43N', 'K88R', 'RSF1010', 'RP4'],
             aspect=3, height=3,
             color="black")
 ```

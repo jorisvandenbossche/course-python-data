@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.6
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b> CASE - Bike count data</b></font></p>
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -112,8 +112,8 @@ As explained above, the first and second column (respectively `datum` and `tijd`
 
 Pre-process the data:
 
-* Combine the 'datum' and 'tijd' columns into one Pandas Series of string datetime values, call this new variable `combined`.
-* Parse the string datetime values to `datetime` objects.
+* Combine the 'datum' and 'tijd' columns into one Pandas Series of string values, call this new variable `combined`.
+* Parse the string values to `datetime` objects.
 * Set the resulting `datetime` column as the index of the `df` DataFrame.
 * Remove the original 'datum' and 'tijd' columns using the `drop` method, and call the new dataframe `df2`.
 * Rename the columns in the DataFrame 'ri Centrum', 'ri Mariakerke' to resp. 'direction_centre', 'direction_mariakerke' using the `rename` method.
@@ -601,7 +601,7 @@ df_hourly = df.resample('H').sum()
 df_hourly.groupby(df_hourly.index.hour).mean().plot()
 ```
 
-So the daily pattern is clearly different for both directions. In the morning more people go north, in the evening more people go south. The morning peak is also more condensed.
+So the daily pattern is clearly different for both directions. In the morning more people go towards the centre, in the evening more people go back to Mariakerke. The morning peak is also more condensed.
 
 +++
 

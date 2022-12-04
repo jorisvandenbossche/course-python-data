@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>CASE - Observation data</b></font></p>
 
-> *© 2021, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -187,11 +187,11 @@ See [pandas_07_missing_values.ipynb](pandas_07_missing_values.ipynb) for an over
 
 **EXERCISE**
 
-How many records in the data set have no information about the `species`? Use the `isna()` method to find out.
+How many records in the data set have no information about the `species_ID`? Use the `isna()` method to find out.
 
 <details><summary>Hints</summary>
 
-- Do NOT use `survey_data_processed['species'] == np.nan`, but use the available method `isna()` to check if a value is NaN
+- Do NOT use `survey_data_processed['species_ID'] == np.nan`, but use the available method `isna()` to check if a value is NaN
 - The result of an (element-wise) condition returns a set of True/False values, corresponding to 1/0 values. The amount of True values is equal to the sum.
     
 </details>
