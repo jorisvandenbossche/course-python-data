@@ -692,7 +692,7 @@ jupyter:
 df_hourly.groupby(df_hourly.index.hour).mean().plot()
 ```
 
-So the daily pattern is clearly different for both directions. In the morning more people go north, in the evening more people go south. The morning peak is also more condensed.
+So the daily pattern is clearly different for both directions. In the morning more people go towards the centre, in the evening more people go back to Mariakerke. The morning peak is also more condensed.
 
 +++
 
