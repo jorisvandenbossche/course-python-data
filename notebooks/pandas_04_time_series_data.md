@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>04 - Pandas: Working with time series data</b></font></p>
 
-> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2023, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -26,56 +26,73 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 ```
 
-# Introduction: `datetime` module
+## Dates and times in pandas
 
 +++
 
-Standard Python contains the `datetime` module to handle date and time data:
+Pandas has its own date and time objects, which are compatible with the [standard `datetime` objects](https://docs.python.org/3/library/datetime.html), but provide some more functionality to work with.  
+
+Consider the following datetime information, represented as strings:
 
 ```{code-cell} ipython3
-import datetime
+s = pd.Series(['2016-12-09 10:00:00', '2016-12-09 11:00:00', '2016-12-09 12:00:00'])
 ```
 
 ```{code-cell} ipython3
-dt = datetime.datetime(year=2016, month=12, day=19, hour=13, minute=30)
-dt
+s
 ```
 
-```{code-cell} ipython3
-print(dt) # .day,...
-```
+The `to_datetime` function can be used to convert string formatted dates into Pandas __Timestamp__ objects:
 
 ```{code-cell} ipython3
-print(dt.strftime("%d %B %Y"))
-```
-
-# Dates and times in pandas
-
-+++
-
-## The ``Timestamp`` object
-
-+++
-
-Pandas has its own date and time objects, which are compatible with the standard `datetime` objects, but provide some more functionality to work with.  
-
-The `Timestamp` object can also be constructed from a string:
-
-```{code-cell} ipython3
-ts = pd.Timestamp('2016-12-19')
+ts = pd.to_datetime(s)
 ts
 ```
 
-Like with `datetime.datetime` objects, there are several useful attributes available on the `Timestamp`. For example, we can get the month (experiment with tab completion!):
+Notice the data type of this series has changed: the `datetime64[ns]` dtype. This indicates that we have a series of actual timestamp values.
+
++++
+
+Like with standard Python [`datetime.datetime` objects](https://docs.python.org/3/library/datetime.html#datetime.datetime), there are several useful attributes available on the Pandas `Timestamp`, using the **`.dt`** accessor. For example, we can get the month, hour, day of the week,... (experiment with tab completion!) for each of the timestamps:
 
 ```{code-cell} ipython3
-ts.month
+ts.dt.month
+```
+
+```{code-cell} ipython3
+ts.dt.hour
+```
+
+```{code-cell} ipython3
+ts.dt.dayofweek
+```
+
+Each of the individual elements in the Series is a pandas `Timestamp` object:
+
+```{code-cell} ipython3
+ts[0]
+```
+
+The `Timestamp` object can also be constructed from a string and provides access to the Timestamp attributes:
+
+```{code-cell} ipython3
+ts_singe = pd.Timestamp('2016-12-21 23:02')
+```
+
+```{code-cell} ipython3
+ts_singe.month, ts_singe.hour, ts_singe.dayofweek
 ```
 
 There is also a `Timedelta` type, which can e.g. be used to add intervals of time:
 
 ```{code-cell} ipython3
 ts + pd.Timedelta('5 days')
+```
+
+To quickly construct some regular time series data, the [``pd.date_range``](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.date_range.html) function comes in handy:
+
+```{code-cell} ipython3
+pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3H'))
 ```
 
 ## Parsing datetime strings
@@ -93,7 +110,7 @@ Unfortunately, when working with real world data, you encounter many different `
 <div class="alert alert-info">
 <b>REMEMBER</b>: <br><br>
 
-To convert string formatted dates to Timestamp objects: use the `pandas.to_datetime` function
+To convert different kind of string formatted dates to Timestamp objects: use the `pandas.to_datetime` function 
 
 </div>
 
@@ -113,47 +130,7 @@ A detailed overview of how to specify the `format` string, see the table in the 
 
 +++
 
-## `Timestamp` data in a Series or DataFrame column
-
-```{code-cell} ipython3
-s = pd.Series(['2016-12-09 10:00:00', '2016-12-09 11:00:00', '2016-12-09 12:00:00'])
-```
-
-```{code-cell} ipython3
-s
-```
-
-The `to_datetime` function can also be used to convert a full series of strings:
-
-```{code-cell} ipython3
-ts = pd.to_datetime(s)
-```
-
-```{code-cell} ipython3
-ts
-```
-
-Notice the data type of this series has changed: the `datetime64[ns]` dtype. This indicates that we have a series of actual datetime values.
-
-+++
-
-The same attributes as on single `Timestamp`s are also available on a Series with datetime data, using the **`.dt`** accessor:
-
-```{code-cell} ipython3
-ts.dt.hour
-```
-
-```{code-cell} ipython3
-ts.dt.dayofweek
-```
-
-To quickly construct some regular time series data, the [``pd.date_range``](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.date_range.html) function comes in handy:
-
-```{code-cell} ipython3
-pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3H'))
-```
-
-# Time series data: `Timestamp` in the index
+## Time series data: `Timestamp` in the index
 
 +++
 
@@ -285,9 +262,9 @@ data = pd.read_csv("data/vmm_flowdata.csv", index_col=0, parse_dates=True)
 
 <div class="alert alert-success">
 
-**EXERCISE:
+**EXERCISE:**
 
-* select all data starting from 2012
+Select all data starting from 2012
 
 </div>
 
@@ -301,7 +278,7 @@ data['2012':]
 
 **EXERCISE**:
 
-* select all data in January for all different years
+Select all data in January for all different years
 
 <details><summary>Hints</summary>
 
@@ -321,7 +298,7 @@ data[data.index.month == 1]
 
 **EXERCISE**:
 
-* select all data in April, May and June for all different years
+Select all data in April, May and June for all different years
 
 <details><summary>Hints</summary>
 
@@ -339,11 +316,10 @@ data[data.index.month.isin([4, 5, 6])]
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
 
- <ul>
-  <li>select all 'daytime' data (between 8h and 20h) for all days</li>
-</ul>
+Select all 'daytime' data (between 8h and 20h) for all days
+    
 </div>
 
 ```{code-cell} ipython3
@@ -385,11 +361,10 @@ data.resample('M').mean().plot() # 10D
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
 
- <ul>
-  <li>Plot the monthly standard deviation of the columns</li>
-</ul>
+Plot the monthly standard deviation of the columns
+    
 </div>
 
 ```{code-cell} ipython3
@@ -400,13 +375,15 @@ data.resample('M').std().plot() # 'A'
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
 
- <ul>
-  <li>Plot the monthly mean and median values for the years 2011-2012 for 'L06_347'<br><br></li>
-</ul>
+Plot the monthly mean and median values for the years 2011-2012 for 'L06_347'
 
-__Note__ Did you know <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.agg.html"><code>agg</code></a> to derive multiple statistics at the same time?
+<details><summary>Hints</summary>
+
+* Did you know <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.agg.html"><code>agg</code></a> to derive multiple statistics at the same time?
+
+</details>
 
 </div>
 
@@ -419,12 +396,9 @@ subset.resample('M').agg(['mean', 'median']).plot()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+**EXERCISE**
 
- <ul>
-  <li>plot the monthly mininum and maximum daily average value of the 'LS06_348' column</li>
-</ul>
-</div>
+Plot the monthly mininum and maximum daily average value of the 'LS06_348' column
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -439,11 +413,10 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
 ```
 
 <div class="alert alert-success">
-<b>EXERCISE</b>:
-
- <ul>
-  <li>Make a bar plot of the mean of the stations in year of 2013</li>
-</ul>
+    
+**EXERCISE**
+    
+Make a bar plot of the mean of the stations in year of 2013
 
 </div>
 
