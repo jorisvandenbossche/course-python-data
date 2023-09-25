@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>06 - Pandas: Methods for data cleaning</b></font></p>
 
-> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2023, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -43,8 +43,6 @@ __Note:__ Working with _missing values_ is tackled in a dedicated notebook [pand
 We showcase using a _dirty_ example data:
 
 ```{code-cell} ipython3
-:tags: []
-
 countries = pd.DataFrame({'county name': ['Belgium', 'Flance', 'Germany', 'Netherlands', ['United Kingdom', 'Germany']],
                           'population': [11.3, 64.3, 81.3, 16.9, 64.9],
                           'area': [30510, 671308, 357050, 41526, [244820, np.nan]],
@@ -231,6 +229,123 @@ Let's apply the cleaning methods to clean up the data in the next set of exercis
 
 **EXERCISE**
 
+Check the unique values of the `TX_SEX_DESCR_NL` column.
+
+Based on the the values, create a mapping dictionary to replace the values with the english version (`"Mannelijk" -> "male", "Vrouwelijk" -> "female"`). Use `None` for the unknown values (`Onbekend` in Dutch). Apply the mapping to overwrite the values in the `TX_SEX_DESCR_NL` column with the new value.
+
+<details><summary>Hints</summary>
+    
+- Create the mapping by hand and define a `dict`.
+- Use the `replace()` method to update the values of the `TX_SEX_DESCR_NL` column.
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+casualties_raw["TX_SEX_DESCR_NL"]
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+casualties_raw["TX_SEX_DESCR_NL"].unique()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+gender_mapping = {"Vrouwelijk": "female", "Mannelijk": "male", "Onbekend": None}
+casualties_raw["TX_SEX_DESCR_NL"] = casualties_raw["TX_SEX_DESCR_NL"].replace(gender_mapping)
+casualties_raw["TX_SEX_DESCR_NL"].unique()
+```
+
+```{code-cell} ipython3
+casualties_raw["TX_SEX_DESCR_NL"]
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Check the unique values of the `DT_HOUR` column. Which of the data values is used as _not a number_ (not known)? Verify the amount of records that with the `DT_HOUR` not known.
+    
+A check with the data provider confirmed that the record(s) with value 99 did actually happen at 9 AM and are a typo instead of _not a number_ replacement value. Replace the 99 values with the real hour of the day in the `DT_HOUR` column.
+
+<details><summary>Hints</summary>
+    
+- The number `99` is not a valid hour of the day and used as not a number data point.
+- Only one data record has an unknown hour of the day. 
+
+</details>
+
+</div>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+casualties_raw["DT_HOUR"].unique()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+(casualties_raw["DT_HOUR"] == 99).sum()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+casualties_raw["DT_HOUR"] = casualties_raw["DT_HOUR"].replace(99, 9)
+```
+
+<div class="alert alert-info">
+    
+__INTERMEZZO__ - List comprehensions
+
+[List comprehension](https://docs.python.org/3/glossary.html#term-list-comprehension) is a compact way to process all or part of the elements, comparable to a for-loop, in a sequence and return a list.
+    
+For example, the code in the following example:
+    
+```python
+example = [2, 3, 4]
+updated_example = []
+for element in example:
+    updated_example.append(element*2)
+```    
+
+will produce the same result `updated_example=[4, 6, 8]` as:
+
+```python
+updated_example = [element*2 for element in example]
+```
+    
+The latter is a __list comprehension__, which is a more compact way of writing the for-loop to return the updated list.
+    
+The loop can also contain an if-statement, e.g.
+    
+```python
+example = [2, 3, 4]
+updated_example = []
+for element in example:
+    if element != 3:
+        updated_example.append(element*2)
+```        
+and
+
+```python
+updated_example = [element*2 for element in example if element != 3]
+```
+    
+will both result in `[4, 8]`.   
+</div>
+
++++
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
 Remove all the `_FR` metadata columns  from the `casualties_raw` data set and assign the result to a new variable `casualties_nl`. Use the `column_names_with_fr` variable derive in the next cell to remove the columns.
 
 <details><summary>Hints</summary>
@@ -239,7 +354,7 @@ Remove all the `_FR` metadata columns  from the `casualties_raw` data set and as
 - Make sure to explicitly set the `columns=` parameter.
 
 __NOTE__ The `column_names_with_fr` variable is created using the `df.columns` attribute of the DataFrame:
-- Instead of enlisting the column names manually, a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) - a _feature of standard Python_ - is used to select the columns names ending on `_FR`.
+- Instead of enlisting the column names manually, a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) - a _feature of standard Python_ - is used to select the columns names ending on `_FR`. Loop over the column names in `casualties_raw.columns`.
 - Within the list comprehension, the [`endswith()`](https://docs.python.org/3/library/stdtypes.html#str.endswith) standard string method is used to check if a column name ends on `_FR`. 
 - ! Pandas also provides the `.str.endswith()` method, but this is for the data values inside a DataFrame. In this exercise we want to adjust the column names itself.    
     
@@ -248,8 +363,6 @@ __NOTE__ The `column_names_with_fr` variable is created using the `df.columns` a
 </div>
 
 ```{code-cell} ipython3
-:tags: []
-
 column_names_with_fr = [col for col in casualties_raw.columns if col.endswith("_FR")]
 column_names_with_fr
 ```
@@ -298,72 +411,6 @@ casualties.head()
 
 **EXERCISE**
 
-Check the unique values of the `SEX` column.
-
-Based on the the values, create a mapping dictionary to replace the values with the english version (`"male", "female"`). Use `None` for the unknown values (`Onbekend` in Dutch). Apply the mapping to overwrite the values in the `SEX` column with the new value.
-
-<details><summary>Hints</summary>
-    
-- Create the mapping by hand and define a `dict`.
-- Use the `replace()` method to update the values of the `SEX` column.
-
-</details>
-
-</div>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-casualties["SEX"].unique()
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-gender_mapping = {"Vrouwelijk": "female", "Mannelijk": "male", "Onbekend": None}
-casualties["SEX"] = casualties["SEX"].replace(gender_mapping)
-casualties["SEX"].unique()
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-Check the unique values of the `DT_HOUR` column. Which of the data values is used as _not a number_ (not known)? Verify the amount of records that with the `DT_HOUR` not known.
-    
-A check with the data provider confirmed that the record(s) with value 99 did actually happen at 9 AM and are a typo instead of _not a number_ replacement value. Replace the 99 values with the real hour of the day in the `DT_HOUR` column.
-
-<details><summary>Hints</summary>
-    
-- The number `99` is not a valid hour of the day and used as not a number data point.
-- Only one data record has an unknown hour of the day. 
-
-</details>
-
-</div>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-casualties["DT_HOUR"].unique()
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-(casualties["DT_HOUR"] == 99).sum()
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-casualties["DT_HOUR"] = casualties["DT_HOUR"].replace(99, 9)
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
 The day (`DT_DAY`) and hour (`DT_HOUR`) are two separate columns instead of a single `datetime` data type column. 
     
 - Check the data types of the `DT_DAY` and `DT_HOUR` columns.
@@ -402,7 +449,7 @@ casualties["datetime"]
 
 **EXERCISE**
 
-For columns consistiong of a limited number of categories with (_ordinal data_) or without a logical order, Pandas has a specific data type: `Categorical`. An example in the data set is the `DAY_OF_WEEK` (from `Monday` -> `Sunday`). 
+For columns consisting of a limited number of categories with (_ordinal data_) or without a logical order, Pandas has a specific data type: `Categorical`. An example in the data set is the `DAY_OF_WEEK` (from `Monday` -> `Sunday`). 
     
 For this conversion, the `astype` is not sufficient. Use the `pd.Categorical` function (check the documentation) to create a new column `week_day` with the week days defined as a Categorical variable. Use Monday as the first day of the week and make sure the categories are ordered.
 
@@ -500,4 +547,8 @@ casualties.drop_duplicates(subset=unique_combinations).shape
 
 # alternative using `duplicated`
 (~casualties.duplicated(subset=unique_combinations)).sum()
+```
+
+```{code-cell} ipython3
+
 ```
