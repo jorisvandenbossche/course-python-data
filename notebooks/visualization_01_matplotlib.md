@@ -586,11 +586,11 @@ fig.suptitle(f"Minimal and maximal discharge from {flowdata.index[0]:%Y-%m-%d} t
 
 Make a line plot of the discharge measurements in station `LS06_347`. 
     
-The main event on November 13th caused a flood event. To support the reader in the interpretation of the graph, add the following elements:
+The main event on November 13th 2010 caused a flood event. To support the reader in the interpretation of the graph, add the following elements:
     
 - Add an horizontal red line at 20 m3/s to define the alarm level.
 - Add the text 'Alarm level' in red just above the alarm levl line.
-- Add an arrow pointing to the main peak in the data (event on November 13th) with the text 'Flood event on 2020-11-13'
+- Add an arrow pointing to the main peak in the data (event on November 13th) with the text 'Flood event on 2010-11-13'
     
 Check the Matplotlib documentation on [annotations](https://matplotlib.org/stable/gallery/text_labels_and_annotations/annotation_demo.html#annotating-plots) for the text annotation
 
