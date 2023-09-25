@@ -125,6 +125,8 @@ Pre-process the data:
 * Set the resulting `timestamp` column as the index of the `df` DataFrame.
 * Remove the original 'Datum', 'Uur5Minuten', 'Code' and 'Ordening' columns using the `drop` method, and call the new dataframe `df2022`.
 * Rename the columns in the DataFrame 'Tegenrichting', 'Hoofdrichting' to resp. 'direction_centre', 'direction_mariakerke' using the `rename` method. Translate the 'Locatie' columns to 'location' and the 'Totaal' column to 'total'.
+    
+The `rename` and `drop` functions are introduced in [pandas_06_data_cleaning.ipynb](./pandas_06_data_cleaning.ipynb) together with other cleaning functions required during data preprocessing.
 
 <details><summary>Hints</summary>
 
@@ -260,11 +262,11 @@ __Note:__ Check the notebook [pandas_09_combining_datasets.ipynb](./pandas_09_co
 
 +++
 
-We now have a cleaned-up dataset of the bike counts at Coupure Links in Ghent (Belgium). Next, we want to get an impression of the characteristics and properties of the data. 
+We now have a cleaned-up dataset of the bike counts at Coupure Links in Ghent (Belgium). Next, we want to get an impression of the characteristics and properties of the data.
 
 +++
 
-### Load the data 
+### Load the data
 
 +++
 
