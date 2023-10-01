@@ -26,7 +26,7 @@ kernelspec:
 
 In this case study, we will make use of the openly available [bike count data of the city of Ghent (Belgium)](https://data.stad.gent/explore/dataset/fietstelpaal-coupure-links-2022-gent/information/?sort=-ordening). At the Coupure Links, next to the Faculty of Bioscience Engineering, a counter keeps track of the number of passing cyclists in both directions.
 
-Data made available by City of Ghent, _"Mobiliteitsbedrijf Gent"_ as [licentie Gratis Hergebruik ](https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/open-data/voorwaarden-voor-het-hergebruik-van-overheidsinformatie/modellicentie-gratis-hergebruik). Original data cleaned and adjusted for exercise purpose (e.g. remove character in column name 'Code').
+Data is made available by the City of Ghent, _"Mobiliteitsbedrijf Gent"_ as [licentie Gratis Hergebruik ](https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/open-data/voorwaarden-voor-het-hergebruik-van-overheidsinformatie/modellicentie-gratis-hergebruik). Original data is downloaded and adjusted for exercise purpose (e.g. remove character in column name 'Code').
 
 ```{code-cell} ipython3
 import pandas as pd
@@ -42,18 +42,18 @@ plt.style.use('seaborn-v0_8-whitegrid')
 
 +++
 
-The data were previously available on the open data portal of the city, and we downloaded them in the `CSV` format, and provide the data of 2022 zipped as `fietstelpaal-coupure-links-2022-gent.zip`.
+The data is available on the open data portal of the city, and we downloaded them in the `CSV` format, and provide the data of 2022 zipped as `data/fietstelpaal-coupure-links-2022-gent.zip`.
 
 This dataset contains the historical data of the bike counters, and consists of the following columns:
 
 - `Code`: Short code used to identify the location of the bike counter
 - `Locatie`: Full location name of the bike counter
 - `Datum`: Date
-- `Uur5Minuten`: Hour, rounded ro 5-minute frequency
+- `Uur5Minuten`: Hour, rounded to 5-minute frequency
 - `Ordening`: Time-zone aware timestamp of the counts
 - `Totaal`: Total number of bikers passing
-- `Hoofdrichting`: number of bikers passing from 'Rozemarijnbrug' (centre of Ghent) to 'Contributiebrug' (Mariakerke), bikers heading north
-- `Tegenrichting`: number of bikers passing from 'Contributiebrug' (Mariakerke) to 'Rozemarijnbrug' (centre of Ghent), bikers heading south
+- `Hoofdrichting`: Number of bikers passing from 'Rozemarijnbrug' (centre of Ghent) to 'Contributiebrug' (Mariakerke), bikers heading north
+- `Tegenrichting`: Number of bikers passing from 'Contributiebrug' (Mariakerke) to 'Rozemarijnbrug' (centre of Ghent), bikers heading south
 
 +++
 
@@ -121,19 +121,19 @@ As explained above, the timestamp information is contained both in the combinati
 
 Pre-process the data:
 
-* Convert the 'Ordening' column into a Pandas Timestamp Series, and assign the data to a new column named `timestamp`. Make sure to read the data as `UTC`
-* Set the resulting `timestamp` column as the index of the `df` DataFrame.
-* Remove the original 'Datum', 'Uur5Minuten', 'Code' and 'Ordening' columns using the `drop` method, and call the new dataframe `df2022`.
-* Rename the columns in the DataFrame 'Tegenrichting', 'Hoofdrichting' to resp. 'direction_centre', 'direction_mariakerke' using the `rename` method. Translate the 'Locatie' columns to 'location' and the 'Totaal' column to 'total'.
+* Convert the 'Ordening' column into a pandas Timestamp Series, and assign the data to a new column named `"timestamp"`. Make sure to read the data as `UTC`
+* Set the resulting `"timestamp"` column as the index of the `df` DataFrame.
+* Remove the original 'Datum', 'Uur5Minuten', 'Code' and 'Ordening' columns using the `drop()` method, and call the new dataframe `df2022`.
+* Rename the columns in the DataFrame 'Tegenrichting', 'Hoofdrichting' to resp. 'direction_centre', 'direction_mariakerke' using the `rename()` method. Translate the 'Locatie' columns to 'location' and the 'Totaal' column to 'total'.
     
-The `rename` and `drop` functions are introduced in [pandas_06_data_cleaning.ipynb](./pandas_06_data_cleaning.ipynb) together with other cleaning functions required during data preprocessing.
+The `rename()` and `drop()` functions are introduced in [pandas_06_data_cleaning.ipynb](./pandas_06_data_cleaning.ipynb) together with other cleaning functions required during data preprocessing.
 
 <details><summary>Hints</summary>
 
 - When converting strings to a `datetime` with `pd.to_datetime`, specifying the format will make the conversion a lot faster. See the format codes in the [Python documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes).
 - The `to_datetime` function has an option `utc=True` to convert all timestamps as UTC timestamp. Otherwise the conversion will fail.   
-- `drop` can remove both rows and columns using the names of the index or column name. Make sure to define `columns=` argument to remove columns.
-- `rename` can be used for both rows/columns. It needs a dictionary with the current names as keys and the new names as values.
+- `drop()` can remove both rows and columns using the names of the index or column name. Make sure to define `columns=` argument to remove columns.
+- `rename()` can be used for both row and column names. It needs a dictionary with the current names as keys and the new names as values, and pass this to the `columns=` keyword for renaming the column names.
 
 </details>
 
@@ -159,10 +159,9 @@ df2022 = df.drop(columns=['Datum', 'Uur5Minuten', 'Ordening', 'Code'])
 :tags: [nbtutor-solution]
 
 df2022 = df2022.rename(columns={'Tegenrichting': 'direction_centre',
-                          'Hoofdrichting': 'direction_mariakerke',
-                          'Totaal': 'total',
-                          'Locatie': 'location'
-                         })
+                                'Hoofdrichting': 'direction_mariakerke',
+                                'Totaal': 'total',
+                                'Locatie': 'location'})
 ```
 
 ```{code-cell} ipython3
@@ -178,7 +177,7 @@ df2022.plot(colormap='coolwarm', ax=ax)
 
 <div class="alert alert-info">
 
- <b>Remember</b>: Whenever possible, specify the date format to interpret the dates to `timestamp` values!
+ <b>Remember</b>: Whenever possible, specify the date format to interpret the dates to `datetime` values!
 
 </div>
 
@@ -194,7 +193,7 @@ In order to make it easier to reuse the code for the pre-processing we have impl
 
 **EXERCISE**
 
-Write a function `process_bike_count_data(df)` that performs the processing steps as done above for an input Pandas DataFrame and returns the updated DataFrame. Test the functionality on the data file of 2023, `fietstelpaal-coupure-links-2022-gent.zip` and call the result `df2023`.
+Write a function `process_bike_count_data(df)` that performs the processing steps as done above for an input Pandas DataFrame and returns the updated DataFrame. Test the functionality on the data file of 2023, `fietstelpaal-coupure-links-2023-gent.zip` and call the result `df2023`.
 
 <details><summary>Hints</summary>
 
@@ -244,12 +243,12 @@ df2023.tail()
 
 +++
 
-As we finished our data-collection step, we want to save this result as an interim data output of our small investigation. As such, we do not have to re-download all the files each time something went wrong, but can restart from our interim step.
+As we finish our data-collection step, we want to save this result as an interim data output of our small investigation. As such, we do not have to re-download and process all the files each time something goes wrong, but can restart from our interim step:
 
 +++
 
 ```python
-pd.concat([df2022, df2023]).drop(columns=["location", "total"]).sort_index().to_csv("data/fietstelpaal-coupure-linksgent.zip", index=True)
+pd.concat([df2022, df2023]).drop(columns=["location", "total"]).sort_index().to_csv("data/fietstelpaal-coupure-links-gent.zip", index=True)
 ```
 
 +++
@@ -266,14 +265,14 @@ We now have a cleaned-up dataset of the bike counts at Coupure Links in Ghent (B
 
 +++
 
-### Load the data
+### Load the processed data
 
 +++
 
 Reading the file in from the interim file containing multiple years of data:
 
 ```{code-cell} ipython3
-df = pd.read_csv("data/fietstelpaal-coupure-linksgent.zip", index_col=0, parse_dates=True)
+df = pd.read_csv("data/fietstelpaal-coupure-links-gent.zip", index_col=0, parse_dates=True)
 ```
 
 ```{code-cell} ipython3
@@ -310,11 +309,12 @@ df.describe()
 
 **EXERCISE**
 
-Create a new Pandas Series `df_both` which contains the sum of the counts of both directions.
+Create a new pandas Series `df_both` which contains the sum of the counts of both directions.
 
 <details><summary>Hints</summary>
 
 - Check the purpose of the `axis` argument of the `sum` method.
+
 </details>
 
 ```{code-cell} ipython3
@@ -392,7 +392,7 @@ What is the average number of bikers passing each hour?
 
 <details><summary>Hints</summary>
 
-- Use `resample` to first calculate the number of bikers passing each hour.
+- Use `resample()` to first calculate the number of bikers passing each hour.
 - `resample` requires an aggregation function that defines how to combine the values within each group (in this case all values within each hour).
 
 </details>
@@ -616,7 +616,7 @@ from calendar import month_abbr
 ```{code-cell} ipython3
 ax = df_monthly.groupby(df_monthly.index.month).mean().plot()
 ax.set_ylim(0)
-xlabels = ax.set_xticklabels(list(month_abbr)[0::2]) #too lazy to write the month values yourself...
+xlabels = ax.set_xticks(list(range(13))[1::2], list(month_abbr)[1::2]) #too lazy to write the month values yourself...
 ```
 
 ## Acknowledgements
