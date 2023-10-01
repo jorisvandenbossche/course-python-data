@@ -279,6 +279,14 @@ df = pd.read_csv("data/fietstelpaal-coupure-links-gent.zip", index_col=0, parse_
 df
 ```
 
+The timestamp data is timezone-aware in UTC. For some of the analyses further in this notebook, we will check the time of the day. In this case, it's useful to view the timestamps in the wall time of Belgium, such that the interpretation of the hours matches with our local time perception (for example, observing that there is a peak in cyclists at 8:00 in the morning).
+We can convert the UTC values to local time using `tz_convert()`:
+
+```{code-cell} ipython3
+df = df.tz_convert("Europe/Brussels")
+df
+```
+
 ### Count interval verification
 
 +++
@@ -295,7 +303,7 @@ The count of the possible intervals is of interest:
 df.index.to_series().diff().value_counts()
 ```
 
-There are a few records that are not 5min. Ddo you know where the values of `0 days 01:05:00` and the duplicate entries with `0 days 00:00:00` are coming from?
+There are a few records that are not 5min. Do you know where the values of `0 days 01:05:00` and the duplicate entries with `0 days 00:00:00` are coming from?
 
 ```{code-cell} ipython3
 df.describe()
