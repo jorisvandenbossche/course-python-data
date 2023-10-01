@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 ```
 
-## Dates and times in pandas
+# Dates and times in pandas
 
 +++
 
@@ -53,7 +53,7 @@ Notice the data type of this series has changed: the `datetime64[ns]` dtype. Thi
 
 +++
 
-Like with standard Python [`datetime.datetime` objects](https://docs.python.org/3/library/datetime.html#datetime.datetime), there are several useful attributes available on the Pandas `Timestamp`, using the **`.dt`** accessor. For example, we can get the month, hour, day of the week,... (experiment with tab completion!) for each of the timestamps:
+Like with standard Python [`datetime.datetime` objects](https://docs.python.org/3/library/datetime.html#datetime.datetime), there are several useful attributes available on the pandas `Timestamp`. And those are also available on a Series with datetime data using the **`.dt`** accessor. For example, we can get the month, hour, day of the week,... (experiment with tab completion!) for each of the timestamps:
 
 ```{code-cell} ipython3
 ts.dt.month
@@ -130,7 +130,7 @@ A detailed overview of how to specify the `format` string, see the table in the 
 
 +++
 
-## Time series data: `Timestamp` in the index
+# Time series data: `Timestamp` in the index
 
 +++
 
@@ -252,7 +252,7 @@ Or all data of January up to March 2012:
 data['2012-01':'2012-03']
 ```
 
-## Exercises
+# Exercises
 
 Let's practice this yourself using the same dataset:
 
@@ -328,7 +328,7 @@ Select all 'daytime' data (between 8h and 20h) for all days
 data[(data.index.hour > 8) & (data.index.hour < 20)]
 ```
 
-## The power of pandas: `resample`
+# The power of pandas: `resample`
 
 +++
 
