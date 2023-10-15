@@ -20,7 +20,6 @@ kernelspec:
 
 +++
 
----
 **Remark:**
 
 Some Python visualization packages used in this notebook are not provided by default in the conda environment of the course. In case you want to try these features yourself, make sure to install these packages with conda.
@@ -28,13 +27,11 @@ Some Python visualization packages used in this notebook are not provided by def
 To make some of the more general plotting packages available:
 
 ```
-conda install -c conda-forge bokeh plotly altair hvplot holoviews
-conda update -c conda-forge panel
+conda install -c conda-forge bokeh plotly altair hvplot holoviews panel
 ``` 
 
 To have support of plotly inside the Jupyter Lab environment
 ```
-conda install "ipywidgets>=7.6" 
 conda install -c conda-forge -c plotly jupyter-dash 
 ```
 
@@ -58,6 +55,8 @@ What we have encountered until now:
 * [seaborn](https://seaborn.pydata.org/)
 
 ```{code-cell} ipython3
+%matplotlib inline
+
 import numpy as np
 import pandas as pd
 
@@ -79,7 +78,7 @@ titanic = pd.read_csv("data/titanic.csv")
 Pandas/Matplotlib plot...
 
 ```{code-cell} ipython3
-with plt.style.context('seaborn-whitegrid'):  # context manager for styling the figure
+with plt.style.context('seaborn-v0_8-whitegrid'):  # context manager for styling the figure
     
     fig, ax = plt.subplots()
     
@@ -235,14 +234,12 @@ The main ingredients (data, geometry, aesthetics) of the `Grammar of Graphics` f
 ```{code-cell} ipython3
 import plotnine as p9
 
-myplot = (p9.ggplot(titanic)              # 1. DATA         
-    + p9.geom_bar(                        # 2. GEOMETRY, geom_*
+myplot = (p9.ggplot(titanic)                      # 1. DATA         
+    + p9.geom_bar(                                # 2. GEOMETRY, geom_*
         stat='stat_summary',
-        mapping=p9.aes(x='Pclass', 
-                       y='Survived')      # 3. AESTHETICS - relate variables to geometry
+        mapping=p9.aes(x='Pclass', y='Survived')  # 3. AESTHETICS - relate variables to geometry
     )    
 )
-
 myplot
 ```
 
@@ -251,13 +248,12 @@ And further customization (_layers_) can be added to the specification, e.g.
 ```{code-cell} ipython3
 import plotnine as p9
 
-myplot = (p9.ggplot(titanic)              # 1. DATA         
-    + p9.geom_bar(                        # 2. GEOMETRY, geom_*
+myplot = (p9.ggplot(titanic)                      # 1. DATA         
+    + p9.geom_bar(                                # 2. GEOMETRY, geom_*
         stat='stat_summary',
-        mapping=p9.aes(x='Pclass', 
-                       y='Survived')      # 3. AESTHETICS - relate variables to geometry
+        mapping=p9.aes(x='Pclass', y='Survived')  # 3. AESTHETICS - relate variables to geometry
     )
-    + p9.xlab("Cabin class")     # labels
+    + p9.xlab("Cabin class")          # labels
     + p9.theme_minimal()              # theme
     # ...
 )
@@ -275,6 +271,7 @@ my_plt_version = myplot.draw();  # extract as Matplotlib Figure
 # Do some Matplotlib magick...
 my_plt_version.axes[0].set_title("Titanic fare price per cabin class")
 ax2 = my_plt_version.add_axes([0.7, 0.5, 0.3, 0.3], label="ax2")
+my_plt_version
 ```
 
 <div class="alert alert-info">
@@ -325,7 +322,7 @@ temporal |		T |		a time or date value
 Altair is made for the web, providing interactive features for the plots. See more examples [here](https://altair-viz.github.io/gallery/index.html#interactive-charts).
 
 ```{code-cell} ipython3
-brush = alt.selection(type='interval')
+brush = alt.selection_interval()
 
 (alt.Chart(titanic)
      .mark_circle().encode( 
@@ -333,7 +330,7 @@ brush = alt.selection(type='interval')
         y="Age:Q",
         column="Sex:O",
         color=alt.condition(brush, "Pclass:N", alt.value('grey')),
-).add_selection(brush))
+).add_params(brush))
 ```
 
 <div class="alert alert-info">
@@ -413,7 +410,7 @@ Useful to know when you want to use the index as well:
 > *If the DataFrame has a named index column, then CDS will also have a column with this name. However, if the index name (or any subname of a MultiIndex) is None, then the CDS will have a column generically named index for the index.*
 
 ```{code-cell} ipython3
-p = figure(x_axis_type="datetime", plot_height=200, plot_width=600)
+p = figure(x_axis_type="datetime", height=200, width=600)
 p.line(x='Time', y='LS06_347', source=source_data)
 show(p)
 ```
@@ -425,7 +422,7 @@ from bokeh.models import ColumnDataSource, BoxAnnotation, Label
 ```
 
 ```{code-cell} ipython3
-p = figure(x_axis_type="datetime", plot_height=200, plot_width=600)
+p = figure(x_axis_type="datetime", height=200, width=600)
 p.line(x='Time', y='L06_347', source=source_data)
 p.circle(x='Time', y='L06_347', source=source_data, 
          fill_alpha= 0.3, line_alpha=0.3)
@@ -458,7 +455,7 @@ _Actually, hvplot is built on top of Holoviews, which is built on top of Bokeh_
 ```{code-cell} ipython3
 import hvplot.pandas
 
-flow_data.plot()
+flow_data.hvplot()
 ```
 
 The link in between hvplot/holoviews and Bokeh (for further adjustments) can be made using the `render` function:

@@ -320,7 +320,7 @@ plt.style.available
 ```{code-cell} ipython3
 x = np.linspace(0, 10)
 
-with plt.style.context('seaborn-whitegrid'):  # 'seaborn', ggplot', 'bmh', 'grayscale', 'seaborn-whitegrid', 'seaborn-muted'
+with plt.style.context('seaborn-v0_8-whitegrid'):  # 'seaborn-v0_8', ggplot', 'bmh', 'grayscale'
     fig, ax = plt.subplots()
     ax.plot(x, np.sin(x) + x + np.random.randn(50))
     ax.plot(x, np.sin(x) + 0.5 * x + np.random.randn(50))
@@ -330,7 +330,7 @@ with plt.style.context('seaborn-whitegrid'):  # 'seaborn', ggplot', 'bmh', 'gray
 We should not start discussing about colors and styles, just pick **your favorite style**!
 
 ```{code-cell} ipython3
-plt.style.use('seaborn')
+plt.style.use('seaborn-v0_8')
 ```
 
 or go all the way and define your own custom style, see the [official documentation](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html) or [this tutorial](https://colcarroll.github.io/yourplotlib/#/).
@@ -647,7 +647,3 @@ Galleries are great to get inspiration, see the plot you want, and check the cod
 * [python Graph Gallery](https://python-graph-gallery.com/)
 
 </div>
-
-```{code-cell} ipython3
-
-```
