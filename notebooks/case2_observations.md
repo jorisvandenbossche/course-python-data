@@ -424,7 +424,7 @@ ax.set_ylabel("");
 **EXERCISE**
 
 - Starting from the `observations`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex` and ensure the counts are in a column named "count".
-- Use a `pivot_table` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
+- Use a `pivot()` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
 
 <details><summary>Hints</summary>
 
@@ -444,7 +444,7 @@ n_plot_sex.head()
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-pivoted = n_plot_sex.pivot_table(columns="sex", index="verbatimLocality", values="count")
+pivoted = n_plot_sex.pivot(columns="sex", index="verbatimLocality", values="count")
 pivoted.head()
 ```
 
