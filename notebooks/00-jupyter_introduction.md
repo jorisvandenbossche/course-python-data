@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>Jupyter notebook INTRODUCTION </b></font></p>
 
-> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2023, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -23,7 +23,7 @@ from IPython.display import Image
 Image(url='http://python.org/images/python-logo.gif')
 ```
 
-<big><center>To run a cell: push the start triangle in the menu or type **SHIFT + ENTER/RETURN**
+<big><center>To run a cell: push the start triangle in the menu or type **SHIFT + ENTER/RETURN**<br><br>
 ![](../img/shiftenter.jpg)
 
 +++
@@ -132,6 +132,14 @@ You can also use HTML commands, just check this cell:
 
 +++
 
+## Execution: SHIFT + ENTER
+
+**REMEMBER**: To run a cell: <strike>push the start triangle in the menu or</strike> type **SHIFT + ENTER**
+
+![](../img/shiftenter.jpg)
+
++++
+
 ## Completion: TAB
 ![](../img/tabbutton.jpg)
 
@@ -182,10 +190,10 @@ import glob
 glob.glob??
 ```
 
-## *edit* mode to *command* mode
+## *edit* mode vs *command* mode
 
-* *edit* mode means you're editing a cell, i.e. with your cursor inside a cell to type content
-* *command* mode means you're NOT editing(!), i.e. NOT with your cursor inside a cell to type content
+* *edit* mode means you're editing a cell, i.e. with your cursor inside a cell to type content -->  <font color="blue">blue colored border</font>
+* *command* mode means you're NOT editing(!), i.e. NOT with your cursor inside a cell to type content --> selected cell has a grey border
 
 To start editing, click inside a cell or 
 <img src="../img/enterbutton.png" alt="Key enter" style="width:150px">

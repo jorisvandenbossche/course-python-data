@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -15,7 +15,7 @@ kernelspec:
 <p><font size="6"><b>08 - Pandas: Tidy data and reshaping</b></font></p>
 
 
-> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2023, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -25,8 +25,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 ```
-
-+++ {"tags": []}
 
 # Tidy data
 
@@ -77,13 +75,9 @@ sns.catplot(data=data, x="WWTP", y="...", hue="...", kind="bar")  # this doesn't
 ```
 
 ```{code-cell} ipython3
-:tags: []
-
 sns.catplot(data=data_long, x="WWTP", y="pH", 
             hue="Treatment", kind="bar")  # switch `WWTP` and `Treatment`
 ```
-
-+++ {"tags": []}
 
 ## Exercise with energy consumption data
 
