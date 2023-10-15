@@ -23,7 +23,7 @@ kernelspec:
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-v0_8-whitegrid')
 ```
 
 # Some 'theory': the groupby operation (split-apply-combine)
@@ -91,7 +91,7 @@ df.groupby('key').sum()
 ```
 
 ```{code-cell} ipython3
-df.groupby('key').aggregate(np.sum)  # 'sum'
+df.groupby('key').aggregate("sum")
 ```
 
 And many more methods are available.
@@ -206,7 +206,7 @@ df['AgeClass'] = pd.cut(df['Age'], bins=np.arange(0,90,10))
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df.groupby('AgeClass')['Fare'].mean().plot.bar(rot=0)
+df.groupby('AgeClass', observed=False)['Fare'].mean().plot.bar(rot=0)
 ```
 
 If you are ready, more groupby exercises can be found below.

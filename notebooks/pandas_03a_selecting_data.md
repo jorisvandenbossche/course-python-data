@@ -235,9 +235,13 @@ len(df[df['Age'] > 70])
 
 <b>EXERCISE</b>:
 
- <ul>
-  <li>Select the passengers that are between 30 and 40 years old?</li>
-</ul>
+* Select the passengers that are between 30 and 40 years old?
+
+<details><summary>Hints</summary>
+
+- To combine multiple conditions, you can use `&` (and) or `|` (or). But you might need to use brackets, because those operators have a higher precedence than the comparison operators.
+
+</details>
 </div>
 
 ```{code-cell} ipython3

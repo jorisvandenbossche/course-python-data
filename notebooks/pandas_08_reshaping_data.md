@@ -28,7 +28,7 @@ import seaborn as sns
 
 # Tidy data
 
-`melt `can be used to make a dataframe longer, i.e. to make a *tidy* version of your data. In a [tidy dataset](https://vita.had.co.nz/papers/tidy-data.pdf) (also sometimes called 'long-form' data or 'denormalized' data) each observation is stored in its own row and each column contains a single variable:
+In a [tidy dataset](https://vita.had.co.nz/papers/tidy-data.pdf) (also sometimes called 'long-form' data or 'denormalized' data) each observation is stored in its own row and each column contains a single variable:
 
 ![](../img/tidy_data_scheme.png)
 
@@ -50,9 +50,75 @@ This data representation is not "tidy":
 
 +++
 
+A "tidy" version would rather look like:
+
+<table style="margin-left:0px;">
+<thead>
+<tr>
+<th align="right"></th>
+<th align="left">WWTP</th>
+<th align="left">Treatment</th>
+<th align="right">pH</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0</td>
+<td align="left">Destelbergen</td>
+<td align="left">A</td>
+<td align="right">8</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="left">Landegem</td>
+<td align="left">A</td>
+<td align="right">7.5</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="left">Dendermonde</td>
+<td align="left">A</td>
+<td align="right">8.3</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="left">Eeklo</td>
+<td align="left">A</td>
+<td align="right">6.5</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="left">Destelbergen</td>
+<td align="left">B</td>
+<td align="right">6.3</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="left">Landegem</td>
+<td align="left">B</td>
+<td align="right">5.2</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="left">Dendermonde</td>
+<td align="left">B</td>
+<td align="right">6.2</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="left">Eeklo</td>
+<td align="left">B</td>
+<td align="right">7.2</td>
+</tr>
+</tbody></table>
+
+* Where each row is now one observation, i.e. one measurement for a certain location and treatment
+* Each variable is its own column
+
++++
+
 ## Melt - from wide to long/tidy format
 
-We can `melt` the data set to tidy the data:
+We can use `melt()` to make a dataframe longer, i.e. to make a *tidy* version of your data:
 
 ```{code-cell} ipython3
 pd.melt(data)  #, id_vars=["WWTP"])
