@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>CASE - Observation data</b></font></p>
 
-> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2023, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -26,7 +26,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-v0_8-whitegrid')
 ```
 
 ## Introduction
@@ -329,6 +329,177 @@ not_identified = observations[mask]
 not_identified.head()
 ```
 
+## Species abundance
+
++++
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Which 8 species (use the `name` column to identify the different species) have been observed most over the entire data set?
+
+<details><summary>Hints</summary>
+
+- Pandas provide a function to combine sorting and showing the first n records, see [here](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.nlargest.html)...
+    
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+observations.groupby("name").size().nlargest(8)
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+observations['name'].value_counts().iloc[:8]
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- What is the number of different species (`name`) in each of the `verbatimLocality` plots? Use the `nunique` method. Assign the output to a new variable `n_species_per_plot`.
+- Define a Matplotlib `Figure` (`fig`) and `Axes` (`ax`) to prepare a plot. Make an horizontal bar chart using Pandas `plot` function linked to the just created Matplotlib `ax`. Each bar represents the `species per plot/verbatimLocality`. Change the y-label to 'Plot number'.
+
+<details><summary>Hints</summary>
+
+- _...in each of the..._ should provide a hint to use `groupby` for this exercise. The `nunique` is the aggregation function for each of the groups.
+- `fig, ax = plt.subplots()` prepares a Matplotlib Figure and Axes.
+    
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+n_species_per_plot = observations.groupby(["verbatimLocality"])["name"].nunique()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+fig, ax = plt.subplots(figsize=(6, 6))
+n_species_per_plot.plot(kind="barh", ax=ax)
+ax.set_ylabel("Plot number");
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+## Alternative option to calculate the species per plot:
+## inspired on the pivot table we already had:
+#species_per_plot = observations.reset_index().pivot_table(
+#      index="species_ID", columns="verbatimLocality", values="occurrenceID", aggfunc='count')
+#n_species_per_plot = species_per_plot.count()
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- What is the number of plots (`verbatimLocality`) each of the species (`name`) have been observed in? Assign the output to a new variable `n_plots_per_species`. Sort the counts from low to high.
+- Make an horizontal bar chart using Pandas `plot` function to show the number of plots each of the species was found (using the `n_plots_per_species` variable).  
+
+<details><summary>Hints</summary>
+
+- Use the previous exercise to solve this one.
+    
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+n_plots_per_species = observations.groupby(["name"])["verbatimLocality"].nunique().sort_values()
+
+fig, ax = plt.subplots(figsize=(10, 8))
+n_plots_per_species.plot(kind="barh", ax=ax)
+ax.set_xlabel("Number of plots");
+ax.set_ylabel("");
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- Starting from the `observations`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex` and ensure the counts are in a column named "count".
+- Use a `pivot()` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
+
+<details><summary>Hints</summary>
+
+- _...for each of the combinations..._ `groupby` can also be used with multiple columns at the same time.
+- If a `groupby` operation gives a Series as result, you can give that Series a name with the `.rename(..)` method.
+- `reset_index()` is useful function to convert multiple indices into columns again.
+    
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+n_plot_sex = observations.groupby(["sex", "verbatimLocality"]).size().rename("count").reset_index()
+n_plot_sex.head()
+```
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+pivoted = n_plot_sex.pivot(columns="sex", index="verbatimLocality", values="count")
+pivoted.head()
+```
+
+As such, we can use the variable `pivoted` to plot the result:
+
+```{code-cell} ipython3
+pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+Recreate the previous plot with the `catplot` function from the Seaborn library directly starting from <code>observations</code> DataFrame. 
+
+<details><summary>Hints</summary>
+
+- Check the `kind` argument of the `catplot` function to find out how to use counts to define the bars instead of a `y` value.
+- To link a column to different colors, use the `hue` argument
+- Using `height` and `aspect`, the figure size can be optimized.
+
+    
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+sns.catplot(data=observations, x="verbatimLocality", 
+            hue="sex", kind="count", height=3, aspect=3)
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**
+
+- Create a table, called `heatmap_prep`, based on the `observations` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
+- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a>, make a heatmap starting from the `heatmap_prep` variable.
+
+<details><summary>Hints</summary>
+
+- A `pivot_table` has an `aggfunc` parameter by which the aggregation of the cells combined into the year/month element are combined (e.g. mean, max, count,...). 
+- You can use the `species_ID` to count the number of observations.
+- seaborn has an `heatmap` function which requires a short-form DataFrame, comparable to giving each element in a table a color value.
+    
+</details>
+
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
+
+heatmap_prep = observations.pivot_table(index='year', columns='month', 
+                                        values="species_ID", aggfunc='count')
+fig, ax = plt.subplots(figsize=(10, 8))
+ax = sns.heatmap(heatmap_prep, cmap='Reds')
+```
+
 ## Adding the names of the observed species
 
 ```{code-cell} ipython3
@@ -337,14 +508,14 @@ observations_unique_ = observations.drop_duplicates()
 observations_data = observations_unique_.dropna(subset=['species_ID'])
 ```
 
-In the data set `observations`, the column `specied_ID` provides only an identifier instead of the full name. The name information is provided in a separate file `species_names.csv`:
+In the data set `observations`, the column `specied_ID` provides an identifier and the `name` column the species name. The taxonomic information of each speciess is provided in a separate file `species_names.csv`:
 
 ```{code-cell} ipython3
 species_names = pd.read_csv("data/species_names.csv")
 species_names.head()
 ```
 
-The species names contains for each identifier in the `ID` column the scientific name of a species. The `species_names` data set contains in total 38 different scientific names:
+The species names contains for each identifier in the `ID` column the scientific name and taxonomic information of a species. The `species_names` data set contains in total 38 different scientific names:
 
 ```{code-cell} ipython3
 species_names.shape
@@ -358,7 +529,7 @@ For further analysis, let's combine both in a single DataFrame in the following 
 
 **EXERCISE**
 
-Combine the DataFrames `observations_data` and `species_names` by adding the corresponding species name information (name, class, kingdom,..) to the individual observations using the `pd.merge()` function. Assign the output to a new variable `survey_data`.
+Combine the DataFrames `observations_data` and `species_names` by adding the corresponding species name information (class, kingdom,..) to the individual observations using the `pd.merge()` function. Assign the output to a new variable `survey_data`. Use the `species_ID` to combine the both DataFrames.
 
 <details><summary>Hints</summary>
 
@@ -518,177 +689,6 @@ median_weight.sort_values(ascending=False)
 
 # Single line statement
 survey_data.dropna(subset=["weight"]).groupby(['name'])["weight"].median().sort_values(ascending=False)
-```
-
-## Species abundance
-
-+++
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-Which 8 species (use the `name` column to identify the different species) have been observed most over the entire data set?
-
-<details><summary>Hints</summary>
-
-- Pandas provide a function to combine sorting and showing the first n records, see [here](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.nlargest.html)...
-    
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-survey_data.groupby("name").size().nlargest(8)
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-survey_data['name'].value_counts()[:8]
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-- What is the number of different species (`name`) in each of the `verbatimLocality` plots? Use the `nunique` method. Assign the output to a new variable `n_species_per_plot`.
-- Define a Matplotlib `Figure` (`fig`) and `Axes` (`ax`) to prepare a plot. Make an horizontal bar chart using Pandas `plot` function linked to the just created Matplotlib `ax`. Each bar represents the `species per plot/verbatimLocality`. Change the y-label to 'Plot number'.
-
-<details><summary>Hints</summary>
-
-- _...in each of the..._ should provide a hint to use `groupby` for this exercise. The `nunique` is the aggregation function for each of the groups.
-- `fig, ax = plt.subplots()` prepares a Matplotlib Figure and Axes.
-    
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-n_species_per_plot = survey_data.groupby(["verbatimLocality"])["name"].nunique()
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-fig, ax = plt.subplots(figsize=(6, 6))
-n_species_per_plot.plot(kind="barh", ax=ax)
-ax.set_ylabel("Plot number");
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-# Alternative option to calculate the species per plot:
-# inspired on the pivot table we already had:
-# species_per_plot = survey_data.reset_index().pivot_table(
-#      index="name", columns="verbatimLocality", values="ID", aggfunc='count')
-# n_species_per_plot = species_per_plot.count()
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-- What is the number of plots (`verbatimLocality`) each of the species (`name`) have been observed in? Assign the output to a new variable `n_plots_per_species`. Sort the counts from low to high.
-- Make an horizontal bar chart using Pandas `plot` function to show the number of plots each of the species was found (using the `n_plots_per_species` variable).  
-
-<details><summary>Hints</summary>
-
-- Use the previous exercise to solve this one.
-    
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-n_plots_per_species = survey_data.groupby(["name"])["verbatimLocality"].nunique().sort_values()
-
-fig, ax = plt.subplots(figsize=(10, 8))
-n_plots_per_species.plot(kind="barh", ax=ax)
-ax.set_xlabel("Number of plots");
-ax.set_ylabel("");
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-- Starting from the `survey_data`, calculate the amount of males and females present in each of the plots (`verbatimLocality`). The result should return the counts for each of the combinations of `sex` and `verbatimLocality`. Assign to a new variable `n_plot_sex` and ensure the counts are in a column named "count".
-- Use a `pivot_table` to convert the `n_plot_sex` DataFrame to a new DataFrame with the `verbatimLocality` as index and `male`/`female` as column names. Assign to a new variable `pivoted`.
-
-<details><summary>Hints</summary>
-
-- _...for each of the combinations..._ `groupby` can also be used with multiple columns at the same time.
-- If a `groupby` operation gives a Series as result, you can give that Series a name with the `.rename(..)` method.
-- `reset_index()` is useful function to convert multiple indices into columns again.
-    
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-n_plot_sex = survey_data.groupby(["sex", "verbatimLocality"]).size().rename("count").reset_index()
-n_plot_sex.head()
-```
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-pivoted = n_plot_sex.pivot_table(columns="sex", index="verbatimLocality", values="count")
-pivoted.head()
-```
-
-As such, we can use the variable `pivoted` to plot the result:
-
-```{code-cell} ipython3
-pivoted.plot(kind='bar', figsize=(12, 6), rot=0)
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-Recreate the previous plot with the `catplot` function from the Seaborn library directly starting from <code>survey_data</code>. 
-
-<details><summary>Hints</summary>
-
-- Check the `kind` argument of the `catplot` function to find out how to use counts to define the bars instead of a `y` value.
-- To link a column to different colors, use the `hue` argument
-- Using `height` and `aspect`, the figure size can be optimized.
-
-    
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-sns.catplot(data=survey_data, x="verbatimLocality", 
-            hue="sex", kind="count", height=3, aspect=3)
-```
-
-<div class="alert alert-success">
-
-**EXERCISE**
-
-- Create a table, called `heatmap_prep`, based on the `survey_data` DataFrame with the row index the individual years, in the column the months of the year (1-> 12) and as values of the table, the counts for each of these year/month combinations.
-- Using the seaborn <a href="http://seaborn.pydata.org/generated/seaborn.heatmap.html">documentation</a>, make a heatmap starting from the `heatmap_prep` variable.
-
-<details><summary>Hints</summary>
-
-- A `pivot_table` has an `aggfunc` parameter by which the aggregation of the cells combined into the year/month element are combined (e.g. mean, max, count,...). 
-- You can use the `ID` to count the number of observations.
-- seaborn has an `heatmap` function which requires a short-form DataFrame, comparable to giving each element in a table a color value.
-    
-</details>
-
-```{code-cell} ipython3
-:tags: [nbtutor-solution]
-
-heatmap_prep = survey_data.pivot_table(index='year', columns='month', 
-                                       values="ID", aggfunc='count')
-fig, ax = plt.subplots(figsize=(10, 8))
-ax = sns.heatmap(heatmap_prep, cmap='Reds')
 ```
 
 Remark that we started from a `tidy` data format (also called *long* format) and converted to *short* format with in the row index the years, in the column the months and the counts for each of these year/month combinations as values.
