@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -15,13 +15,11 @@ kernelspec:
 <p><font size="6"><b>Visualisation: Seaborn </b></font></p>
 
 
-> *© 2022, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2023, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
 ```{code-cell} ipython3
-:tags: []
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -40,8 +38,6 @@ import matplotlib.pyplot as plt
 * Interacts well with Pandas
 
 ```{code-cell} ipython3
-:tags: []
-
 import seaborn as sns
 ```
 
@@ -52,8 +48,6 @@ import seaborn as sns
 We will use the Titanic example data set:
 
 ```{code-cell} ipython3
-:tags: []
-
 titanic = pd.read_csv('data/titanic.csv')
 ```
 
@@ -186,7 +180,7 @@ The `Figure` level Seaborn functions:
 
 </div>
 
-+++ {"tags": []}
++++
 
 ### Axes level functions
 
@@ -216,8 +210,6 @@ type(scatter_out)
 But we can't use the `col`/`row` options for facetting:
 
 ```{code-cell} ipython3
-:tags: []
-
 # sns.scatterplot(data=titanic, x="Age", y="Fare", hue="Survived", col="Sex")  # uncomment to check the output
 ```
 
@@ -327,8 +319,6 @@ sns.catplot(data=titanic, x="Survived", col="Pclass",
 To use another statistical function to apply on each of the groups, use the `estimator`:
 
 ```{code-cell} ipython3
-:tags: []
-
 sns.catplot(data=titanic, x="Sex", y="Age", col="Pclass", kind="bar", 
             estimator=np.mean)
 ```
