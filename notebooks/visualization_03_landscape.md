@@ -30,11 +30,6 @@ To make some of the more general plotting packages available:
 conda install -c conda-forge bokeh plotly altair hvplot holoviews panel
 ``` 
 
-To have support of plotly inside the Jupyter Lab environment
-```
-conda install -c conda-forge -c plotly jupyter-dash 
-```
-
 To run the large data set section, additional package installations are required:
 
 ```

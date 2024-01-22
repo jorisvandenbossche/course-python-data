@@ -467,7 +467,7 @@ sns.catplot(data=victims_hour_of_day,
 
 Create a barplot with the number of victims ("n_victims") for each hour of the day for each category in the gender column. Before plotting, calculate the total number of victims for each hour of the day and each gender with Pandas and assign it to the variable `victims_gender_hour_of_day`. 
 
-Create a separate subplot for each gender category in a separate row and apply the `rocket` color palette.  
+Create a separate subplot for each gender category in a separate row.
     
 Make sure to include the `NaN` values of the "gender" column as a separate subplot, called _"unknown"_ without changing the `casualties` DataFrame data.
     
@@ -496,7 +496,6 @@ sns.catplot(data=victims_gender_hour_of_day.fillna("unknown"),
             x="datetime", 
             y="n_victims", 
             row="gender",
-            palette="rocket",
             kind="bar", 
             aspect=4,
             height=3)
@@ -547,7 +546,7 @@ sns.catplot(data=casualties_motorway_trucks,
             x="week_day",
             y="n_victims",
             estimator=np.sum,
-            ci=None,
+            errorbar=None,
             kind="bar",
             color="#900C3F",
             height=3, 

@@ -45,7 +45,7 @@ import plotnine as p9
 We will use the Titanic example data set:
 
 ```{code-cell} ipython3
-titanic = pd.read_csv('../data/titanic.csv')
+titanic = pd.read_csv('data/titanic.csv')
 ```
 
 ```{code-cell} ipython3
