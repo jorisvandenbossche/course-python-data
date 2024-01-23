@@ -344,7 +344,6 @@ The [GeoPandas](https://geopandas.org) package extends pandas with geospatial fu
 
 ```{code-cell} ipython3
 import geopandas
-import fiona
 ```
 
 ```{code-cell} ipython3

@@ -229,7 +229,7 @@ _NOTE:_ In this case, we can use seaborn both with the data not in a long format
 
 # with wide dataframe
 fig, ax = plt.subplots()
-sns.violinplot(data=data['2011-01': '2011-08'], palette="GnBu_d", ax=ax)
+sns.violinplot(data=data['2011-01': '2011-08'], color="C0", ax=ax)
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```
 
@@ -240,7 +240,7 @@ ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 data_tidy_subset = data_tidy[(data_tidy['datetime'] >= "2011-01") & (data_tidy['datetime'] < "2011-09")]
 
 fig, ax = plt.subplots()
-sns.violinplot(data=data_tidy_subset, x="station", y="no2", palette="GnBu_d", ax=ax)
+sns.violinplot(data=data_tidy_subset, x="station", y="no2", color="C0", ax=ax)
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ```
 
@@ -248,7 +248,7 @@ ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 :tags: [nbtutor-solution]
 
 # with figure-level function
-sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin", palette="GnBu_d")
+sns.catplot(data=data_tidy_subset, x="station", y="no2", kind="violin")
 ```
 
 <div class="alert alert-success">

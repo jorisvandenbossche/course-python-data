@@ -408,7 +408,7 @@ What is the average number of bikers passing each hour?
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df.resample('H').sum().mean()
+df.resample('h').sum().mean()
 ```
 
 <div class="alert alert-success">
@@ -508,7 +508,7 @@ Let's have a look at some short term patterns. For the data of the first 3 weeks
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df_hourly = df.resample('H').sum()
+df_hourly = df.resample('h').sum()
 ```
 
 ```{code-cell} ipython3
@@ -600,7 +600,7 @@ df_daily.groupby(df_daily.index.dayofweek).mean().plot(kind='bar')
 **Daily pattern:**
 
 ```{code-cell} ipython3
-df_hourly = df.resample('H').sum()
+df_hourly = df.resample('h').sum()
 ```
 
 ```{code-cell} ipython3

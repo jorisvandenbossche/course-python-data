@@ -92,7 +92,7 @@ ts + pd.Timedelta('5 days')
 To quickly construct some regular time series data, the [``pd.date_range``](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.date_range.html) function comes in handy:
 
 ```{code-cell} ipython3
-pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3H'))
+pd.Series(pd.date_range(start="2016-01-01", periods=10, freq='3h'))
 ```
 
 ## Parsing datetime strings

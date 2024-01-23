@@ -315,7 +315,7 @@ We will first reproduce 'Figure 2' without the error bars:
 
 - To replace values using a mapping (dictionary with the keys the current values and the values the new values), use the Pandas `replace` method.
 - This is another example of a `catplot`, using `point`s to represent the data.
-- The `join` argument defines if individual points need to be connected or not.
+- To avoid that the individual points get connected with a line, you can pass `linestyle="none"`.
 - Seaborn provides the `row_order` and `order` options to provide a custom order of respectively the subplots and categories.
 - One combination appears multiple times, so make sure to not yet use confidence intervals by setting `errorbar` to `None`.
 </details>
@@ -335,7 +335,7 @@ sns.catplot(data=falcor, kind="point",
             x='Bacterial_genotype',
             y='log10 Mc',
             row="Phage",
-            join=False, 
+            linestyle="none",
             errorbar=None,
             row_order=["Lambda", "T4", "T7"],
             order=['WT', 'MUT', 'D87G', 'S83L', 'D516G', 'S512F', 'K43N', 'K88R', 'RSF1010', 'RP4'],

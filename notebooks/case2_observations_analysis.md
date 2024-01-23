@@ -24,7 +24,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-v0_8-whitegrid')
 ```
 
 ## 1. Reading in the enriched observations data
