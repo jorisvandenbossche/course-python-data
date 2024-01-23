@@ -7,7 +7,7 @@ dependencies:
 - jupyter
 - jupyterlab>=3
 - numpy
-- pandas>=1
+- pandas=2.1
 - matplotlib>3
 - mplleaflet
 - ipympl
