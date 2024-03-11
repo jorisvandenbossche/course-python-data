@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.0
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -54,7 +54,7 @@ Be careful to respect the indentation depth. The Ipython shell automatically inc
 >     do this if true 
 <!-- #endraw -->
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 an_int = 2
 if an_int == 1:
     print(1)
@@ -69,7 +69,7 @@ else:
 
 iterating can be over indices (ints) or over values
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 for index in range(4):
     print(index)
 
@@ -83,7 +83,7 @@ for word in ('cool', 'powerful', 'readable'):
 
 Typical C-style while loop
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 z = 1 + 1j
 # Mandelbrot problem
 while abs(z) < 100:
@@ -96,7 +96,7 @@ print(z)
 
 *break* out of enclosing for/while loop
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 z = 1 + 1j
 # Mandelbrot problem
 while abs(z) < 100:
@@ -109,7 +109,7 @@ print(z)
 
 *continue* the next iteration of a loop
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 aList = [1, 0, 2, 4]
 print('printing the inverse of the integers, excluding division by zero')
 for element in aList:
@@ -141,7 +141,7 @@ Evaluates to True:
 
 Tests equality, with logics
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 1 == 1
 ```
 
@@ -149,7 +149,7 @@ Tests equality, with logics
 
 Tests identity: both sides are the **same object**
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 print(1 is 1.)
 a = 1
 b = 1 
@@ -162,29 +162,29 @@ For any collection b: b contains a
 
 If b is a dictionary, this tests that a is a key of b.
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 a_list = [1, 2, 3]
 2 in a_list
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 'ae' in a_list
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 3. in a_list
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 a_dict = {'theKey' : 'theValue'}
 'theKey' in a_dict
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 'theValue' in a_dict
 ```
 
-```python run_control={"frozen": false, "read_only": false} jupyter={"outputs_hidden": true}
+```python
 dd = {'antea': 3, 'IMDC': 2, 'arcadis': 4, 'witteveen': 5, 'grontmij': 1}
 ```
 
@@ -192,11 +192,11 @@ dd = {'antea': 3, 'IMDC': 2, 'arcadis': 4, 'witteveen': 5, 'grontmij': 1}
     <b>EXERCISE</b>: Return the key of an item in the dictionary `dd` if the value is provided (assume that the user is always providing a value that is part of the dictionary and all values only occur once). Make sure the returned key is formatted as capitals and use `value=3` to test:
 </div>
 
-```python jupyter={"outputs_hidden": true}
+```python
 value = 2
 ```
 
-```python clear_cell=true run_control={"frozen": false, "read_only": false}
+```python clear_cell=true
 # return the name of the company given a certain value between 1 and 5:
 for k in dd:
     if dd[k] == value:
@@ -207,7 +207,7 @@ for k in dd:
     <b>EXERCISE</b>: Given the dictionary `dd`, check if a key is already existing in the dictionary and print a message `already in dictionary`. Use 'antea' as string to check for.
 </div>
 
-```python clear_cell=true run_control={"frozen": false, "read_only": false}
+```python clear_cell=true
 if 'antea' in dd.keys():
     print('already in dictionary')
 ```
@@ -223,14 +223,14 @@ if 'antea' in dd.keys():
 
 You can iterate over any sequence (string, list, keys in a dictionary, lines in a file, ...)
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 vowels = 'aeiouy'
 for i in 'powerful':
     if i in vowels:
         print(i)
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 message = "Hello how are you?"
 message.split() # returns a list
 for word in message.split():
@@ -246,7 +246,7 @@ Few languages (in particular, languages for scientific computing) allow to loop 
 Common task is to iterate over a sequence while keeping track of the item number.
 * Could use while loop with a counter as above. Or a for loop:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 words = ('cool', 'powerful', 'readable')
 for i in range(0, len(words)):
     print(i, words[i])
@@ -254,14 +254,14 @@ for i in range(0, len(words)):
 
 * But, Python provides enumerate keyword for this:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 for index, item in enumerate(words):
     print(index, item)
 ```
 
 Or combine elements of two containers:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 tea = 'tea'
 for word, let in zip(words, tea):
     print(word, let)
@@ -275,13 +275,13 @@ This can be extended with more iterating options (check the itertools! http://py
 
 use **items()**
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 a_dict = {'One': 1, 'Two':2, 'Three':3}
 for key, val in a_dict.items():
     print('Key: {} has value: {}'.format(key, val))
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 for key in a_dict.keys():
     print('Key: {}'.format(key))
 ```
@@ -302,7 +302,7 @@ and store the number of letters and digits in a dictionary d={"DIGITS": #digits,
 </div>
 
 
-```python clear_cell=true run_control={"frozen": false, "read_only": false}
+```python clear_cell=true
 sentence = "hello world! 123"
 d = {"DIGITS": 0, "LETTERS": 0}
 for char in sentence:
@@ -324,17 +324,17 @@ print("DIGITS", d["DIGITS"])
 
 Exceptions are raised by errors in Python:
 
-```python run_control={"frozen": false, "read_only": false} jupyter={"outputs_hidden": true}
+```python
 # 1/0 # uncomment this cell
 ```
 
-```python run_control={"frozen": false, "read_only": false} jupyter={"outputs_hidden": true}
+```python
 ## uncomment the following lines in this cell
 #d = {1:1, 2:2}  
 #d[3]
 ```
 
-```python run_control={"frozen": false, "read_only": false} jupyter={"outputs_hidden": true}
+```python
 ## uncomment the following lines in this cell
 #l = [1, 2, 3]
 #l.foobar
@@ -345,7 +345,7 @@ As you can see, there are **different types of exceptions** for different errors
 
 ### raise Exception
 
-```python run_control={"frozen": false, "read_only": false} jupyter={"outputs_hidden": true}
+```python
 k = 'a_string'   # test yourself with integer value, e.g. 3
 if not isinstance(k, str):
     raise Exception('Provide a string as input!')
@@ -371,7 +371,7 @@ You can also be more precise about the type of error, eg. TypeError. A list of d
 
 Different exceptions can be combined, raising different type of errors:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 k = 'f6'
 import sys
 try:

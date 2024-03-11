@@ -13,154 +13,91 @@ jupyter:
     name: python3
 ---
 
-# Python the basics: datatypes
+# Containers and slicing
 
 > *© 2024, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
-> This notebook is based on material of the [*Python Scientific Lecture Notes*](https://scipy-lectures.github.io/), and the [*Software Carptentry: Programming with Python course*](https://swcarpentry.github.io/python-novice-gapminder/01-run-quit.html).
+> This notebook is based on material of the [*Python Scientific Lecture Notes*](https://scipy-lectures.github.io/), and the [*Software Carptentry: Programming with Python course*](https://swcarpentry.github.io/python-novice-gapminder).
 
 
-## Importing packages
+## Containers
 
 
-Importing packages is always the first thing you do in python, since it offers the functionalities to work with.
-
-Different options are available:
-
-* <span style="color:green">import <i>package-name</i></span>  <p> importing all functionalities as such
-* <span style="color:green">from <i>package-name</i> import <i>specific function</i></span>  <p> importing a specific function or subset of the package
-* <span style="color:green">from <i>package-name</i> import *  </span>   <p> importing all definitions and actions of the package (sometimes better than option 1)
-* <span style="color:green">import <i>package-name</i> as <i>short-package-name</i></span>    <p> Very good way to keep a good insight in where you use what package
+If I measure air pressure multiple times, doing calculations with a hundred variables called `pressure_001`, `pressure_002`, etc., would be slow. We need _container_ or _collection_ data types to combine multiple values in a single object.
 
 
-import all functionalities as such
+### Lists
+
+
+We can use a list to store many values together:
+
+- Contained within square brackets `[...]`.
+- Values separated by commas `,`.
+
 
 ```python
-# Two general packages
-import os
-import sys
-```
-
-## Basic python datatypes
-
-
-### Numerical types
-
-
-Python supports the following numerical, scalar types:
-* integer
-* floats
-* complex
-* boolean
-
-```python
-an_integer = 3
-print(type(an_integer))
+pressures_hPa = [1013, 1003, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]
 ```
 
 ```python
-an_integer
+len(pressures_hPa)  # len is a built-in function in Python (does not require an import)
 ```
 
-```python
-# type casting: converting the integer to a float type
-float(an_integer)
-```
-
-```python
-a_float = 0.2
-type(a_float)
-```
-
-```python
-a_complex = 1.5 + 0.5j
-# get the real or imaginary part of the complex number by using the functions
-# real and imag on the variable
-print(type(a_complex), a_complex.real, a_complex.imag)
-```
-
-```python
-a_boolean = (3 > 4)
-a_boolean
-```
-
-A Python shell can therefore replace your pocket calculator, with the basic arithmetic operations addition, substraction, division ... are natively implemented
-+, -, *, /, % (modulo) natively implemented
-
- *operation*| *python implementation* 
-----------:| --------------------- 
- addition  | `+`
- substraction | `-`
- multiplication | `*`
- division | `/`
- modulo | `%`
- exponentiation | `**`
-
-```python
-print (7 * 3.)
-print (2**10)
-print (8 % 3)
-```
-
-**Attention !**
-
-```python
-print(3/2)
-print(3/2.)
-print(3.//2.)  #integer division
-```
-
-### Containers
-
-
-#### Lists
-
-
-A list is an ordered collection of objects, that may have different types. The list container supports slicing, appending, sorting ...
-
-Indexing starts at 0 (as in C, C++ or Java), not at 1 (as in Fortran or Matlab)!
-
+A list is an ordered collection of objects, that may have different types. 
 
 ```python
 a_list = [2.,'aa', 0.2]
 a_list
 ```
 
+Use an item’s index to fetch it from a list  and have access to individual object in the list:
+
 ```python
-# accessing individual object in the list
 a_list[1]
 ```
 
 ```python
-# negative indices are used to count from the back
-a_list[-1]
+a_list[-1]  # negative indices are used to count from the back
 ```
 
-**Slicing**: obtaining sublists of regularly-spaced elements
+<div class="alert alert-warning">
+
+__Warning__: 
+    
+Indexing in Python starts at 0 (as in C, C++ or Java), not at 1 (as in Fortran or Matlab)!
+    
+</div>
+
+
+Lists are __mutable__ objects and can be modified. Lists’ values can be replaced by assigning to them. Use an index expression on the left of assignment to replace a value:
+
+```python
+a_list[1] = 3000
+a_list
+```
+
+__Slicing__ obtaining sublists of regularly-spaced elements:
 
 ```python
 another_list = ['first', 'second', 'third', 'fourth', 'fifth']
+print(another_list[2:4])
 print(another_list[3:])
 print(another_list[:2])
 print(another_list[::2])
 ```
 
-* Note that L[start:stop] contains the elements with indices i such as start<= i < stop 
-* (i ranging from start to stop-1). Therefore, L[start:stop] has (stop-start) elements.
-* Slicing syntax: L[start:stop:stride]
+<div class="alert alert-info">
+
+__Info__: 
+    
+* `L[start:stop]` contains the elements with indices i so `start <= i < stop`
+* i ranging from start to stop-1. Therefore, L[start:stop] has (stop-start) elements.
+* Slicing syntax: `L[start:stop:stride]`
 * all slicing parameters are optional
+</div>
 
-
-Lists are *mutable* objects and can be modified
-
-```python
-another_list[3] = 'newFourth'
-print(another_list)
-another_list[1:3] = ['newSecond', 'newThird']
-print(another_list)
-```
 
 Warning, with views equal to each other, they point to the same point in memory. Changing one of them is also changing the other!!
 
@@ -174,13 +111,13 @@ print(a)
 **List methods**:
 
 
-You can always list the available methods in the namespace by using the dir()-command:
+You can list the available _methods_ in the namespace using the `TAB` key  or using the (built-in) `dir()`-function:
 
-```python
+```python tags=[]
 #dir(list)
 ```
 
-```python
+```python tags=[]
 a_third_list = ['red', 'blue', 'green', 'black', 'white']
 ```
 
@@ -222,22 +159,7 @@ a_third_list
 
 ------------
 
-
-<div class="alert alert-success">
-    <b>EXERCISE</b>: What happens if you put two question marks behind the command?
-</div>
-
-```python clear_cell=true
-a_third_list.count?
-```
-
-```python clear_cell=true
-a_third_list.index?
-```
-
-------------
-
-```python
+```python tags=[]
 a_third_list = ['red', 'blue', 'green', 'black', 'white']
 ```
 
@@ -247,8 +169,22 @@ a_third_list = a_third_list[:-2]
 a_third_list
 ```
 
+### TODO - exercises
+
+
 <div class="alert alert-success">
-    <b>EXERCISE</b>: Mimick the functioning of the *reverse* command using the appropriate slicing command:
+
+**EXERCISE**:
+
+Mimick the functioning of the *reverse* command using the appropriate slicing command:
+
+<details><summary>Hints</summary>
+
+- The slicing syntax is `L[start:stop:stride]` and the stride can be a negative value
+- To access from start till end, the `start` and `stop` can be empty.
+    
+</details>    
+    
 </div>
 
 ```python clear_cell=true
@@ -315,6 +251,10 @@ Cool, this works! let's check more about strings:
 
 
 #### Strings
+
+
+NOTE 2024 -> just short reference to list (slicing,...) and that it is immutable
+https://swcarpentry.github.io/python-novice-gapminder/11-lists.html#character-strings-can-be-indexed-like-lists.
 
 
 Different string syntaxes (simple, double or triple quotes)
