@@ -192,7 +192,7 @@ dd = {'antea': 3, 'IMDC': 2, 'arcadis': 4, 'witteveen': 5, 'grontmij': 1}
     <b>EXERCISE</b>: Return the key of an item in the dictionary `dd` if the value is provided (assume that the user is always providing a value that is part of the dictionary and all values only occur once). Make sure the returned key is formatted as capitals and use `value=3` to test:
 </div>
 
-```python
+```python tags=[]
 value = 2
 ```
 

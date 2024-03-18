@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.0
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -41,7 +41,7 @@ Let us first write a *script*, that is a file with a sequence of instructions th
 The extension for Python files is ``.py``. Write or copy-and-paste the following lines in a file called test.py
 <!-- #endregion -->
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 %%file test.py
 
 message = "Hello how are you?"
@@ -51,11 +51,11 @@ for word in message.split():
 
 Let us now execute the script interactively, that is inside the Ipython interpreter. This is maybe the most common use of scripts in scientific computing.
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 %run test.py
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 message
 ```
 
@@ -65,7 +65,7 @@ Other interpreters also offer the possibility to execute scripts (e.g., ``execfi
 
 It is also possible to execute this script as a *standalone program*, by executing the script inside a shell terminal (Linux/Mac console or cmd Windows console). For example, if we are in the same directory as the test.py file, we can execute this in a console:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 !python test.py
 ```
 
@@ -75,7 +75,7 @@ If we want to write larger and better organized programs (compared to simple scr
 
 Let us create a module demo contained in the file ``demo.py``:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 %%file demo.py
 
 "A demo module."
@@ -95,21 +95,21 @@ d = 2
 
 In this file, we defined two functions ``print_a`` and ``print_b``. Suppose we want to call the ``print_a`` function from the interpreter. We could execute the file as a script, but since we just want to have access to the function ``print_a``, we are rather going to **import it as a module**. The syntax is as follows.
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 import demo
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 demo.print_a()
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 demo.print_b()
 ```
 
 ## `__main__` function and executing scripts
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 %%file demo2.py
 
 "A second demo module with a main function."
@@ -126,18 +126,18 @@ if __name__ == '__main__':
     print_a()
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 !python demo2.py
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 import demo2
 demo2.print_b()
 ```
 
 Standalone scripts may also take command-line arguments:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 %%file demo3.py
 
 import sys
@@ -146,6 +146,6 @@ if __name__ == '__main__':
     print(sys.argv)
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 !python demo3.py arg1 arg2
 ```

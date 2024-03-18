@@ -22,13 +22,13 @@ jupyter:
 > This notebook is based on material of the [*Python Scientific Lecture Notes*](https://scipy-lectures.github.io/), and the [*Software Carptentry: Programming with Python course*](https://swcarpentry.github.io/python-novice-gapminder).
 
 
-## Containers
+## Introduction
 
 
 If I measure air pressure multiple times, doing calculations with a hundred variables called `pressure_001`, `pressure_002`, etc., would be slow. We need _container_ or _collection_ data types to combine multiple values in a single object.
 
 
-### Lists
+## Lists
 
 
 We can use a list to store many values together:
@@ -62,6 +62,12 @@ a_list[1]
 a_list[-1]  # negative indices are used to count from the back
 ```
 
+Use `[]` on its own to represent a list that doesn’t contain any values. 
+
+```python
+type([]), len([])
+```
+
 <div class="alert alert-warning">
 
 __Warning__: 
@@ -71,14 +77,16 @@ Indexing in Python starts at 0 (as in C, C++ or Java), not at 1 (as in Fortran o
 </div>
 
 
-Lists are __mutable__ objects and can be modified. Lists’ values can be replaced by assigning to them. Use an index expression on the left of assignment to replace a value:
+Lists are __mutable__ objects and can be modified. Lists’ __values can be replaced by assigning to them__. Use an index expression on the left of assignment to replace a value:
 
 ```python
 a_list[1] = 3000
 a_list
 ```
 
-__Slicing__ obtaining sublists of regularly-spaced elements:
+__Slicing:__ 
+
+Obtaining sublists of regularly-spaced elements by using the indexes (either continuous or non-Continuous with a step size):
 
 ```python
 another_list = ['first', 'second', 'third', 'fourth', 'fifth']
@@ -86,6 +94,17 @@ print(another_list[2:4])
 print(another_list[3:])
 print(another_list[:2])
 print(another_list[::2])
+print(another_list[:-2])
+```
+
+```python
+print(another_list[-4:-2])
+```
+
+Python reports an `IndexError` if we attempt to access a value that doesn’t exist:
+
+```python
+#another_list[20]
 ```
 
 <div class="alert alert-info">
@@ -95,11 +114,13 @@ __Info__:
 * `L[start:stop]` contains the elements with indices i so `start <= i < stop`
 * i ranging from start to stop-1. Therefore, L[start:stop] has (stop-start) elements.
 * Slicing syntax: `L[start:stop:stride]`
-* all slicing parameters are optional
-</div>
+* All slicing parameters are optional
+* start and stop can be negative (counting backwards)
+   
+</div> 
 
 
-Warning, with views equal to each other, they point to the same point in memory. Changing one of them is also changing the other!!
+When assigning a list to a new variable name, only a view is created and both names are linked to the same data in memory on your computer (cfr. two sticky notes specifiying the same). When changing one of them, the other will also be adjusted:
 
 ```python
 a = ['a',  'b']
@@ -108,10 +129,28 @@ b[0] = 1
 print(a)
 ```
 
+By making an explicit `copy()`, both names are linking to independent data: 
+
+```python
+a = ['a',  'b']
+b = a.copy()
+b[0] = 1
+print(a)
+```
+
+<div class="alert alert-warning">
+
+__Warning__: 
+    
+With _views_ equal to each other, they point to the same point in memory. Changing one of them is also changing the other!
+    
+</div>
+
+
 **List methods**:
 
 
-You can list the available _methods_ in the namespace using the `TAB` key  or using the (built-in) `dir()`-function:
+You can enlist the available _methods_ of a `list` using the `TAB` key  or using the (built-in) `dir()`-function:
 
 ```python tags=[]
 #dir(list)
@@ -121,14 +160,16 @@ You can list the available _methods_ in the namespace using the `TAB` key  or us
 a_third_list = ['red', 'blue', 'green', 'black', 'white']
 ```
 
+Som examples of methods:
+
 ```python
-# Appending
+# Appending in-place
 a_third_list.append('pink')
 a_third_list
 ```
 
 ```python
-# Removes and returns the last element
+# Removes and returns the last element in-place
 a_third_list.pop()
 a_third_list
 ```
@@ -140,61 +181,19 @@ a_third_list
 ```
 
 ```python
-# Reverse the list
-a_third_list.reverse()
-a_third_list
+a_third_list.extend(['pink', 'purple'])
 ```
 
-```python
-# Remove the first occurence of an element
-a_third_list.remove('white')
-a_third_list
-```
+<div class="alert alert-info">
 
-```python
-# Sort list
-a_third_list.sort()
-a_third_list
-```
-
-------------
-
-```python tags=[]
-a_third_list = ['red', 'blue', 'green', 'black', 'white']
-```
-
-```python
-# remove the last two elements
-a_third_list = a_third_list[:-2]
-a_third_list
-```
-
-### TODO - exercises
-
-
-<div class="alert alert-success">
-
-**EXERCISE**:
-
-Mimick the functioning of the *reverse* command using the appropriate slicing command:
-
-<details><summary>Hints</summary>
-
-- The slicing syntax is `L[start:stop:stride]` and the stride can be a negative value
-- To access from start till end, the `start` and `stop` can be empty.
+__Remember__: 
     
-</details>    
+ The methods of a list update the list __in-place__, so we do not reassign the output to a variable name.
     
-</div>
-
-```python clear_cell=true
-a_third_list[::-1]
-```
-
-------------
+</div> 
 
 
-Concatenating lists is just the same as summing both lists:
+Concatenating lists is the same as summing both lists:
 
 ```python
 a_list = ['pink', 'orange']
@@ -202,74 +201,177 @@ a_concatenated_list = a_third_list + a_list
 a_concatenated_list
 ```
 
-<div class="alert alert alert-danger">
-    <b>Note</b>: Why is the following not working?
-</div>
+The multiplication of a list with a value N will repeat the same list N times:
 
 ```python
-reverted = a_third_list.reverse()
-## comment out the next lines to test the error:
-#a_concatenated_list = a_third_list + reverted
-#a_concatenated_list
-```
-
-The list itself is reversed and no output is returned, so reverted is None, which can not be added to a list
-
-------------
-
-```python
-# Repeating lists
-a_repeated_list = a_concatenated_list*10
+a_repeated_list = a_concatenated_list * 4
 print(a_repeated_list)
 ```
 
-**List comprehensions**
-
-List comprehensions are a very powerful functionality. It creates an in-list for-loop option, looping through all the elements of a list and doing an action on it, in a single, readable line.
+### Exercises
 
 ```python
-number_list = [1, 2, 3, 4]
-[i**2 for i in number_list]
+pressures_hPa = [1013, 1003, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]
 ```
 
-and with conditional options:
+<div class="alert alert-success">
 
-```python
-[i**2 for i in number_list if i>1]
+**EXERCISE**:
+
+Change the 3rd element of the `pressures_hPa` list to the value 1111.
+
+<details><summary>Hints</summary>
+
+- Selecting elements require square brackets `[]`
+- Python starts counting at 0, so the third element has index 2
+    
+</details>    
+    
+</div>
+
+```python tags=["nbtutor-solution"]
+pressures_hPa[2] = 1111
+pressures_hPa
 ```
 
-```python
-[i**2 for i in number_list if i>1]
+<!-- #region -->
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Insert an additional measured pressure value of `1212` on position 5 of the list (making the list one element larger).
+
+<details><summary>Hints</summary>
+
+- Explore the available list _methods_ by using the TAB key after the dot: `pressures_hPa.` + TAB. Which method would be useful to _insert_ a new element?
+- Remember that list methods do adjust the list in-place.
+
+    
+</details>    
+    
+</div>
+<!-- #endregion -->
+
+```python tags=["nbtutor-solution"]
+pressures_hPa.insert(4, 1212)
+pressures_hPa
 ```
 
-```python
-# Let's try multiplying with two on a list of strings:
-print([i*2 for i in a_repeated_list])
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Select the last 3 elements of the list `pressures_hPa`.
+
+<details><summary>Hints</summary>
+
+- You can count elements backwards from the end by using a negative index.
+- The syntax to select elements is `L[start:stop:stride]`, with each of them optional.
+    
+</details>    
+    
+</div>
+
+```python tags=["nbtutor-solution"]
+pressures_hPa[-3:]
 ```
 
-Cool, this works! let's check more about strings:
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Select all of the even-numbered items from the variable `pressures_hPa`.
+
+<details><summary>Hints</summary>
+
+- Start with element 1 (which is the second element, since indexing starts at 0), go on until the end (since no end is given), and uses a step size of 2 (i.e., selects every second element).
+    
+</details>    
+    
+</div>
+
+```python tags=["nbtutor-solution"]
+pressures_hPa[1::2]
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Explain the difference between `sorted(pressures_hPa)` and `pressures_hPa.sort()`.
+
+<details><summary>Hints</summary>
+
+- `.sort()` is a list method whereas the `sorted` is a standard Python function  
+    
+</details>    
+    
+</div>
+
+```python tags=["nbtutor-solution"]
+# Returns a sorted copy of the list (the original list `pressures_hPa` remains unchanged)
+print(sorted(pressures_hPa))
+# The list methos `sort` sorts the list in-place and does not return anything on itself
+print(pressures_hPa.sort())
+print(pressures_hPa)
+```
+
+<!-- #region -->
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Why is the following not working?
+    
+```python
+a_third_list = ['red', 'blue', 'green', 'black', 'white']
+reverted = a_third_list.reverse()
+a_concatenated_list = a_third_list + reverted    
+```
+    
+- Try out the code snippet yourself and clarify why this raises an error. 
+- Fix the error so the `a_third_list` is concatenated with the reverse of `a_third_list`
+
+<details><summary>Hints</summary>
+
+- A list method updated the list in-place.
+- To create a copy instead of a view on the data, use the `copy()` method.    
+    
+</details>    
+    
+</div>
+<!-- #endregion -->
+
+```python tags=["nbtutor-solution"]
+a_third_list = ['red', 'blue', 'green', 'black', 'white']
+a_third_list_reversed = a_third_list.copy()
+a_third_list_reversed.reverse()
+a_concatenated_list = a_third_list + a_third_list_reversed
+a_concatenated_list
+```
+
+------------
 
 
-#### Strings
+## Strings
 
 
-NOTE 2024 -> just short reference to list (slicing,...) and that it is immutable
-https://swcarpentry.github.io/python-novice-gapminder/11-lists.html#character-strings-can-be-indexed-like-lists.
-
-
-Different string syntaxes (simple, double or triple quotes)
+A character string is a 'container' of individual characters. Different string syntaxes do exist: simple, double or triple quotes:
 
 ```python
-s = 'Never gonna give you up'
-print(s)
-s = "never gonna let you down"
-print(s)
-s = '''Never gonna run around 
+lyric = 'Never gonna give you up'
+print(lyric)
+
+lyric = "never gonna let you down"
+print(lyric)
+
+lyric = '''Never gonna run around 
     and desert you'''         
-print(s)
-s = """Never gonna make you cry, 
+print(lyric)
+
+lyric = """Never gonna make you cry, 
     never gonna say goodbye"""
-print(s)
+print(lyric)
 ```
 
 ```python
@@ -278,154 +380,131 @@ print(s)
 #print("Hi, what's up?")
 ```
 
+<div class="alert alert-info">
+
+__Remember__: 
+    
+ Single `'` and double `"` quotes are the same and can be interchanged. See the [official Python style guidelines](https://peps.python.org/pep-0008/#string-quotes).
+    
+</div> 
+
+
 The newline character is **\n**, and the tab character is **\t**.
 
 ```python
-print('''Never gonna tell a lie and hurt you.
-Never gonna give you up,\tnever gonna let you down
-Never \ngonna\n run around and\t desert\t you''')
+print("Never gonna tell a lie and hurt you. Never gonna give you up,\tnever gonna let you down Never \ngonna\n run around and\t desert\t you")
 ```
 
-Strings are collections like lists. Hence they can be indexed and sliced, using the same syntax and rules.
+Strings are a container just like lists. Hence they can be __indexed and sliced__, using the same syntax and rules:
 
 ```python
-a_string = "hello"
+a_string = "Python course"
 print(a_string[0])
 print(a_string[1:5])
 print(a_string[-4:-1:2])
 ```
 
-Accents and special characters can also be handled in Unicode strings (see http://docs.python.org/tutorial/introduction.html#unicode-strings).
+A string is __an immutable object__ and it is not possible to modify its contents. Immutable obects (e.g. strings) can’t be changed after creation, mutable objects (e.g. lists) can be modified in place after creation.
 
-```python
-print(u'Hello\u0020World !')
-```
-
-A string is an immutable object and it is not possible to modify its contents. One may however create new strings from the original one.
-
-```python
+```python tags=[]
 #a_string[3] = 'q'   # uncomment this cell
 ```
 
-We won't introduce all methods on strings, but let's check the namespace and apply a few of them:
+String objects also provide a number of __methods__. One can explore the namespace using `dir()` or using the TAB-key:
 
-```python
+```python tags=[]
 #dir(str) # uncomment this cell
 ```
 
 ```python
 another_string = "Strawberry-raspBerry pAstry package party"
-another_string.lower().replace('r', 'l', 7)
+another_string.lower().replace("r", "s", 7)
 ```
 
-String formatting to make the output as wanted can be done as follows:
+__String formatting__
+
+[Formatted String Literals](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals) are a powerful way to include the value of Python expressions inside a string:
+
+- prefixing the string with `f`
+- write Python expressions as `{ expression }`
 
 ```python
-print('An integer: %i; a float: %f; another string: %s' % (1, 0.1, 'string'))
+an_integer = 1
+a_float = 2.0
+a_string = "Python course"
+
+f"An integer: {an_integer}; a float: {a_float}; another string: {a_string}"
 ```
 
-The [`format` string print](https://pyformat.info/) options in python 3 are able to interpret the conversions itself:
+Let's say we have multiple data files in a directory on our computer and we want to access a specific file using a configuration parameter:
 
 ```python
-print('An integer: {}; a float: {}; another string: {}'.format(1, 0.1, 'string'))
-```
-
-```python
-n_dataset_number = 20
-sFilename = 'processing_of_dataset_%d.txt' % n_dataset_number
-print(sFilename)
-```
-
-<div class="alert alert alert-success">
-    <b>Exercise</b>: With the `dir(list)` command, all the methods of the list type are printed. However, we're not interested in the hidden methods. Use a list comprehension to only print the non-hidden methods (methods with no starting or trailing '_'):
-</div>
-
-```python clear_cell=true
-[el for el in dir(list) if not el[0]=='_']
-```
-
-<div class="alert alert alert-success">
-    <b>Exercise</b>: Given the previous sentence `the quick brown fox jumps over the lazy dog`, split the sentence and put all the word-lengths in a list. 
-</div>
-
-```python
-sentence = "the quick brown fox jumps over the lazy dog"
-```
-
-```python clear_cell=true
-#split in words and get word lengths
-[len(word) for word in sentence.split()]
+dataset_id = 20
+file_name= f"processing_of_dataset_{dataset_id}.txt"
+file_name
 ```
 
 ------------
 
 
-#### Dictionaries
+## Dictionaries
 
 
-A dictionary is basically an efficient table that **maps keys to values**. It is an **unordered** container
-
-It can be used to conveniently store and retrieve values associated with a name
+Besides air pressure, I also measure temperature and I'd like to keep the measurements together. 
 
 ```python
-# Always key : value combinations, datatypes can be mixed
-hourly_wage = {'Jos':10, 'Frida': 9, 'Gaspard': '13', 23 : 3}
-hourly_wage
+pressures_hPa = 1013
+temperature_degree = 23
 ```
+
+Storing them all in a single list would make is hard to work with. I want a _container_ or _collection_ data type that maps a name to values. 
+
+We can use a dictionary that **maps keys to values**:
+
+- Contained within curly brackets `{...}`.
+- Each element is a combination of a key and a value separated by a colon: `key: value`.
+- Elements separated by commas `,`.
 
 ```python
-hourly_wage['Jos']
+measurement = {"pressure_hPa": pressures_hPa,
+               "temperature_degree": temperature_degree
+              }
+measurement
 ```
 
-Adding an extra element:
+A dictionary can be used to store and retrieve values associated with a name. To retrieve the value, use square brackets `[]` with the key:
 
 ```python
-hourly_wage['Antoinette'] = 15
-hourly_wage
+measurement["pressure_hPa"]
 ```
 
-You can get the keys and values separately:
+New key-value combinations can be added by providing a new key
 
 ```python
-hourly_wage.keys()
+measurement['location'] = "Ostend"
+measurement
 ```
+
+Assigning a new value to an existing key will overwrite the original value:
 
 ```python
-hourly_wage.values()
+measurement['location'] = "Ghent"
+measurement
 ```
+
+You can access the keys and values separately or the items as a list-alike:
 
 ```python
-hourly_wage.items() # all combinations in a list
-```
-
-```python
-# ignore this loop for now, this will be explained later
-for key, value in hourly_wage.items():
-    print(key,' earns ', value, '€/hour')
-```
-
-<div class="alert alert alert-success">
-    <b>Exercise</b> Put all keys of the `hourly_wage` dictionary in a list as strings.  If they are not yet a string, convert them:
-</div>
-
-```python
-hourly_wage = {'Jos':10, 'Frida': 9, 'Gaspard': '13', 23 : 3}
-```
-
-```python clear_cell=true
-str_key = []
-for key in hourly_wage.keys():
-    str_key.append(str(key))
-str_key
+list(measurement.keys()), list(measurement.values()), list(measurement.items())
 ```
 
 ----------------------------
 
 
-#### Tuples
+## Tuples
 
 
-Tuples are basically immutable lists. The elements of a tuple are written between parentheses, or just separated by commas
+Tuples are __immutable lists__. The elements of a tuple are written between parentheses, or just separated by commas
 
 ```python
 a_tuple = (2, 3, 'aa', [1, 2])
@@ -437,6 +516,126 @@ a_second_tuple = 2, 3, 'aa', [1,2]
 a_second_tuple
 ```
 
-the key concept here is mutable vs. immutable
-* mutable objects can be changed in place
-* immutable objects cannot be modified once created
+<div class="alert alert-info">
+
+__Remember__: 
+    
+mutable vs. immutable:
+
+- Immutable objects cannot be modified once created. When we want to change the value of a string we can only replace the old with a completely new.
+- Mutable objects can be changed in place. We can change individual elements, append new elements, or reorder the whole. If you want variables with mutable values to be independent, you must make a copy of the value when you assign it.
+    
+</div> 
+
+
+
+
+### Exercises
+
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Assign the string "abracadabra" to a variable `my_spell`. Convert the string variable `my_spell` to uppercase using the appropriate string method.
+
+<details><summary>Hints</summary>
+
+- Use the TAB-key to explore the availabal methods of a string.
+- A method need to be called using round brackets (like any other function).
+    
+</details>    
+    
+</div>
+
+```python tags=["nbtutor-solution"]
+my_spell = "abracadabra"
+my_spell.upper()
+```
+
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+Assign the string "abracadabra" to a variable `my_spell`. Select all of the even-numbered characters from the variable `my_spell`.
+
+<details><summary>Hints</summary>
+
+- Strings are a container of characters and can be sliced just like lists.
+    
+</details>    
+    
+</div>
+
+```python tags=["nbtutor-solution"]
+my_spell = "abracadabra"
+my_spell[1::2]
+```
+
+<!-- #region -->
+<div class="alert alert-success">
+
+**EXERCISE**:
+
+You did a set of water quality measurements of Dissolved oxygen (mg/l) in different rivers on 18 March 2024. The measurements are combined in a dictionary with variable name `water_quality`.  
+    
+- Demer: 9.5 mg/l
+- Nete: 8.4 mg/l
+- Leie: 6.6 mg/l
+    
+To automate reporting, you want to automate the print statement of the measured dissolved oxygen for a given location:
+    
+- Define a variable `report_location` which represents one of the measurement locations, e.g. "Nete"
+- Use the variable `report_location` to automate the output of the sentence "The measured dissolved oxygen in REPORT-lOCATION on March 3rd 2024 was REPORTED-VALUE mg/l.'. For the "Nete", this would be 'The measured dissolved oxygen in Nete on March 18th 2024 was 8.4 mg/l.'
+    
+Changing the variable `report_location` to "Demer" should provide the correct output statement for the "Demer".
+
+<details><summary>Hints</summary>
+
+    
+</details>    
+
+- This requires a combination of a literal string (prefix a string with an f) and the selecting of an element from a dictionary (using square brackets `[]`).    
+- Note the different usage of the curly braces `{}`: First to create a dictionary and second to contain the python statements in the literal string.
+    
+</div>
+<!-- #endregion -->
+
+```python
+water_quality = {
+    "Demer": 9.5,
+    "Nete": 8.4,
+    "Leie": 6.6
+}
+```
+
+```python tags=["nbtutor-solution"]
+report_location = "Nete"
+f"The measured dissolved oxygen in {report_location} on March 18th 2024 was {water_quality[report_location]} mg/l."
+```
+
+## For data analysis, a table would be more appropriate... Pandas
+
+```python
+import pandas as pd
+```
+
+```python
+pressures_hPa = [1013, 1003, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]
+temperature_degree = [23, 20, 17, 8, 12, 5, 16, 22, -2, 16]
+locations = ['Ghent - Sterre', 'Ghent - Coupure', 'Ghent - Blandijn', 
+             'Ghent - Korenlei', 'Ghent - Kouter', 'Ghent - Coupure',
+             'Antwerp - Groenplaats', 'Brussels- Grand place', 
+             'Antwerp - Justitipaleis', 'Brussels - Tour & taxis']
+
+measurements = pd.DataFrame({'pressure_hPa': pressures_hPa,
+                'temperature_degree': temperature_degree,
+                'location': locations})
+measurements
+```
+
+The Pandas package provides important container types for data manipulation: Tables aka DataFrames.
+
+```python
+
+```

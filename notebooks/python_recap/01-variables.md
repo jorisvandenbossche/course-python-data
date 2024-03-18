@@ -172,7 +172,7 @@ Try to print the variable `pressure_p` using the `print` function. Check the out
 
 ```python tags=["nbtutor-solution"]
 # Variables must be created before they are used.
-print(pressure_p)
+# print(pressure_p)
 ```
 
 <div class="alert alert-warning">

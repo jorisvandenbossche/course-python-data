@@ -61,7 +61,7 @@ max("a", "A")  # “larger” and “smaller” use (0-9, A-Z, a-z) to compare l
 Functions may only work for certain (combinations of) arguments:
 
 ```python
-max(1, 'a')
+#max(1, 'a')  # uncommment this line
 ```
 
 Functions may have default values for some arguments
