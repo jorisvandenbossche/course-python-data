@@ -19,7 +19,7 @@ jupyter:
 
 ---
 
-> This notebook is based on material of the [*Python Scientific Lecture Notes*](https://scipy-lectures.github.io/), and the [*Software Carptentry: Programming with Python course*](https://swcarpentry.github.io/python-novice-gapminder).
+> This notebook is based on material of the [*Python Scientific Lecture Notes*](https://scipy-lectures.github.io/), the [*Software Carptentry: Programming with Python gapminder course*](https://swcarpentry.github.io/python-novice-gapminder) and the [*Software Carptentry: Programming with Python inflammation course*](https://swcarpentry.github.io/python-novice-inflammation/).
 
 
 ## Introduction
@@ -333,7 +333,8 @@ The measured air pressure at sea level is 1010 hPa. Calculate the corresponding 
 
 <details><summary>Hints</summary>
 
-- 
+- Remember that Python can be used as a calculator
+- Check the [math module](https://docs.python.org/3/library/math.html) to find the `exp` operator function
 
 FYI, see https://www.math24.net/barometric-formula/ or https://en.wikipedia.org/wiki/Atmospheric_pressure    
     
