@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.1
+      jupytext_version: 1.16.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -76,7 +76,7 @@ fahr_to_celsius(32)
 
 In fact, calling our own function is no different from calling any other function!
 
-Functions allow us to encapsulate complexity so that we can treat it as a single "thing" and provides re-use by 'writing one time, using many times'. Each function is a small machine in our workflow.
+Functions allow us to encapsulate complexity so that we can treat it as a single "thing" and provides re-use by "writing one time, using many times". Each function is a small machine in our workflow.
 
 
 The variable `temperature` only exists within the function itself. We call it a __local variable__ because they no longer exist once the function is done executing. If we try to access their values outside of the function, we will encounter an error:
@@ -98,7 +98,7 @@ def double_it(x):
 double_it(3)
 ```
 
-```python tags=[]
+```python
 #double_it()  # uncomment line
 ```
 
@@ -111,9 +111,10 @@ def multiply_it(x, multiplication_factor=2):
 
 print(multiply_it(3))
 print(multiply_it(3, 3))
+print(multiply_it(3, multiplication_factor=4))
 ```
 
-The order of the keyword arguments does not matter, but it is good practice to use the same ordering as the function's definition. Keyword arguments 
+The order of the keyword arguments (when specifying by name) does not matter, but it is good practice to use the same ordering as the function's definition. Keyword arguments 
 are a very convenient feature for defining functions with a variable number of arguments, especially when default values are to be used in most calls to the function.
 
 
@@ -159,9 +160,9 @@ variable_args('one', 'two', x=1, y=2, z=3)
 ## Docstrings
 
 
-Document waht a function does and its parameters to remind ourselves and our colleagues later what it’s for and how to use it.
+Document what a function does and its parameters to remind ourselves and our colleagues later what it’s for and how to use it.
 
-A good overview is given in the [numpydoc formatting guidelines](https://numpydoc.readthedocs.io/en/latest/format.html) (other formatting styles that compy to the [Docstring Conventions](https://peps.python.org/pep-0257/) do exist as well, but numpy docstring is default within the scientific Python world). Make sure to provide a summary and parameters as a minimum.
+A good overview is given in the [numpydoc formatting guidelines](https://numpydoc.readthedocs.io/en/latest/format.html) (other formatting styles that comply to the [Docstring Conventions](https://peps.python.org/pep-0257/) do exist as well, but numpy docstring format is the default within the scientific Python world). Make sure to provide a summary and parameters as a minimum.
 
 ```python
 def funcname(param):
@@ -242,7 +243,7 @@ Use the function `barometric_formula` to calculate the corresponding air pressur
 
 <details><summary>Hints</summary>
 
-- See notebook 02-functions_use.ipynb for the for the code itsef, but encapsulate this into a function.
+- See notebook 02-functions_use.ipynb for the for the code itself, but encapsulate this into a function.
 - Do not forget to add a docstring, see the specification on the [numpy docstring documentation](https://numpydoc.readthedocs.io/en/latest/format.html).
 
 FYI, see https://www.math24.net/barometric-formula/ or https://en.wikipedia.org/wiki/Atmospheric_pressure    

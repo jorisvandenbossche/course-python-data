@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -39,8 +39,6 @@ water_quality = {
 ```
 
 ```{code-cell} ipython3
-:tags: []
-
 report_location = "Nete"
 f"The measured dissolved oxygen in {report_location} on March 18th 2024 was {water_quality[report_location]} mg/l."
 ```
@@ -104,11 +102,11 @@ for i in range(3):
     print(i)
 ```
 
-The built-in function `enumerate` takes a iterable collection (e.g. a list) and generates a new sequence of the same length. Each element of the new sequence is a pair composed of the index (0, 1, 2,…) and the value from the original sequence:
+The built-in function `enumerate` takes an iterable collection (e.g. a list) and generates a new sequence of the same length. Each element of the new sequence is a pair composed of the index (0, 1, 2,…) and the value from the original sequence:
 
 ```{code-cell} ipython3
-for idx, do in enumerate([9.5, 8.4, 6.6]):
-    print(idx, do)
+for idx, value in enumerate([9.5, 8.4, 6.6]):
+    print(idx, value)
 ```
 
 __Looping over dictionary__
@@ -141,7 +139,8 @@ for key in water_quality.keys():
 
 Use `if` statements to control whether or not a block of code is executed. The structure is similar to a `for` statement:
 
-- First line opens with if and ends with a colon `:`
+- First line opens with `if` and ends with a colon `:`
+- The content between `if` and `:` is evaluated to True or False
 - Body containing one or more statements is indented (usually by 4 spaces)
 - Use `else` to execute a block of code when an if condition is not true
 - Use `elif` to specify additional tests (can be multiple)
@@ -264,13 +263,8 @@ print(acc)
 A number of raw measurements of conductivity `conductivities = [3.3, 4.5, 6.6]` need to be adjusted by the calibration parameters according to $a+conductivity*r$ with $a$ and $r$ respectively 0.43 and 1.35.
     
 - Loop through the conductivities list
-- print for each of the elements the calibrated value using the calibration parameters $a$ and $r$     
+- print for each of the elements the calibrated value using the calibration parameters $a$ and $r$   
 
-<details><summary>Hints</summary>
-    
-    
-</details>
-   
 </div>
 
 ```{code-cell} ipython3
@@ -290,7 +284,7 @@ for conductivity in conductivities:
 
 **EXERCISE**:
 
-A number of air pressure measurements `pressures_hPa = [1013, 950, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]` need to be processed. You want to enlist the indices (position) of the list with an air pressure below 1000 (hPa) and store these indices in a new variabe `indices`. 
+A number of air pressure measurements `pressures_hPa = [1013, 950, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]` need to be processed. You want to enlist the indices (position) of the values with an air pressure below 1000 (hPa) and store these indices in a new variabe `indices`. 
     
 - Create an empty list with variable name `indices`
 - Loop through the `pressures_hPa` list
@@ -300,7 +294,7 @@ Print the list `indices` (it should contain the values [1, 5, 6, 8])
     
 <details><summary>Hints</summary>
     
-- Rememeber `enumerate` to track the index while looping though a list in a for-loop?
+- Remember `enumerate` to track the index while looping though a list in a for-loop?
 - `append` is a list method that can be used to add an en element to a list __in-place__
         
 </details>
@@ -340,7 +334,7 @@ You want to automatically raise an alert when conditions are not optimal:
 <details><summary>Hints</summary>
 
 - To loop through a dictionary, make sure to use the `items()` to be able to use the key (location) and the value (concentration)
-- Multiple conditions can be combined using `|` or `&`. Make sure to add round brackets fo the order of execution is respected. 
+- Multiple conditions can be combined using `|` or `&`. Make sure to add round brackets so the order of execution is respected. 
 - To include the variables in the print statement, check the [formatted string literals](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)
     
 </details>
@@ -356,7 +350,7 @@ water_quality = {"Demer": 9.5, "Nete": 8.4, "Leie": 6.6, "Dender": 3, "Dijle": 2
 
 for location, do in water_quality.items():
     if (do > 20) | (do < 5):
-        print(f"Alert: Poor conditions measured at {location} with DO concetration of {do} mg/l.")
+        print(f"Alert: Poor conditions measured at {location} with DO concentration of {do} mg/l.")
 ```
 
 <div class="alert alert-success">
@@ -379,7 +373,7 @@ You want to process the files with a specific function (data pipeline) based on 
 
 <details><summary>Hints</summary>
 
-- Check the string-methods to find a way to test if a string `startswith` something
+- Check the string-methods to find a way to test if a string "starts with" something
 - You need if/elif and else to handle all options
 - To include the file name in the print statement, check the [formatted string literals](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals)
     
@@ -408,7 +402,7 @@ for file_name in file_names:
 
 +++
 
-### Loop over files in directory
+### Loop over files in a directory
 
 +++
 
@@ -447,8 +441,8 @@ for file_path in Path("../").glob("*"):
 
 __Reminder__: 
     
-Any Python object has certain characteristics - __attributes__, e.g. `file_path.suffix` which do not require round brackets. An object also provides a number of methods to act on the object - __methods__, e.g. `file_path.is_dir()` which require round brackets `()`.
-    
+Any Python object has certain characteristics - __attributes__, e.g. `file_path.suffix` which do not require round brackets. An object also provides a number of functions to act on the object - __methods__, e.g. `file_path.is_dir()` which require round brackets `()`.
+
 </div>
 
 +++

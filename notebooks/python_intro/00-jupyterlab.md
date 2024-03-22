@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -26,7 +26,7 @@ kernelspec:
 
 To run Python, we are going to use Jupyter Notebooks via JupyterLab for the remainder of this course. Jupyter notebooks are common in data science and visualization and serve as a convenient common-denominator experience for running Python code interactively. Jupyter notebooks let us __execute and view the results of our Python code interactively__ within the notebook.
 
-__JupyterLab__ is an application server with a web user interface from [Project Jupyter](https://jupyter.org/) that enables one to work with documents and activities such as __Jupyter notebooks__ (a notebook is a file stored on your computer as a `.json`-file).
+__JupyterLab__ is an application server with a web user interface from [Project Jupyter](https://jupyter.org/) that enables one to work with documents and activities such as __Jupyter notebooks__ (a notebook is a file stored on your computer as a JSON file).
 
 +++
 

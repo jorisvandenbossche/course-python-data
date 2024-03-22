@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.1
+      jupytext_version: 1.16.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -133,9 +133,9 @@ some_str.replace?
 
 Importing packages/libraries is always the first thing you do in Python, since it offers the functionalities to work with. It is like putting your equipment on the table to start working with it:
 
-- Use import to load a library module into a program’s memory.
+- Use `import` to load a library module into a program’s memory.
 - Then refer to things from the module as `module_name.thing_name`.
-   Python uses . to mean “part of”.
+   Python uses `.` to mean “part of”.
    
 Let's import `math`, one of the modules in the standard Python library:
 
@@ -270,7 +270,7 @@ random.randint(1, 6)
 random.randrange(1, 7)
 ```
 
-<!-- #region tags=[] -->
+<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**:
@@ -342,7 +342,7 @@ FYI, see https://www.math24.net/barometric-formula/ or https://en.wikipedia.org/
     
 </div>
 
-```python tags=[]
+```python
 standard_temperature = 288.15
 gas_constant = 8.31446
 gravit_acc = 9.81

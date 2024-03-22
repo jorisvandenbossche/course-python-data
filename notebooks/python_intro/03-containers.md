@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.1
+      jupytext_version: 1.16.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -23,7 +23,7 @@ jupyter:
 ## Introduction
 
 
-If I measure air pressure multiple times, doing calculations with a hundred variables called `pressure_001`, `pressure_002`, etc., would be slow. We need _container_ or _collection_ data types to combine multiple values in a single object.
+If I measure air pressure multiple times, doing calculations with a hundred variables called `pressure_001`, `pressure_002`, etc., would be slow and inconvenient. We need _container_ or _collection_ data types to combine multiple values in a single object.
 
 
 ## Lists
@@ -84,7 +84,7 @@ a_list
 
 __Slicing:__ 
 
-Obtaining sublists of regularly-spaced elements by using the indexes (either continuous or non-Continuous with a step size):
+Obtaining sublists of regularly-spaced elements by using the indexes (either contiguous or non-contiguous with a step size):
 
 ```python
 another_list = ['first', 'second', 'third', 'fourth', 'fifth']
@@ -108,17 +108,17 @@ Python reports an `IndexError` if we attempt to access a value that doesn’t ex
 <div class="alert alert-info">
 
 __Info__: 
-    
+
+* Slicing syntax: `L[start:stop:step]`
 * `L[start:stop]` contains the elements with indices i so `start <= i < stop`
 * i ranging from start to stop-1. Therefore, L[start:stop] has (stop-start) elements.
-* Slicing syntax: `L[start:stop:stride]`
 * All slicing parameters are optional
-* start and stop can be negative (counting backwards)
-   
+* All slicing parameters can be negative (counting backwards)
+
 </div> 
 
 
-When assigning a list to a new variable name, only a view is created and both names are linked to the same data in memory on your computer (cfr. two sticky notes specifiying the same). When changing one of them, the other will also be adjusted:
+When assigning a list to a new variable name, both names are linked to the same data in memory on your computer (cfr. two sticky notes specifiying the same). When changing one of them, the other will also be adjusted:
 
 ```python
 a = ['a',  'b']
@@ -140,7 +140,7 @@ print(a)
 
 __Warning__: 
     
-With _views_ equal to each other, they point to the same point in memory. Changing one of them is also changing the other!
+With two variables being identical, they point to the same point in memory. Changing one of them is also changing the other!
     
 </div>
 
@@ -150,11 +150,11 @@ With _views_ equal to each other, they point to the same point in memory. Changi
 
 You can enlist the available _methods_ of a `list` using the `TAB` key  or using the (built-in) `dir()`-function:
 
-```python tags=[]
+```python
 #dir(list)
 ```
 
-```python tags=[]
+```python
 a_third_list = ['red', 'blue', 'green', 'black', 'white']
 ```
 
@@ -264,7 +264,7 @@ Select the last 3 elements of the list `pressures_hPa`.
 <details><summary>Hints</summary>
 
 - You can count elements backwards from the end by using a negative index.
-- The syntax to select elements is `L[start:stop:stride]`, with each of them optional.
+- The syntax to select elements is `L[start:stop:step]`, with each of them optional.
     
 </details>    
     
@@ -404,13 +404,13 @@ print(a_string[-4:-1:2])
 
 A string is __an immutable object__ and it is not possible to modify its contents. Immutable obects (e.g. strings) can’t be changed after creation, mutable objects (e.g. lists) can be modified in place after creation.
 
-```python tags=[]
+```python
 #a_string[3] = 'q'   # uncomment this cell
 ```
 
 String objects also provide a number of __methods__. One can explore the namespace using `dir()` or using the TAB-key:
 
-```python tags=[]
+```python
 #dir(str) # uncomment this cell
 ```
 
@@ -570,7 +570,6 @@ my_spell = "abracadabra"
 my_spell[1::2]
 ```
 
-<!-- #region -->
 <div class="alert alert-success">
 
 **EXERCISE**:
@@ -590,14 +589,11 @@ Changing the variable `report_location` to "Demer" should provide the correct ou
 
 <details><summary>Hints</summary>
 
-    
-</details>    
-
 - This requires a combination of a literal string (prefix a string with an f) and the selecting of an element from a dictionary (using square brackets `[]`).    
 - Note the different usage of the curly braces `{}`: First to create a dictionary and second to contain the python statements in the literal string.
-    
+</details>
+
 </div>
-<!-- #endregion -->
 
 ```python
 water_quality = {
