@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -130,7 +130,7 @@ or loop over the keys elements only:
 
 ```{code-cell} ipython3
 for key in water_quality.keys():
-    print('Location: {}'.format(key))
+    print(f"Location: {key}")
 ```
 
 ## Conditionals
