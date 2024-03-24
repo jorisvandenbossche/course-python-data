@@ -124,7 +124,7 @@ __ALERT!__
   
 Default values are evaluated when the function is defined, not when it is called. This can be problematic when using mutable types (e.g. dictionary or list) and modifying them in the function body, since the modifications will be persistent across invocations of the function.
 
-Do not use lists of dictionaries as default arguments of a function!    
+__Do not use lists of dictionaries as default arguments of a function__!    
     
 </div>
 

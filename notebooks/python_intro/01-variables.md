@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.16.1
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -43,7 +43,7 @@ pressure_hPa = 1010 # hPa
 
 __Info__: 
     
-Everything in a line of code following the ‘#’ symbol is a comment that is ignored by Python. Comments allow programmers to leave explanatory notes.
+Everything in a line of code following the __‘#’ symbol is a comment__ that is ignored by Python. Comments allow programmers to leave explanatory notes.
     
 </div>
 

@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -16,6 +16,8 @@ kernelspec:
 
 > *© 2024, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
+-----
+
 > This notebook is based on material of the [*Python Scientific Lecture Notes*](https://scipy-lectures.github.io/), the [*Software Carptentry: Programming with Python gapminder course*](https://swcarpentry.github.io/python-novice-gapminder) and the [*Software Carptentry: Programming with Python inflammation course*](https://swcarpentry.github.io/python-novice-inflammation/).
 
 +++
@@ -24,7 +26,7 @@ kernelspec:
 
 +++
 
-To run Python, we are going to use Jupyter Notebooks via JupyterLab for the remainder of this course. Jupyter notebooks are common in data science and visualization and serve as a convenient common-denominator experience for running Python code interactively. Jupyter notebooks let us __execute and view the results of our Python code interactively__ within the notebook.
+To run Python, we are going to use Jupyter Notebooks via JupyterLab for this course. Jupyter notebooks are common in data science and visualization and serve as a convenient common-denominator experience for running Python code interactively. Jupyter notebooks let us __execute and view the results of our Python code interactively__ within the notebook.
 
 __JupyterLab__ is an application server with a web user interface from [Project Jupyter](https://jupyter.org/) that enables one to work with documents and activities such as __Jupyter notebooks__ (a notebook is a file stored on your computer as a JSON file).
 
@@ -54,7 +56,7 @@ Jupyter mixes code and text in different types of blocks, called cells. We often
 
 ```{code-cell} ipython3
 # Code cell, then we are using python
-print('Hello DS')
+print('Hello Course')
 ```
 
 ```{code-cell} ipython3
