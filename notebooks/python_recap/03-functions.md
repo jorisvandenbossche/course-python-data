@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.0
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -30,7 +30,7 @@ jupyter:
 
 Function blocks must be indented as other control-flow blocks
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def the_answer_to_the_universe():
     print(42)
 
@@ -52,7 +52,7 @@ the_answer_to_the_universe()
 
 Functions can *optionally* return values
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def calcAreaSquare(edge):
     return edge**2
 calcAreaSquare(2.3)
@@ -63,14 +63,14 @@ calcAreaSquare(2.3)
 
 Mandatory parameters (positional arguments)
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def double_it(x):
     return 2*x
 
 double_it(3)
 ```
 
-```python run_control={"frozen": false, "read_only": false} jupyter={"outputs_hidden": true}
+```python
 #double_it()
 ```
 
@@ -80,25 +80,25 @@ The order of the keyword arguments does not matter, but it is good practice to u
 
 *Keyword arguments* are a very convenient feature for defining functions with a variable number of arguments, especially when default values are to be used in most calls to the function.
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def double_it (x=1):
     return 2*x
 
 print(double_it(3))
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 print(double_it())
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def addition(int1=1, int2=1, int3=1):
     return int1 + 2*int2 + 3*int3
 
 print(addition(int1=1, int2=1, int3=1))
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 print(addition(int1=1, int3=1, int2=1)) # sequence of these named arguments do not matter
 ```
 
@@ -112,7 +112,7 @@ Default values are evaluated when the function is defined, not when it is called
 
 Using an immutable type in a keyword argument:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bigx = 10
 def double_it(x=bigx):
     return x * 2
@@ -122,25 +122,25 @@ double_it()
 
 Using an mutable type in a keyword argument (and modifying it inside the function body)
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def add_to_dict(args={'a': 1, 'b': 2}):
     for i in args.keys():
         args[i] += 1
     print(args)
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 add_to_dict
 add_to_dict()
 add_to_dict()
 add_to_dict()
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 #the {'a': 1, 'b': 2} was created in the memory on the moment that the definition was evaluated
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def add_to_dict(args=None):
     if not args:
         args = {'a': 1, 'b': 2}
@@ -151,7 +151,7 @@ def add_to_dict(args=None):
     print(args)
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 add_to_dict
 add_to_dict()
 add_to_dict()
@@ -168,7 +168,7 @@ Special forms of parameters:
 
 
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def variable_args(*args, **kwargs):
     print('args is', args)
     print('kwargs is', kwargs)
@@ -181,7 +181,7 @@ variable_args('one', 'two', x=1, y=2, z=3)
 
 Documentation about what the function does and its parameters. General convention:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 def funcname(params):
     """Concise one-line sentence describing the function.
     
@@ -205,7 +205,7 @@ Functions are first-class objects, which means they can be:
 
 
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 va = variable_args
 va('three', x=1, y=2)
 ```
@@ -220,7 +220,7 @@ Calling them can be done by dir(object):
 
 -------------------------------
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 dd = {'antea': 3, 'IMDC': 2, 'arcadis': 4, 'witteveen': 5, 'grontmij': 1, 'fluves': 6, 'marlinks': 7}
 ```
 
@@ -228,7 +228,7 @@ dd = {'antea': 3, 'IMDC': 2, 'arcadis': 4, 'witteveen': 5, 'grontmij': 1, 'fluve
     <b>EXERCISE</b>: Make a function of the exercise in the previous notebook: Given the dictionary `dd`, check if a key is already existing in the dictionary and raise an exception if the key already exist. Otherwise, return the dict with the element added.
 </div>
 
-```python clear_cell=true run_control={"frozen": false, "read_only": false}
+```python clear_cell=true
 def check_for_key(checkdict, key):
     """
     Function checks the presence of key in dictionary checkdict and returns an 
@@ -239,11 +239,11 @@ def check_for_key(checkdict, key):
         raise Exception('Key already used in this dictionary')
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 check_for_key(dd, 'deme')
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 #check_for_key(dd, 'antea') # uncomment this line
 ```
 
@@ -266,7 +266,7 @@ Python supports object-oriented programming (OOP). The goals of OOP are:
 
 Here is a small example: we create a Student class, which is an object gathering several custom functions (**methods**) and variables (**attributes**), we will be able to use:
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 class Employee():  #object
     
     def __init__(self, name, wage=60.):
@@ -295,21 +295,21 @@ class Employee():  #object
         return self.hours *self.wage
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert = Employee('bert')
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.worked(10.)
 bert.worked(20.)
 bert.wage = 80.
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.calc_earnings()
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 dir(Employee)
 ```
 
@@ -323,7 +323,7 @@ It is just the same as all the other objects we worked with!
     <b>EXERCISE</b>: Extend the class `Employee` with a projects attribute, which is a dictionary. Projects can be added by the method `new_project`. Hours are contributed to a specific project
 </div>
 
-```python clear_cell=true run_control={"frozen": false, "read_only": false}
+```python clear_cell=true
 class Employee():  #object
     
     def __init__(self, name, wage=60.):
@@ -374,28 +374,28 @@ class Employee():  #object
             print(hour, 'worked on project', proj)
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert = Employee('bert')
 bert.new_project('vmm')
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.worked(10., 'vmm')
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.calc_earnings()
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.new_project('pwc')
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.info()
 ```
 
-```python run_control={"frozen": false, "read_only": false}
+```python
 bert.worked(3., 'pwc')
 ```
 

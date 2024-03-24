@@ -1,7 +1,6 @@
 ---
 jupyter:
   jupytext:
-    cell_metadata_filter: -run_control,-deletable,-editable,-jupyter,-slideshow
     formats: ipynb,md
     text_representation:
       extension: .md
