@@ -185,8 +185,10 @@ and to combine multiple conditions:
 
 Operator   |  Description
 ------ | --------
-&       | And (`cond1 & cond2`)
-\|       | Or (`cond1 \| cond2`)
+and (`&`)       | And (`cond1 & cond2`)
+or (`\|`)       | Or (`cond1 \| cond2`)
+
+(`&` and `|` are bitwise operators, useful to combine conditions when we work in Pandas)
 
 ```{code-cell} ipython3
 dissolved_oxygen = 13.
@@ -195,7 +197,7 @@ dissolved_oxygen != 13
 
 ```{code-cell} ipython3
 dissolved_oxygen = 13.
-(dissolved_oxygen < 10) | (dissolved_oxygen > 12)  # Note the round brackets
+(dissolved_oxygen < 10) or (dissolved_oxygen > 12)  # Note the round brackets
 ```
 
 The condition can also be triggered by a function, e.g. a method that returns a True/False:
@@ -349,7 +351,7 @@ water_quality = {"Demer": 9.5, "Nete": 8.4, "Leie": 6.6, "Dender": 3, "Dijle": 2
 :tags: [nbtutor-solution]
 
 for location, do in water_quality.items():
-    if (do > 20) | (do < 5):
+    if (do > 20) or (do < 5):
         print(f"Alert: Poor conditions measured at {location} with DO concentration of {do} mg/l.")
 ```
 
@@ -542,4 +544,8 @@ while level < 1000:
     level += level*2
 
 print(f"While loop ended, current level: {level}")    
+```
+
+```{code-cell} ipython3
+
 ```
