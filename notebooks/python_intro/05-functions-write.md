@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.16.1
+      jupytext_version: 1.14.1
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -281,4 +281,44 @@ def barometric_formula(pressure_sea_level, height=2500):
     return pressure_altitude
 
 barometric_formula(1010), barometric_formula(1010, 2750)
+```
+
+<!-- #region -->
+<div class="alert alert-success">
+
+**EXERCISE**:
+   
+Apply the `barometric_formula` on the following list of air pressures for a height of 1200m and return a list (variable `pressures_hPa_1200`) with the calculated values:
+
+```python
+pressures_hPa = [1013, 1003, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]
+```
+    
+<details><summary>Hints</summary>
+    
+- You can use a regular for-loop and append each value to a new (empty) list OR you can use a list comprehension (see 04-control-flow).  
+
+</details>    
+    
+</div>
+<!-- #endregion -->
+
+```python
+pressures_hPa = [1013, 1003, 1010, 1020, 1032, 993, 989, 1018, 889, 1001]
+```
+
+```python tags=["nbtutor-solution"]
+pressures_hPa_1200 = [barometric_formula(pressure, 1200) for pressure in pressures_hPa]
+pressures_hPa_1200
+```
+
+```python tags=["nbtutor-solution"]
+pressures_hPa_1200 = []
+for pressure in pressures_hPa:
+    pressures_hPa_1200.append(barometric_formula(pressure, 1200))
+pressures_hPa_1200
+```
+
+```python
+
 ```
