@@ -296,8 +296,8 @@ What is the final returned value?
 
 <!-- #endregion -->
 
-<!-- #region tags=["nbtutor-solution"] -->
-```
+```python tags=["nbtutor-solution"]
+print("""
 Order of operations:
 - 1.1 * radiance = 1.1
 - 1.1 - 0.5 = 0.6
@@ -306,8 +306,8 @@ Order of operations:
 - max(2.1, 2.6) = 2.6
 
 At the end, result = 2.6
+""")
 ```
-<!-- #endregion -->
 
 <div class="alert alert-success">
 

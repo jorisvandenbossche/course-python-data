@@ -175,12 +175,12 @@ What happens if you write some Python in a code cell and then you switch it to a
     
 </div>
 
-+++ {"tags": ["nbtutor-solution"]}
+```{code-cell} ipython3
+:tags: [nbtutor-solution]
 
 x = 6 * 7 + 12
 print(x)
-
-+++
+```
 
 ## Execution: SHIFT + ENTER
 
