@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -137,6 +137,8 @@ The `rename()` and `drop()` functions are introduced in [pandas_06_data_cleaning
 
 </details>
 
+</div>
+
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
@@ -200,6 +202,8 @@ Write a function `process_bike_count_data(df)` that performs the processing step
 - Want to know more about proper documenting your Python functions? Check out the official guide of [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html). The `Parameters` and `Returns` sections should always be explained.
 
 </details>
+
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -325,6 +329,8 @@ Create a new pandas Series `df_both` which contains the sum of the counts of bot
 
 </details>
 
+</div>
+
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
@@ -343,6 +349,8 @@ Using the `df_both` from the previous exercise, create a new Series `df_quiet` w
 - Use the `[]` to select data. You can use conditions (so-called _boolean indexing_) returning True/False inside the brackets.
 
 </details>
+
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -363,6 +371,8 @@ Using the original data `df`, select only the intervals for which less than 3 cy
 - Make sure to use `()` around each individual condition.
 
 </details>
+
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -386,6 +396,8 @@ What is the average number of bikers passing every 5 min in each direction?
 
 </details>
 
+</div>
+
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
@@ -404,6 +416,8 @@ What is the average number of bikers passing each hour?
 - `resample` requires an aggregation function that defines how to combine the values within each group (in this case all values within each hour).
 
 </details>
+
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -445,6 +459,8 @@ What is the maximum number of cyclist that passed on a single day calculated on 
 
 </details>
 
+</div>
+
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
@@ -481,15 +497,17 @@ How does the long-term trend look like? Calculate monthly sums and plot the resu
 
 <details><summary>Hints</summary>
 
-- The symbol for monthly resampling is `M`.
+- The symbol for monthly resampling is `ME` or `MS`.
 - Use the `plot` method of Pandas, which will generate a line plot of each numeric column by default.
 
 </details>
 
+</div>
+
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-df_monthly = df.resample('M').sum()
+df_monthly = df.resample('ME').sum()
 df_monthly.plot()
 ```
 
@@ -504,6 +522,8 @@ Let's have a look at some short term patterns. For the data of the first 3 weeks
 - Slicing is done using `[]`, you can use string representation of dates to select from a `datetime` index: e.g. `'2010-01-01':'2020-12-31'`
 
 </details>
+
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -540,6 +560,8 @@ df_hourly['2023-01-01':'2023-01-21'].plot()
 - Just like `resample`, `rolling` requires an aggregate statistic (e.g. mean, median,...) to combine the values within the window.
 
 </details>
+
+</div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -614,7 +636,7 @@ So the daily pattern is clearly different for both directions. In the morning mo
 **Monthly pattern**
 
 ```{code-cell} ipython3
-df_monthly = df.resample('M').sum()
+df_monthly = df.resample('ME').sum()
 ```
 
 ```{code-cell} ipython3
