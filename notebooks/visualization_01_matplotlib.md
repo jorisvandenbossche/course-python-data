@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -145,7 +145,7 @@ ax.plot(x, y, '-')
 # ...
 ```
 
-## An small cheat-sheet reference for some common elements
+## A small cheat-sheet reference for some common elements
 
 ```{code-cell} ipython3
 x = np.linspace(-1, 0, 100)
@@ -158,11 +158,11 @@ fig.subplots_adjust(top=0.9)
 ax.plot(x, x**2, color='0.4', label='power 2')
 ax.plot(x, x**3, color='0.8', linestyle='--', label='power 3')
 
-ax.vlines(x=-0.75, ymin=0., ymax=0.8, color='0.4', linestyle='-.') 
-ax.fill_between(x=x, y1=x**2, y2=1.1*x**2, color='0.85')
+ax.vlines(x=-0.75, ymin=0., ymax=0.8, color='0.4', linestyle='-.')  # vertical dotted line within range [0, 0.8]
+ax.fill_between(x=x, y1=x**2, y2=1.1*x**2, color='0.85')   # color fill between the two exponential functions
 
-ax.axhline(y=0.1, color='0.4', linestyle='-.')
-ax.axhspan(ymin=0.65, ymax=0.75, color='0.95')
+ax.axhline(y=0.1, color='0.4', linestyle='-.')   # ax-wide horizontal dotted line 
+ax.axhspan(ymin=0.65, ymax=0.75, color='0.95')   # ax-wide horizontal filled space
 
 fig.suptitle('Figure title', fontsize=18, 
              fontweight='bold')
@@ -191,7 +191,7 @@ ax.legend(loc='lower right', frameon=True, ncol=2, fontsize=14)
 
 Adjusting specific parts of a plot is a matter of accessing the correct element of the plot:
 
-![](https://matplotlib.org/stable/_images/anatomy.png)
+<img src="https://matplotlib.org/stable/_images/anatomy.png" width="800"/>
 
 +++
 
@@ -407,13 +407,13 @@ Under the hood, it creates an Matplotlib Figure with an Axes object.
 #### Comparison 1: single plot
 
 ```{code-cell} ipython3
-flowdata.plot(figsize=(16, 6), ylabel="Discharge m3/s") # SHIFT + TAB this!
+flowdata.plot(figsize=(14, 4), ylabel="Discharge m3/s") # SHIFT + TAB this!
 ```
 
 Making this with matplotlib...
 
 ```{code-cell} ipython3
-fig, ax = plt.subplots(figsize=(16, 6))
+fig, ax = plt.subplots(figsize=(14, 4))
 ax.plot(flowdata)
 ax.legend(["L06_347", "LS06_347", "LS06_348"])
 ```
@@ -426,7 +426,7 @@ is still ok!
 
 ```{code-cell} ipython3
 axs = flowdata.plot(subplots=True, sharex=True,
-                    figsize=(16, 8), colormap='viridis', # Dark2
+                    figsize=(14, 8), colormap='viridis', # Dark2
                     fontsize=15, rot=0)
 axs[0].set_title("EXAMPLE");
 ```
@@ -439,7 +439,7 @@ import matplotlib.dates as mdates
 
 colors = [cm.viridis(x) for x in np.linspace(0.0, 1.0, len(flowdata.columns))] # list comprehension to set up the colors
 
-fig, axs = plt.subplots(3, 1, figsize=(16, 8))
+fig, axs = plt.subplots(3, 1, figsize=(14, 8))
 
 for ax, col, station in zip(axs, colors, flowdata.columns):
     ax.plot(flowdata.index, flowdata[station], label=station, color=col)
