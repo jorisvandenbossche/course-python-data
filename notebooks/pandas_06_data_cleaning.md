@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -547,8 +547,4 @@ casualties.drop_duplicates(subset=unique_combinations).shape
 
 # alternative using `duplicated`
 (~casualties.duplicated(subset=unique_combinations)).sum()
-```
-
-```{code-cell} ipython3
-
 ```

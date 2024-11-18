@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -356,28 +356,34 @@ These strings can also be combined with numbers, eg `'10D'`...
 </div>
 
 ```{code-cell} ipython3
-data.resample('M').mean().plot() # 10D
+data.resample('ME').mean().plot() # 10D, MS
 ```
 
 <div class="alert alert-success">
 
 **EXERCISE**
 
-Plot the monthly standard deviation of the columns
+Plot the monthly standard deviation of the columns. Use the last day of each month to represent the month.
+
+<details><summary>Hints</summary>
+
+* Pandas has both a [`ME` and `MS` month (offset)](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects) to represent the month by the 'calendar month end' (`ME`) or 'calendar month start' (`MS`) respectively.
+
+</details>
     
 </div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-data.resample('M').std().plot() # 'A'
+data.resample('ME').std().plot() # 'A'
 ```
 
 <div class="alert alert-success">
 
 **EXERCISE**
 
-Plot the monthly mean and median values for the years 2011-2012 for 'L06_347'
+Plot the monthly mean and median values for the years 2011-2012 for 'L06_347'. Use the last day of each month to represent the month.
 
 <details><summary>Hints</summary>
 
@@ -391,14 +397,14 @@ Plot the monthly mean and median values for the years 2011-2012 for 'L06_347'
 :tags: [nbtutor-solution]
 
 subset = data['2011':'2012']['L06_347']
-subset.resample('M').agg(['mean', 'median']).plot()
+subset.resample('ME').agg(['mean', 'median']).plot()
 ```
 
 <div class="alert alert-success">
 
 **EXERCISE**
 
-Plot the monthly mininum and maximum daily average value of the 'LS06_348' column
+Plot the monthly mininum and maximum daily average value of the 'LS06_348' column. Use the first day of each month to represent the month.
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
@@ -409,7 +415,7 @@ daily = data['LS06_348'].resample('D').mean() # daily averages calculated
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum values of these daily averages
+daily.resample('MS').agg(['min', 'max']).plot() # monthly minimum and maximum values of these daily averages
 ```
 
 <div class="alert alert-success">
@@ -418,10 +424,20 @@ daily.resample('M').agg(['min', 'max']).plot() # monthly minimum and maximum val
     
 Make a bar plot of the mean of the stations in year of 2013
 
+<details><summary>Hints</summary>
+
+* If you can directly slice and aggregate the data, you do not have to use resample.
+
+</details>
+
 </div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
 data['2013':'2013'].mean().plot(kind='barh')
+```
+
+```{code-cell} ipython3
+
 ```

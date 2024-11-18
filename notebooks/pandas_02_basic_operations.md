@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -79,6 +79,16 @@ countries['population_density'] = countries['population'] / countries['area'] * 
 ```{code-cell} ipython3
 countries
 ```
+
+<div class="alert alert-warning">
+
+**REMEMBER**
+
+Create a __new column__ by assigning the output to the DataFrame with a __new column name in between the []__.
+
+</div>
+
++++
 
 # Aggregations (reductions)
 
@@ -180,7 +190,7 @@ What is the survival rate? (the relative number of people that survived)
 
 <details><summary>Hints</summary>
 
-- the 'Survived' column indicates whether someone survived (1) or not (0).
+- the 'Survived' column indicates whether someone survived (1) or not (0). 
 
 </details>
     
