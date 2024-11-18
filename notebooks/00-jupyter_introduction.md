@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -22,6 +22,26 @@ kernelspec:
 from IPython.display import Image
 Image(url='http://python.org/images/python-logo.gif')
 ```
+
+# Introduction
+
++++
+
+To run Python, we are going to use Jupyter Notebooks via JupyterLab for this course. Jupyter notebooks are common in data science and visualization and serve as a convenient common-denominator experience for running Python code interactively. Jupyter notebooks let us __execute and view the results of our Python code interactively__ within the notebook.
+
+__JupyterLab__ is an application server with a web user interface from [Project Jupyter](https://jupyter.org/) that enables one to work with documents and activities such as __Jupyter notebooks__ (a notebook is a file stored on your computer as a JSON file).
+
++++
+
+<div class="alert alert-info">
+
+__INFO__
+
+Jupyter Notebook files have the file extension `.ipynb` to distinguish them from plain-text files.
+    
+</div>
+
++++
 
 <big><center>To run a cell: push the start triangle in the menu or type **SHIFT + ENTER/RETURN**<br><br>
 ![](../img/shiftenter.jpg)
@@ -64,7 +84,7 @@ Text cells, using Markdown syntax. With the syntax, you can make text **bold** o
 * with
 * items
 
-[Link to interesting resources](https://www.youtube.com/watch?v=z9Uz1icjwrM) or images: ![images](https://listame.files.wordpress.com/2012/02/bender-1.jpg)
+[Link to interesting resources](https://www.youtube.com/watch?v=z9Uz1icjwrM) or images: ![images](https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg)
 
 > Blockquotes if you like them
 > This line is part of the same blockquote.
@@ -251,6 +271,17 @@ Just do it!
 
 <big><center>**REMEMBER**: To run a cell: <strike>push the start triangle in the menu or</strike> type **SHIFT + ENTER**
 ![](../img/shiftenter.jpg)
+
++++
+
+<div class="alert alert-info">
+
+__Kernels?__
+
+The JupyterLab docs define kernels as “separate processes started by the server that runs your code in different programming languages and environments.” When we open a Jupyter Notebook, that starts a kernel - a process - that is going to run the code. In this lesson, we’ll be using the Jupyter ipython kernel which lets us run Python 3 code interactively.
+
+Using other Jupyter kernels for other programming languages would let us write and execute code in other programming languages in the same JupyterLab interface, like R, Java, Julia, Ruby, JavaScript, Fortran, etc.
+</div>
 
 +++
 
