@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -733,7 +733,7 @@ Make a plot visualizing the evolution of the number of observations for each of 
 
 <details><summary>Hints</summary>
 
-- You want to `resample` the data using the `eventDate` column to create annual counts. If the index is not a datetime-index, you can use the `on=` keyword to specify which datetime column to use.
+- You want to `resample` the data using the `eventDate` column to create annual counts. If the index is not a datetime-index, you can use the `on=` keyword to specify which datetime column to use. You can either use `YE` or `YS`.
 - `resample` needs an aggregation function on how to combine the values within a single 'group' (in this case data within a year). In this example, we want to know the `size` of each group, i.e. the number of records within each year.
     
 </details>
@@ -741,7 +741,7 @@ Make a plot visualizing the evolution of the number of observations for each of 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-survey_data.resample('A', on='eventDate').size().plot()
+survey_data.resample('YE', on='eventDate').size().plot()
 ```
 
 ## (OPTIONAL SECTION) Evolution of species during monitoring period
@@ -789,7 +789,7 @@ Plot, for the species 'Dipodomys merriami', 'Dipodomys ordii', 'Reithrodontomys 
 <details><summary>Hints</summary>
 
 - `isin` is useful to select from within a list of elements.
-- `groupby` AND `resample` need to be combined. We do want to change the time-interval to represent data as a function of time (`resample`) and we want to do this _for each name/species_ (`groupby`). The order matters!
+- `groupby` AND `resample` need to be combined. We do want to change the time-interval to represent data as a function of time (`resample`, using `ME`) and we want to do this _for each name/species_ (`groupby`). The order matters!
 - `unstack` is a Pandas function a bit similar to `pivot`. Check the [unstack documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.unstack.html) as it might be helpful for this exercise.
     
 </details>
@@ -804,7 +804,7 @@ subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dip
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size()
+month_evolution = subsetspecies.groupby("name").resample('ME', on='eventDate').size()
 ```
 
 ```{code-cell} ipython3
@@ -832,7 +832,7 @@ Recreate the same plot as in the previous exercise using Seaborn `relplot` funct
 # Given as solution..
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
-month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size().rename("counts")
+month_evolution = subsetspecies.groupby("name").resample('ME', on='eventDate').size().rename("counts")
 month_evolution = month_evolution.reset_index()
 ```
 
@@ -860,7 +860,7 @@ Plot the annual amount of occurrences for each of the 'taxa' as a function of ti
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-year_evolution = survey_data.groupby("taxa").resample('A', on='eventDate').size()
+year_evolution = survey_data.groupby("taxa").resample('YE', on='eventDate').size()
 year_evolution.name = "counts"
 year_evolution = year_evolution.reset_index()
 ```
@@ -902,3 +902,7 @@ xticks = ax.set_yticklabels(calendar.day_name)
 ```
 
 Nice work!
+
+```{code-cell} ipython3
+
+```

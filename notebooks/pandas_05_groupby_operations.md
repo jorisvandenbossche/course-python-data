@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -116,11 +116,10 @@ df.head()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Using groupby(), calculate the average age for each sex.</li>
-</ul>
+Using groupby(), calculate the average age for each sex.
+
 </div>
 
 ```{code-cell} ipython3
@@ -131,11 +130,10 @@ df.groupby('Sex')['Age'].mean()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Calculate the average survival ratio for all passengers.</li>
-</ul>
+Calculate the average survival ratio for all passengers.
+
 </div>
 
 ```{code-cell} ipython3
@@ -147,11 +145,16 @@ df['Survived'].mean()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Calculate this survival ratio for all passengers younger than 25 (remember: filtering/boolean indexing).</li>
-</ul>
+Calculate this survival ratio for all passengers younger than 25 
+
+<details><summary>Hints</summary>
+
+- remember the concept of filtering and boolean indexing using a mask of True/False records?
+
+</details>  
+
 </div>
 
 ```{code-cell} ipython3
@@ -163,11 +166,10 @@ df25['Survived'].mean()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>What is the difference in the survival ratio between the sexes?</li>
-</ul>
+What is the difference in the survival ratio between the sexes?
+
 </div>
 
 ```{code-cell} ipython3
@@ -178,11 +180,10 @@ df.groupby('Sex')['Survived'].mean()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Make a bar plot of the survival ratio for the different classes ('Pclass' column).</li>
-</ul>
+Make a bar plot of the survival ratio for the different classes ('Pclass' column).
+
 </div>
 
 ```{code-cell} ipython3
@@ -193,9 +194,9 @@ df.groupby('Pclass')['Survived'].mean().plot.bar() #and what if you would compar
 
 <div class="alert alert-success">
 
-**EXERCISE**:
+__EXERCISE__
 
-* Make a bar plot to visualize the average Fare payed by people depending on their age. The age column is divided in separate classes using the `pd.cut()` function as provided below.
+Make a bar plot to visualize the average Fare payed by people depending on their age. The age column is divided in separate classes using the `pd.cut()` function as provided below.
 
 </div>
 
@@ -291,10 +292,9 @@ titles.head()
 
 <div class="alert alert-success">
 
-**EXERCISE**:
+__EXERCISE__
 
-
-* Using `groupby()`, plot the number of films that have been released each decade in the history of cinema.
+Using `groupby()`, plot the number of films that have been released each decade in the history of cinema.
 
 </div>
 
@@ -312,11 +312,10 @@ titles.groupby('decade').size().plot.bar(color='green')
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Use `groupby()` to plot the number of 'Hamlet' movies made each decade.</li>
-</ul>
+Use `groupby()` to plot the number of 'Hamlet' movies made each decade.
+
 </div>
 
 ```{code-cell} ipython3
@@ -329,11 +328,10 @@ hamlet.groupby('decade').size().plot.bar(color="orange")
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>For each decade, plot all movies of which the title contains "Hamlet".</li>
-</ul>
+For each decade, plot all movies of which the title contains "Hamlet".
+
 </div>
 
 ```{code-cell} ipython3
@@ -346,11 +344,10 @@ hamlet.groupby('decade').size().plot.bar(color="lightblue")
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>List the 10 actors/actresses that have the most leading roles (n=1) since the 1990's.</li>
-</ul>
+List the 10 actors/actresses that have the most leading roles (n=1) since the 1990's.
+
 </div>
 
 ```{code-cell} ipython3
@@ -369,11 +366,10 @@ cast1990['name'].value_counts().head(10)
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>In a previous exercise, the number of 'Hamlet' films released each decade was checked. Not all titles are exactly called 'Hamlet'. Give an overview of the titles that contain 'Hamlet' and an overview of the titles that start with 'Hamlet',  each time providing the amount of occurrences in the data set for each of the movies</li>
-</ul>
+In a previous exercise, the number of 'Hamlet' films released each decade was checked. Not all titles are exactly called 'Hamlet'. Give an overview of the titles that contain 'Hamlet' and an overview of the titles that start with 'Hamlet',  each time providing the amount of occurrences in the data set for each of the movies.
+
 </div>
 
 ```{code-cell} ipython3
@@ -392,11 +388,10 @@ hamlets['title'].value_counts()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>List the 10 movie titles with the longest name.</li>
-</ul>
+List the 10 movie titles with the longest name.
+
 </div>
 
 ```{code-cell} ipython3
@@ -415,11 +410,10 @@ titles.loc[title_longest.index]
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>How many leading (n=1) roles were available to actors, and how many to actresses, in each year of the 1950s?</li>
-</ul>
+How many leading (n=1) roles were available to actors, and how many to actresses, in each year of the 1950s?
+
 </div>
 
 ```{code-cell} ipython3
@@ -432,11 +426,10 @@ cast1950.groupby(['year', 'type']).size()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>What are the 11 most common character names in movie history?</li>
-</ul>
+What are the 11 most common character names in movie history?
+
 </div>
 
 ```{code-cell} ipython3
@@ -447,11 +440,10 @@ cast.character.value_counts().head(11)
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Plot how many roles Brad Pitt has played in each year of his career.</li>
-</ul>
+Plot how many roles Brad Pitt has played in each year of his career.
+
 </div>
 
 ```{code-cell} ipython3
@@ -462,11 +454,10 @@ cast[cast.name == 'Brad Pitt'].year.value_counts().sort_index().plot()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>What are the 10 most occurring movie titles that start with the words 'The Life'?</li>
-</ul>
+What are the 10 most occurring movie titles that start with the words 'The Life'?
+      
 </div>
 
 ```{code-cell} ipython3
@@ -477,11 +468,10 @@ titles[titles['title'].str.startswith('The Life')]['title'].value_counts().head(
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Which actors or actresses were most active in the year 2010 (i.e. appeared in the most movies)?</li>
-</ul>
+Which actors or actresses were most active in the year 2010 (i.e. appeared in the most movies)?
+
 </div>
 
 ```{code-cell} ipython3
@@ -492,11 +482,10 @@ cast[cast.year == 2010].name.value_counts().head(10)
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Determine how many roles are listed for each of 'The Pink Panther' movies.</li>
-</ul>
+Determine how many roles are listed for each of 'The Pink Panther' movies.
+
 </div>
 
 ```{code-cell} ipython3
@@ -508,11 +497,10 @@ pink.groupby(['year'])[['n']].max()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li> List, in order by year, each of the movies in which 'Frank Oz' has played more than 1 role.</li>
-</ul>
+List, in order by year, each of the movies in which 'Frank Oz' has played more than 1 role.
+
 </div>
 
 ```{code-cell} ipython3
@@ -525,11 +513,10 @@ oz_roles[oz_roles > 1]
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li> List each of the characters that Frank Oz has portrayed at least twice.</li>
-</ul>
+List each of the characters that Frank Oz has portrayed at least twice.
+      
 </div>
 
 ```{code-cell} ipython3
@@ -542,7 +529,7 @@ oz_roles[oz_roles > 1].sort_values()
 
 <div class="alert alert-success">
 
-**EXERCISE**
+__EXERCISE__
 
 Add a new column to the `cast` DataFrame that indicates the number of roles for each movie. 
     
@@ -564,13 +551,16 @@ cast.head()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li> Calculate the ratio of leading actor and actress roles to the total number of leading roles per decade. </li>
-</ul><br>
+Calculate the ratio of leading actor and actress roles to the total number of leading roles per decade.
 
-**Tip**: you can do a groupby twice in two steps, first calculating the numbers, and secondly, the ratios.
+<details><summary>Hints</summary>
+
+- You can do a groupby twice in two steps, first calculating the numbers, and secondly, the ratios.
+
+</details>  
+
 </div>
 
 ```{code-cell} ipython3
@@ -598,11 +588,10 @@ ratios_decade[:, 'actress'].plot()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li> In which years the most films were released?</li>
-</ul><br>
+In which years the most films were released?
+      
 </div>
 
 ```{code-cell} ipython3
@@ -614,11 +603,10 @@ t.year.value_counts().head(3)
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>How many leading (n=1) roles were available to actors, and how many to actresses, in the 1950s? And in 2000s?</li>
-</ul><br>
+How many leading (n=1) roles were available to actors, and how many to actresses, in the 1950s? And in 2000s?
+
 </div>
 
 ```{code-cell} ipython3

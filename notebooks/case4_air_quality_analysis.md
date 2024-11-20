@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -133,13 +133,12 @@ Reason to not use a tidy dataset here:
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Create a tidy version of this dataset <code>data_tidy</code>, ensuring the result has new columns 'station' and 'no2'.</li>
-  <li>Check how many missing values are contained in the 'no2' column.</li>
-  <li>Drop the rows with missing values in that column.</li>
-</ul>
+- Create a tidy version of this dataset <code>data_tidy</code>, ensuring the result has new columns 'station' and 'no2'.
+- Check how many missing values are contained in the 'no2' column.
+- Drop the rows with missing values in that column.
+
 </div>
 
 ```{code-cell} ipython3
@@ -171,14 +170,12 @@ In the following exercises we will mostly do our analysis on `data`and often use
 
 <div class="alert alert-warning">
 
-<b>REMINDER</b>: <br><br>
+__REMINDER__
 
 Take a look at the [Timeseries notebook](pandas_04_time_series_data.ipynb) when you require more info about:
 
- <ul>
-  <li><code>resample</code></li>
-  <li>string indexing of DateTimeIndex</li>
-</ul><br>
+- `resample`
+- string indexing of DateTimeIndex
 
 Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [seaborn](visualization_02_seaborn.ipynb) notebooks when you require more info about the plot requirements.
 
@@ -188,19 +185,24 @@ Take a look at the [matplotlib](visualization_01_matplotlib.ipynb) and [seaborn]
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Plot the monthly mean and median concentration of the 'FR04037' station for the years 2009 - 2013 in a single figure/ax</li>
-</ul>
+Plot the monthly mean and median concentration of the 'FR04037' station for the years 2009 - 2013 in a single figure/ax.
+
+<details><summary>Hints</summary>
+
+- The symbol for monthly resampling is either `ME` or `MS`.
+
+</details>
+
 </div>
 
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
 fig, ax = plt.subplots()
-data.loc['2009':, 'FR04037'].resample('M').mean().plot(ax=ax, label='mean')
-data.loc['2009':, 'FR04037'].resample('M').median().plot(ax=ax, label='median')
+data.loc['2009':, 'FR04037'].resample('ME').mean().plot(ax=ax, label='mean')
+data.loc['2009':, 'FR04037'].resample('ME').median().plot(ax=ax, label='median')
 ax.legend(ncol=2)
 ax.set_title("FR04037");
 ```
@@ -208,7 +210,7 @@ ax.set_title("FR04037");
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-data.loc['2009':, 'FR04037'].resample('M').agg(['mean', 'median']).plot()
+data.loc['2009':, 'FR04037'].resample('ME').agg(['mean', 'median']).plot()
 ```
 
 <div class="alert alert-success">
@@ -271,19 +273,20 @@ fig, ax = plt.subplots()
 data['2012':].mean().plot(kind='bar', ax=ax, rot=0, color='C0')
 ax.set_ylabel("NO$_2$ concentration (µg/m³)")
 ax.axhline(y=40., color='darkorange')
-ax.text(0.01, 0.48, 'Yearly limit is 40 µg/m³',
+ax.text(0.3, 0.48, 'Yearly limit is 40 µg/m³',
         horizontalalignment='left', fontsize=13, 
         transform=ax.transAxes, color='darkorange');
 ```
 
 <div class="alert alert-success">
 
-<b>EXERCISE:</b> Did the air quality improve over time?
+__EXERCISE__
 
- <ul>
-  <li>For the data from 1999 till the end, plot the yearly averages</li>
-  <li>For the same period, add the overall mean (all stations together) as an additional line to the graph, use a thicker black line (<code>linewidth=4</code> and <code>linestyle='--'</code>)</li>
-  <li>[OPTIONAL] Add a legend above the ax for all lines</li>
+Did the air quality improve over time?
+
+- For the data from 1999 till the end, plot the yearly averages
+- For the same period, add the overall mean (all stations together) as an additional line to the graph, use a thicker black line (<code>linewidth=4</code> and <code>linestyle='--'</code>)
+- [OPTIONAL] Add a legend above the ax for all lines
   
 
 </ul>
@@ -294,8 +297,8 @@ ax.text(0.01, 0.48, 'Yearly limit is 40 µg/m³',
 
 fig, ax = plt.subplots()
 
-data['1999':].resample('A').mean().plot(ax=ax)
-data['1999':].mean(axis=1).resample('A').mean().plot(color='k', 
+data['1999':].resample('YE').mean().plot(ax=ax)
+data['1999':].mean(axis=1).resample('YE').mean().plot(color='k', 
                                             linestyle='--', 
                                             linewidth=4, 
                                             ax=ax, 
@@ -353,12 +356,10 @@ But, `groupby` is more flexible and can also do resamples that do not result in 
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>
+__EXERCISE__
 
- <ul>
-    <li>How does the <i>typical yearly profile</i> (typical averages for the different months over the years) look like for the different stations? (add a 'month' column as a first step)</li>
+How does the <i>typical yearly profile</i> (typical averages for the different months over the years) look like for the different stations? (add a 'month' column as a first step)
 
-</ul>
 </div>
 
 ```{code-cell} ipython3
@@ -386,12 +387,10 @@ Note: Technically, we could reshape the result of the groupby operation to a tid
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>
+__EXERCISE__
 
- <ul>
-  <li>Plot the weekly 95% percentiles of the concentration in 'BETR801' and 'BETN029' for 2011</li>
+Plot the weekly 95% percentiles of the concentration in 'BETR801' and 'BETN029' for 2011
 
-</ul>
 </div>
 
 ```{code-cell} ipython3
@@ -412,12 +411,10 @@ df2011.groupby(df2011.index.isocalendar().week)[['BETN029', 'BETR801']].quantile
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>
+__EXERCISE__
 
- <ul>
-  <li>Plot the typical diurnal profile (typical hourly averages) for the different stations taking into account the whole time period.</li>
+Plot the typical diurnal profile (typical hourly averages) for the different stations taking into account the whole time period.
 
-</ul>
 </div>
 
 ```{code-cell} ipython3
@@ -520,8 +517,6 @@ __EXERCISE__
 
 Count the number of exceedances of hourly values above the European limit 200 µg/m3 for each year and station after 2005. Make a barplot of the counts. Add an horizontal line indicating the maximum number of exceedances (which is 18) allowed per year?
 
-**Hints:**
-
 <details><summary>Hints</summary>
  
 - Create a new DataFrame, called <code>exceedances</code>, (with boolean values) indicating if the threshold is exceeded or not
@@ -565,14 +560,13 @@ __EXERCISE__
     
 Perform the following actions for the station `'FR04012'` only:
 
- <ul>
-  <li>Remove the rows containing <code>NaN</code> or zero values</li>
-  <li>Sort the values  of the rows according to the air quality values (low to high values)</li>
-  <li>Rescale the values to the range [0-1] and store result as <code>FR_scaled</code> (Hint: check <a href="https://en.wikipedia.org/wiki/Feature_scaling#Rescaling">wikipedia</a>)</li>
-  <li>Use pandas to plot these values sorted, not taking into account the dates</li>
-  <li>Add the station name 'FR04012' as y-label</li>
-  <li>[OPTIONAL] Add a vertical line to the plot where the line (hence, the values of variable FR_scaled) reach the value <code>0.3</code>. You will need the documentation of <code>np.searchsorted</code> and matplotlib's <code>axvline</code></li>
-</ul>
+- Remove the rows containing <code>NaN</code> or zero values
+- Sort the values  of the rows according to the air quality values (low to high values)
+- Rescale the values to the range [0-1] and store result as <code>FR_scaled</code> (Hint: check <a href="https://en.wikipedia.org/wiki/Feature_scaling#Rescaling">wikipedia</a>)
+- Use pandas to plot these values sorted, not taking into account the dates
+- Add the station name 'FR04012' as y-label
+- [OPTIONAL] Add a vertical line to the plot where the line (hence, the values of variable FR_scaled) reach the value <code>0.3</code>. You will need the documentation of <code>np.searchsorted</code> and matplotlib's <code>axvline</code>
+
 </div>
 
 ```{code-cell} ipython3
@@ -601,14 +595,13 @@ axfr.axvline(x=FR_scaled.searchsorted(0.3), color='0.6', linestyle='--', linewid
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Create a Figure with two subplots (axes), for which both ax<b>i</b>s are shared</li>
-  <li>In the left subplot, plot the histogram (30 bins) of station 'BETN029', only for the year 2009</li>
-  <li>In the right subplot, plot the histogram (30 bins) of station 'BETR801', only for the year 2009</li>
-  <li>Add the title representing the station name on each of the subplots, you do not want to have a legend</li>
-</ul>
+- Create a Figure with two subplots (axes), for which both ax<b>i</b>s are shared
+- In the left subplot, plot the histogram (30 bins) of station 'BETN029', only for the year 2009
+- In the right subplot, plot the histogram (30 bins) of station 'BETR801', only for the year 2009
+- Add the title representing the station name on each of the subplots, you do not want to have a legend
+
 </div>
 
 ```{code-cell} ipython3
@@ -641,15 +634,13 @@ ax2.set_title('BETR801')
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>
+__EXERCISE__
 
- <ul>
-  <li>Make a selection of the original dataset of the data in January 2009, call the resulting variable <code>subset</code></li>
-  <li>Add a new column, called 'dayofweek', to the variable <code>subset</code> which defines for each data point the day of the week</li>
-  <li>From the <code>subset</code> DataFrame, select only Monday (= day 0) and Sunday (=day 6) and remove the others (so, keep this as variable <code>subset</code>)</li>
-  <li>Change the values of the dayofweek column in <code>subset</code> according to the following mapping: <code>{0:"Monday", 6:"Sunday"}</code></li>
-  <li>With seaborn, make a scatter plot of the measurements at 'BETN029' vs 'FR04037', with the color variation based on the weekday. Add a linear regression to this plot.</li>
-</ul><br>
+- Make a selection of the original dataset of the data in January 2009, call the resulting variable <code>subset</code>
+- Add a new column, called 'dayofweek', to the variable <code>subset</code> which defines for each data point the day of the week
+- From the <code>subset</code> DataFrame, select only Monday (= day 0) and Sunday (=day 6) and remove the others (so, keep this as variable <code>subset</code>)
+- Change the values of the dayofweek column in <code>subset</code> according to the following mapping: <code>{0:"Monday", 6:"Sunday"}</code>
+- With seaborn, make a scatter plot of the measurements at 'BETN029' vs 'FR04037', with the color variation based on the weekday. Add a linear regression to this plot.
 
 **Note**: If you run into the **SettingWithCopyWarning** and do not know what to do, recheck [pandas_03b_indexing](pandas_03b_indexing.ipynb)
 
@@ -715,17 +706,16 @@ ax = exceedances.plot(kind='bar')
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Visualize the typical week profile for station 'BETR801' as boxplots (where the values in one boxplot are the <i>daily means</i> for the different <i>weeks</i> for a certain day of the week).</li><br>
-  </ul>
+Visualize the typical week profile for station 'BETR801' as boxplots (where the values in one boxplot are the <i>daily means</i> for the different <i>weeks</i> for a certain day of the week).
+
+
+<details><summary>Hints</summary>
  
-
-**Tip:**<br>
-
 The boxplot method of a DataFrame expects the data for the different boxes in different columns. For this, you can either use `pivot_table` or a combination of `groupby` and `unstack`
 
+</details>
 
 </div>
 

@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -136,7 +136,7 @@ The usage of the tidy data representation has some important benefits when worki
 data_long.groupby("Treatment")["pH"].mean()  # switch to `WWTP`
 ```
 
-```{code-cell} ipython3
+```python
 sns.catplot(data=data, x="WWTP", y="...", hue="...", kind="bar")  # this doesn't work that easily
 ```
 
@@ -433,11 +433,10 @@ pd.crosstab(index=df['Sex'], columns=df['Pclass'])
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Make a pivot table with the survival rates for Pclass vs Sex.</li>
-</ul>
+Make a pivot table with the survival rates for Pclass vs Sex.
+
 </div>
 
 ```{code-cell} ipython3
@@ -462,11 +461,10 @@ ax1.set_ylabel('Survival ratio')
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Make a table of the median Fare payed by aged/underaged vs Sex.</li>
-</ul>
+Make a table of the median Fare payed by aged/underaged vs Sex.
+
 </div>
 
 ```{code-cell} ipython3
@@ -484,7 +482,7 @@ df.pivot_table(index='Underaged', columns='Sex',
 
 <div class="alert alert-success">
 
-**EXERCISE**:
+__EXERCISE__
 
 A pivot table aggregates values for each combination of the new row index and column values. That reminds of the "groupby" operation.
     
@@ -613,11 +611,10 @@ titles.head()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Plot the number of actor roles each year and the number of actress roles each year over the whole period of available movie data.</li>
-</ul>
+Plot the number of actor roles each year and the number of actress roles each year over the whole period of available movie data.
+
 </div>
 
 ```{code-cell} ipython3
@@ -644,11 +641,10 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Plot the number of actor roles each year and the number of actress roles each year. Use kind='area' as plot type</li>
-</ul>
+Plot the number of actor roles each year and the number of actress roles each year. Use kind='area' as plot type.
+
 </div>
 
 ```{code-cell} ipython3
@@ -659,11 +655,10 @@ pd.crosstab(index=cast['year'], columns=cast['type']).plot.area()
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Plot the fraction of roles that have been 'actor' roles each year over the whole period of available movie data.</li>
-</ul>
+Plot the fraction of roles that have been 'actor' roles each year over the whole period of available movie data.
+
 </div>
 
 ```{code-cell} ipython3
@@ -676,11 +671,10 @@ table = grouped.unstack('type').fillna(0)
 
 <div class="alert alert-success">
 
-<b>EXERCISE</b>:
+__EXERCISE__
 
- <ul>
-  <li>Define a year as a "Superman year" when films of that year feature more Superman characters than Batman characters. How many years in film history have been Superman years?</li>
-</ul>
+Define a year as a "Superman year" when films of that year feature more Superman characters than Batman characters. How many years in film history have been Superman years?
+
 </div>
 
 ```{code-cell} ipython3
@@ -700,4 +694,8 @@ c.head()
 d = c.Superman - c.Batman
 print('Superman years:')
 print(len(d[d > 0.0]))
+```
+
+```{code-cell} ipython3
+
 ```

@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -40,8 +40,6 @@ df.head()
 Starting from reading such a tabular dataset, Pandas provides the functionalities to answer questions about this data in a few lines of code. Let's start with a few examples as illustration:
 
 +++
-
-<div class="alert alert-warning">
 
 - What is the age distribution of the passengers?
 
@@ -290,6 +288,12 @@ Embarked       | Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southam
 
 * Read the CSV file (available at `data/titanic.csv`) into a pandas DataFrame. Call the result `df`.
 
+<details><summary>Hints</summary>
+
+- The read functions in pandas start with `pd.read_`. Combine this with TAB to see the options interactively.
+
+</details>  
+
 </div>
 
 ```{code-cell} ipython3
@@ -334,7 +338,13 @@ len(df)
 <div class="alert alert-success">
     <b>EXERCISE</b>:
 
-* Select the 'Age' column (remember: we can use the [] indexing notation and the column label).
+* Select the 'Age' column.
+
+<details><summary>Hints</summary>
+
+* Use the `[]` indexing notation and the column label (the name expressed as a string).
+
+</details>
 
 </div>
 

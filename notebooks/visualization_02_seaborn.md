@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -617,7 +617,7 @@ What happens with the data registration since 2012?
     
 <details><summary>Hints</summary>
 
-- Monthly statistics from a time series requires `resample` (with - in this case - `sum`), which also takes the `on` parameter to specify the datetime column (instead of using the index of the DataFrame).
+- Monthly statistics from a time series requires `resample` (with - in this case - `sum`), which also takes the `on` parameter to specify the datetime column (instead of using the index of the DataFrame). You can pick `ME` or `MS`.
 - Apply the resampling on the `["n_victims_ok", "n_slightly_injured", "n_seriously_injured", "n_dead_30days"]` columns only.
 - Seaborn line plots works without tidy data when NOT providing `x` and `y` argument. It also works using tidy data. To 'tidy' the data set, `.melt()` can be used, see [pandas_08_reshaping.ipynb](pandas_08_reshaping.ipynb).
 - Pandas plot method works on the non-tidy data set with `plot.area()` .
@@ -629,7 +629,7 @@ __Note__ Seaborn does not have an area plot.
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-monthly_victim_counts = casualties.resample("M", on="datetime")[
+monthly_victim_counts = casualties.resample("ME", on="datetime")[
     ["n_victims_ok", "n_slightly_injured", "n_seriously_injured", "n_dead_30days"]
 ].sum()
 ```
@@ -873,3 +873,7 @@ A tidy data set is setup as follows:
 - Each type of <code>observational unit</code> forms a <b>table</b>.
 
 </div>
+
+```{code-cell} ipython3
+
+```
