@@ -136,9 +136,13 @@ The usage of the tidy data representation has some important benefits when worki
 data_long.groupby("Treatment")["pH"].mean()  # switch to `WWTP`
 ```
 
+Applying Seaborn on the (wide) original format of the datadoes not fit as there is no way to link the two treatment columns to a certain representation:
+
 ```python
 sns.catplot(data=data, x="WWTP", y="...", hue="...", kind="bar")  # this doesn't work that easily
 ```
+
+Whereas using the long format, the "treatment" column can be represented by color (hue), e.g.
 
 ```{code-cell} ipython3
 sns.catplot(data=data_long, x="WWTP", y="pH", 

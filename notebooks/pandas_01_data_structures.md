@@ -41,7 +41,9 @@ Starting from reading such a tabular dataset, Pandas provides the functionalitie
 
 +++
 
-- What is the age distribution of the passengers?
+<div class="alert alert-warning">
+    
+What is the age distribution of the passengers?
 
 </div>
 
@@ -51,9 +53,7 @@ df['Age'].hist()
 
 <div class="alert alert-warning">
 
- <ul>
-  <li>How does the survival rate of the passengers differ between sexes?</li>
-</ul> 
+How does the survival rate of the passengers differ between sexes?
 
 </div>
 
@@ -63,9 +63,7 @@ df.groupby('Sex')[['Survived']].mean()
 
 <div class="alert alert-warning">
 
- <ul>
-  <li>Or how does the survival rate differ between the different classes of the Titanic?</li>
-</ul> 
+Or how does the survival rate differ between the different classes of the Titanic? 
 
 </div>
 
@@ -75,9 +73,7 @@ df.groupby('Pclass')['Survived'].mean().plot.bar()
 
 <div class="alert alert-warning">
 
- <ul>
-  <li>Are young people (e.g. < 25 years) likely to survive?</li>
-</ul> 
+Are young people (e.g. < 25 years) likely to survive?
 
 </div>
 
