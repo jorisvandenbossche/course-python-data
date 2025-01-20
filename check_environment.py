@@ -58,10 +58,10 @@ else:
     print(FAIL, "Python 3 is required, but %s is installed." % sys.version)
 
 print()
-requirements = {'numpy': "1.9", 'matplotlib': "2.0",
-                'pandas': "1.2", 'jupyterlab': "3",
-                'pyproj': '2.6', 'requests': '2.18.0',
-                'seaborn': '0.9.0'}
+requirements = {'numpy': "2", 'matplotlib': "3",
+                'pandas': "2", 'jupyterlab': "3",
+                'pyproj': "2.6", 'requests': "2.18.0",
+                'seaborn': "0.13.0"}
 
 # now the dependencies
 for lib, required_version in list(requirements.items()):

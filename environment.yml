@@ -2,7 +2,7 @@ name: course-python
 channels:
 - conda-forge
 dependencies:
-- python=3.11
+- python=3.12
 - ipython
 - jupyter
 - jupyterlab>=3
