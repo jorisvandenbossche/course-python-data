@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.4
+    jupytext_version: 1.16.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b>Visualization - Matplotlib</b></font></p>
 
-> *© 2024, Joris Van den Bossche and Stijn Van Hoey. Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2025, Joris Van den Bossche and Stijn Van Hoey. Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -191,7 +191,7 @@ ax.legend(loc='lower right', frameon=True, ncol=2, fontsize=14)
 
 Adjusting specific parts of a plot is a matter of accessing the correct element of the plot:
 
-<img src="https://matplotlib.org/stable/_images/anatomy.png" width="800"/>
+<img src="https://matplotlib.org/stable/_images/anatomy.png" width="600"/>
 
 +++
 
