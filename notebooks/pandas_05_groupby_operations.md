@@ -287,6 +287,8 @@ cast.head()
 
 ```{code-cell} ipython3
 titles = pd.read_csv('data/titles.csv')
+# some titles are missing and this gives issues filtering with this column -> fill with empty string
+titles['title'] = titles['title'].fillna("")
 titles.head()
 ```
 
