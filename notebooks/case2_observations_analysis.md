@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 <p><font size="6"><b> CASE - Observation data - analysis</b></font></p>
 
-> *© 2024, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
+> *© 2025, Joris Van den Bossche and Stijn Van Hoey  (<mailto:jorisvandenbossche@gmail.com>, <mailto:stijnvanhoey@gmail.com>). Licensed under [CC BY 4.0 Creative Commons](http://creativecommons.org/licenses/by/4.0/)*
 
 ---
 
@@ -688,7 +688,7 @@ subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dip
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size()
+month_evolution = subsetspecies.groupby("name").resample('ME', on='eventDate').size()
 ```
 
 ```{code-cell} ipython3
@@ -722,7 +722,7 @@ Uncomment the next cell (calculates `month_evolution`, the intermediate result o
 # Given as solution..
 subsetspecies = survey_data[survey_data["name"].isin(['Dipodomys merriami', 'Dipodomys ordii',
                                                       'Reithrodontomys megalotis', 'Chaetodipus baileyi'])]
-month_evolution = subsetspecies.groupby("name").resample('M', on='eventDate').size().rename("counts")
+month_evolution = subsetspecies.groupby("name").resample('ME', on='eventDate').size().rename("counts")
 month_evolution = month_evolution.reset_index()
 month_evolution.head()
 ```
@@ -753,7 +753,7 @@ Plot the annual amount of occurrences for each of the 'taxa' as a function of ti
 ```{code-cell} ipython3
 :tags: [nbtutor-solution]
 
-year_evolution = survey_data.groupby("taxa").resample('A', on='eventDate').size()
+year_evolution = survey_data.groupby("taxa").resample('YE', on='eventDate').size()
 year_evolution.name = "counts"
 year_evolution = year_evolution.reset_index()
 ```

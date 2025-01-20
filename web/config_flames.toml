@@ -1,0 +1,7 @@
+title = "Data wrangling in Python"
+organisation = "Flanders’ Training Network for Methodology and Statistics (Flames)"
+dates = "October 16 and 23, 2023"
+repository = "FLAMES-python-data-wrangling"
+conda_environment = "FLAMES-python"
+hackmd = "https://hackmd.io/SEWMuyGfSRGbbaTn4AI97A?both"
+googleform = "https://forms.gle/eaCeaheJXv8vCTcL8"
