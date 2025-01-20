@@ -17,3 +17,4 @@ dependencies:
 - requests
 - openpyxl
 - geopandas
+- pyarrow
